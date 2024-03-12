@@ -5,7 +5,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(async (config) => {
-    const token = localStorage.getItem("@token_petshop")
+    const token = localStorage.getItem("@token")
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }
