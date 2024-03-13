@@ -4,7 +4,7 @@
       <v-list-item
         prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
         :title="name"
-        :subtitle="profile"
+        :subtitle="profile"        
       ></v-list-item>
     </v-list>
 
@@ -13,6 +13,9 @@
     <v-list density="compact" nav>
       <router-link to="/home">
         <v-list-item prepend-icon="mdi-folder" title="Home" value="home"> </v-list-item>
+      </router-link>
+      <router-link to="/avaliacao/step1">
+        <v-list-item prepend-icon="mdi-folder" title="Avaliações" value="Avaliation"> </v-list-item>
       </router-link>
     </v-list>
     <div class="pa-8">
