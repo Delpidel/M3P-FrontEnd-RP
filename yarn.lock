@@ -2159,7 +2159,7 @@ vue-screen-utils@^1.0.0-beta.13:
 
 vuetify@^3.4.17:
   version "3.5.8"
-  resolved "https://registry.npmjs.org/vuetify/-/vuetify-3.5.8.tgz"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.5.8.tgz#bc8f08dfd3314640e7b5d43b50138a26d650cbbf"
   integrity sha512-8nGS+lKejZkev55HFwIfsRt+9fOqbeDQNmXxfmLKAlnUT8FtynVwbjAwHMtX/OQAQ3ZwRaR1ptqQQmx3OgxzbQ==
 
 w3c-xmlserializer@^5.0.0:
