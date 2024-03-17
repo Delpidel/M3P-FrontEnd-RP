@@ -13,6 +13,7 @@
     <v-list density="compact" nav>
       <router-link to="/home">
         <v-list-item prepend-icon="mdi-folder" title="Home" value="home"> </v-list-item>
+        <v-list-item prepend-icon="mdi-list-box-outline" title="Workouts Students List" value="wokouts-students-list" to="/students/:id/workouts"> </v-list-item>
       </router-link>
     </v-list>
     <div class="pa-8">
