@@ -1,16 +1,14 @@
 <template>
-
   <v-container>
     <h1 class="title">Treinos - {{ formattedWorkouts.name }}</h1>
-    <br>
-    <p>Hoje : {{ currentDay }}</p>
-    <br>
-
-    <v-card color="orange-accent-1">
+   
+    <v-card color="#FFC107" width="50%" class="px-6 py-6 mt-4">
+      <p>Hoje : {{ currentDay }}</p>
+      
       <v-table v-if="formattedWorkouts.workouts[currentDay]">
         <tbody>
           <tr v-for="(workout, index) in formattedWorkouts.workouts[currentDay]" :key="index">
-            <td><input type="checkbox"></td>
+            <td class="orange-checkbox"><input type="checkbox"></td>
             <td>{{ workout.description }}</td>
             <td> | {{ workout.weight }} KG </td>
             <td> | {{ workout.repetitions }} repetições </td>
@@ -19,18 +17,19 @@
         </tbody>
       </v-table>
       <template v-else>
-        <p>Não há sessões de treinamento agendadas para hoje!</p>
+        <br>
+        <p class="white-text">Não há sessões de treinamento agendadas para hoje!</p>
       </template>
     </v-card>
-
+    <br>
 
     <v-card>
-      <v-toolbar color="orange-accent-1">
+      <v-toolbar color="#FFC107">
         <v-toolbar-title>Treinos da Semana</v-toolbar-title>
       </v-toolbar>
 
       <div class="d-flex flex-row">
-        <v-tabs v-model="tab" direction="horizontal" color="orange-darken-2">
+        <v-tabs v-model="tab" direction="horizontal" color="#FFC107">
           <v-tab v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
             <v-icon v-if="icons[index]">{{ icons[index] }}</v-icon>
             {{ day }}
@@ -104,3 +103,21 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.white-text {
+  color: white;
+}
+
+.orange-checkbox input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #FFC107;
+  border-radius: 3px;
+}
+
+.orange-checkbox input[type="checkbox"]:checked {
+  background-color: #FFC107; /* Color de fondo cuando está seleccionado */
+}
+</style>
