@@ -116,7 +116,7 @@ export default {
 }
 
 .orange-checkbox input[type="checkbox"]:checked {
-  background-color: #FFC107; /* Color de fondo cuando está seleccionado */
+  background-color: #FFC107;
 }
 
 .custom-card {
