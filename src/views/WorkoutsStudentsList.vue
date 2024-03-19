@@ -2,7 +2,7 @@
   <v-container>
     <h1 class="title">Treinos - {{ formattedWorkouts.name }}</h1>
    
-    <v-card color="#757575" width="50%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
+    <v-card color="#757575" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
       <v-toolbar-title class="orange-text">HOJE : {{ currentDay }}</v-toolbar-title>
       <br>
       
@@ -18,13 +18,12 @@
         </tbody>
       </v-table>
       <template v-else>
-        <br>
         <p class="orange-text">Não há sessões de treinamento agendadas para hoje!</p>
       </template>
     </v-card>
     <br>
 
-    <v-card class="custom-card" color="#757575" elevation="10" >
+    <v-card class="custom-card" color="#757575" elevation="10" width="100%" >
       <v-toolbar color="#FFC107">
         <v-toolbar-title>TREINOS DA SEMANA</v-toolbar-title>
       </v-toolbar>
