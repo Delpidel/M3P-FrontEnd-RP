@@ -5,7 +5,20 @@
     <p>Día de hoy: {{ currentDay }}</p>
     <br>
 
-    
+    <v-table v-if="formattedWorkouts.workouts[currentDay]">
+      <tbody>
+        <tr v-for="(workout, index) in formattedWorkouts.workouts[currentDay]" :key="index">
+          <td><input type="checkbox"></td>   
+          <td>{{ workout.description }}</td>
+          <td> | {{ workout.weight }} KG </td>
+          <td> | {{ workout.repetitions }} repetições </td>
+          <td> | {{ workout.break_time }} min de pausa</td>
+        </tr>
+      </tbody>
+    </v-table>
+    <template v-else>
+      <p>No hay entrenamientos programados para hoy.</p>
+    </template>
   </v-container>
 
 
