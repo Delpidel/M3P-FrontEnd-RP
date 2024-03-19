@@ -2,8 +2,9 @@
   <v-container>
     <h1 class="title">Treinos - {{ formattedWorkouts.name }}</h1>
    
-    <v-card color="#FFC107" width="50%" class="px-6 py-6 mt-4">
-      <p>Hoje : {{ currentDay }}</p>
+    <v-card color="#757575" width="50%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
+      <v-toolbar-title class="orange-text">HOJE : {{ currentDay }}</v-toolbar-title>
+      <br>
       
       <v-table v-if="formattedWorkouts.workouts[currentDay]">
         <tbody>
@@ -18,26 +19,24 @@
       </v-table>
       <template v-else>
         <br>
-        <p class="white-text">Não há sessões de treinamento agendadas para hoje!</p>
+        <p class="orange-text">Não há sessões de treinamento agendadas para hoje!</p>
       </template>
     </v-card>
     <br>
 
-    <v-card>
+    <v-card class="custom-card" color="#757575" elevation="10" >
       <v-toolbar color="#FFC107">
-        <v-toolbar-title>Treinos da Semana</v-toolbar-title>
+        <v-toolbar-title>TREINOS DA SEMANA</v-toolbar-title>
       </v-toolbar>
 
-      <div class="d-flex flex-row">
+      <div class="d-flex flex-row py-3 px-2" >
         <v-tabs v-model="tab" direction="horizontal" color="#FFC107">
           <v-tab v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
             <v-icon v-if="icons[index]">{{ icons[index] }}</v-icon>
             {{ day }}
           </v-tab>
         </v-tabs>
-      </div>
-
-      <br>
+      </div>     
 
       <v-window v-model="tab">
         <v-window-item v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
@@ -105,8 +104,8 @@ export default {
 </script>
 
 <style scoped>
-.white-text {
-  color: white;
+.orange-text {
+  color: #FFC107;
 }
 
 .orange-checkbox input[type="checkbox"] {
@@ -120,4 +119,15 @@ export default {
 .orange-checkbox input[type="checkbox"]:checked {
   background-color: #FFC107; /* Color de fondo cuando está seleccionado */
 }
+
+.custom-card {
+  border: 2px solid #FFC107; 
+  border-radius: 18px;
+}
+
+.custom-card-1 {
+  border: 2px solid #757575; 
+  border-radius: 18px;
+}
+
 </style>
