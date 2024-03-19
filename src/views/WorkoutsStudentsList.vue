@@ -1,31 +1,13 @@
 <template>
+
   <v-container>
     <h1 class="title">Treinos {{ formattedWorkouts.name }}</h1>
+    <p>Día de hoy: {{ currentDay }}</p>
     <br>
 
-    <v-table>
-      <thead class="header-table">
-        <tr>
-          <th class="text-left">Dia</th>
-          <th class="text-left">Descripción</th>
-          <th class="text-left">Peso</th>
-          <th class="text-left">Repeticiones</th>
-          <th class="text-left">Tiempo de Descanso</th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-for="(workouts, day) in formattedWorkouts.workouts" :key="day">
-          <tr v-for="(workout, index) in workouts" :key="index">
-            <td>{{ day }}</td>
-            <td>{{ workout.description }}</td>
-            <td>{{ workout.weight }}</td>
-            <td>{{ workout.repetitions }}</td>
-            <td>{{ workout.break_time }}</td>
-          </tr>
-        </template>
-      </tbody>
-    </v-table>
+    
   </v-container>
+
 
   <v-card>
     <v-toolbar color="orange-accent-1">
@@ -73,9 +55,18 @@ export default {
         name: null,
         workouts: {}
       },
+      today: ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'],
+
       tab: 'option-1', 
       days: ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO', 'DOMINGO'],
       icons: ['mdi-run', 'mdi-dumbbell', 'mdi-gymnastics', 'mdi-bike', 'mdi-arm-flex', 'mdi-jump-rope', 'mdi-weight-lifter']
+    }
+  },
+
+  computed: {
+    currentDay() {
+      const todayIndex = new Date().getDay(); 
+      return this.today[todayIndex]; 
     }
   },
 
