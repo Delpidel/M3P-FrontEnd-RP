@@ -3,7 +3,12 @@
     <v-row>
       <!-- Calendário -->
       <v-col cols="12" md="4">
-        <v-date-picker v-model="date" color="yellow" @input="selectDate"></v-date-picker>
+        <v-col>
+          <v-date-picker v-model="date" color="yellow" @input="selectDate"></v-date-picker>
+        </v-col>        
+        <v-col md="10">
+          <v-text-field type="time"> Horário: </v-text-field>
+        </v-col>        
       </v-col>
 
       <!-- Formulário de Avaliação -->
@@ -41,6 +46,7 @@ export default {
   data() {
     return {
       date: null,
+      time: null,
       name: '',
       weight: '',
       height: '',
