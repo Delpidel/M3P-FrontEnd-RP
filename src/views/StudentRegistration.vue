@@ -6,7 +6,7 @@
                 <h1 class="font-weight-medium ms-2 mt-1">Cadastro de aluno</h1>
             </div>
             <v-progress-linear 
-                color="gre-darken-4" 
+                color="grey-darken-4" 
                 indeterminate>
             </v-progress-linear>
         </div>
@@ -14,7 +14,10 @@
 </template>
 
 <script>
+
+
 </script>
 
 <style scoped>
+
 </style>
