@@ -19,9 +19,7 @@
         data-test="input-email"
         outlined
         :error-messages="errors.email"
-        required
       />
-      <span class="message-error" v-if="errors.email">{{ errors.email }}</span>
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
         Password
@@ -38,9 +36,7 @@
         data-test="input-password"
         outlined
         :error-messages="errors.password"
-        required
       />
-      <span class="message-error" v-if="errors.password">{{ errors.password }}</span>
 
       <v-alert
         v-if="showError"
@@ -111,14 +107,10 @@ export default {
             this.$router.push('/dashboard')
           })
           .catch(error => {
-          // Se houver um erro na resposta, exiba a mensagem de erro
           if (error.response && error.response.status === 401) {
-            // Defina showError como true para exibir o alerta de erro
             this.showError = true
           } else {
-            // Defina showError como false para ocultar o alerta de erro
             this.showError = false
-            // Exiba uma mensagem de erro genérica
             console.error('Ocorreu um erro ao processar sua solicitação:', error.message)
           }
         })
