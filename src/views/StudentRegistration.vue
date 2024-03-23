@@ -12,7 +12,7 @@
         </div>
         <div class="formContent d-flex flex-column">
             <div>
-                <v-form>
+                <v-form @submit.prevent="handleSubmitStudentRegistration"> 
                     <div class="formContent-data d-flex">
                         <div class="d-flex formContent-data-cameraContent">
                             <div class="formContent-data-cameraContent-camera"> 
@@ -176,12 +176,27 @@
 </template>
 
 <script>
+    import { schemaStudentRegistrationForm } from '../validations/studentRegistration.validations'
+    import { captureErrorYup } from '../utils/captureErrorsYup'
+
     import Camera from 'simple-vue-camera'
+    import * as yup from 'yup'
 
     export default {
         data() {
             return {
                 open: false,
+                name: "",
+                email: "",
+                contact: "",
+                date_birth: new Date(),
+                cep: "",
+                street: "",
+                number: "",
+                neighborhood: "",
+                city: "",
+                province: "",
+                complement: "",
             }
         },
         components: {
@@ -189,7 +204,28 @@
         },
         methods: {
             handleCameraEnabled() {
-            this.open = !this.open;
+                this.open = !this.open;
+            },
+            handleSubmitStudentRegistration() {
+                try {
+                    const body = {
+                        name: this.name,
+                        email: this.email,
+                        contact: this.contact,
+                        date_birth: this.date_birth,
+                        cep: this.cep,
+                        street: this.street,
+                        number: this.number,
+                        neighborhood: this.neighborhood,
+                        city: this.city,
+                        province: this.province,
+                    }
+                    schemaStudentRegistrationForm.validateSync(body, { abortEarly: false })
+                } catch (error) {
+                    if (error instanceof yup.ValidationError) {
+                        this.errors = captureErrorYup(error)
+                    }
+                }
             },
         }
     }
