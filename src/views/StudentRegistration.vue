@@ -18,9 +18,9 @@
                             <div class="formContent-data-cameraContent-camera"> 
                                 <div class="formContent-data-cameraContent-camera-photo">
                                     <simple-v-camera
+                                        v-if="open"
                                         :resolution="{ width:400, height: 400}"
                                         ref="camera"
-                                        autoplay
                                     ></simple-v-camera>
                                 </div>
                             </div>
@@ -28,16 +28,17 @@
                                 <v-btn
                                     class="ma-2"
                                     color="amber"
-                                    icon="mdi-camera-plus"
-                                    size="large"
                                     title="Capturar foto"
+                                    size="large"
+                                    icon="mdi-camera-plus"
                                 ></v-btn>
                                 <v-btn
                                     class="ma-2"
                                     color="grey-darken-4 text-amber"
-                                    icon="mdi-camera"
                                     size="large"
-                                    title="Habilitar câmera"
+                                    title="Clique para habilitar/desabilitar a webcam"
+                                    :icon="open ? 'mdi-camera' : 'mdi-camera-off'"
+                                    @click="handleCameraEnabled"
                                 ></v-btn>
                             </div>
                         </div>
@@ -178,9 +179,19 @@
     import Camera from 'simple-vue-camera'
 
     export default {
+        data() {
+            return {
+                open: false,
+            }
+        },
         components: {
             'simple-v-camera': Camera
         },
+        methods: {
+            handleCameraEnabled() {
+            this.open = !this.open;
+            },
+        }
     }
 
 </script>
