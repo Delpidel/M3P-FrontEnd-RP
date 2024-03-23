@@ -49,6 +49,7 @@
                                     label="Nome completo"
                                     type="text"
                                     variant="outlined"
+                                    :error-messages="errors.name"
                                 />
                             </v-col>
                             <v-col cols="12" sm="12" md="12">
@@ -57,6 +58,7 @@
                                     label="E-mail"
                                     type="email"
                                     variant="outlined"
+                                    :error-messages="errors.email"
                                 />
                             </v-col>
                             <div class="d-flex formContent-data-contactDate">
@@ -66,6 +68,7 @@
                                         label="Telefone para contato"
                                         type="number"
                                         variant="outlined"
+                                        :error-messages="errors.contact"
                                     />
                                 </v-col>
                                 <v-col cols="12" sm="12" md="6">
@@ -74,6 +77,8 @@
                                         label="Data de Nascimento"
                                         type="date"
                                         variant="outlined"
+                                        :max="new Date()"
+                                        :error-messages="errors.dateBirth"
                                     />
                                 </v-col>
                             </div>
@@ -89,6 +94,7 @@
                                 label="CEP"
                                 type="number"
                                 variant="outlined"
+                                :error-messages="errors.cep"
                             />
                         </v-col>
                         <v-col cols="12" sm="12" md="6">
@@ -97,6 +103,7 @@
                                 label="Logradouro"
                                 type="text"
                                 variant="outlined"
+                                :error-messages="errors.street"
                             />
                         </v-col>
                         <v-col cols="12" sm="12" md="3">
@@ -105,6 +112,7 @@
                                 label="Número"
                                 type="text"
                                 variant="outlined"
+                                :error-messages="errors.number"
                             />
                         </v-col>
                     </div>
@@ -115,6 +123,7 @@
                                 label="Bairro"
                                 type="text"
                                 variant="outlined"
+                                :error-messages="errors.neighborhood"
                             />
                         </v-col>
 
@@ -134,6 +143,7 @@
                                 label="Cidade"
                                 type="text"
                                 variant="outlined"
+                                :error-messages="errors.city"
                             />
                         </v-col>
 
@@ -143,6 +153,7 @@
                                 label="Estado"
                                 type="text"
                                 variant="outlined"
+                                :error-messages="errors.state"
                             />
                         </v-col>
                     </div>
@@ -189,14 +200,16 @@
                 name: "",
                 email: "",
                 contact: "",
-                date_birth: new Date(),
+                dateBirth: new Date(),
                 cep: "",
                 street: "",
                 number: "",
                 neighborhood: "",
                 city: "",
-                province: "",
+                state: "",
                 complement: "",
+
+                errors: {},
             }
         },
         components: {
@@ -212,13 +225,13 @@
                         name: this.name,
                         email: this.email,
                         contact: this.contact,
-                        date_birth: this.date_birth,
+                        dateBirth: this.dateBirth,
                         cep: this.cep,
                         street: this.street,
                         number: this.number,
                         neighborhood: this.neighborhood,
                         city: this.city,
-                        province: this.province,
+                        state: this.state,
                     }
                     schemaStudentRegistrationForm.validateSync(body, { abortEarly: false })
                 } catch (error) {
