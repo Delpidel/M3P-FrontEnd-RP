@@ -98,12 +98,12 @@ export default {
           email: this.email,
           password: this.password
         })
-          .then((data) => {
-            api.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`
-            localStorage.setItem('@token_fitmanage', data.data.token)
-            localStorage.setItem('@permissions_fitmanage', JSON.stringify(data.data.permissions))
-            localStorage.setItem('@name', data.data.name)
-            localStorage.setItem('@profile', data.data.profile)
+        .then(({ data }) => {
+            api.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
+            localStorage.setItem('@token', data.token)
+            localStorage.setItem('@permissions', JSON.stringify(data.permissions))
+            localStorage.setItem('@name', data.name)
+            localStorage.setItem('@profile', data.profile)
             this.$router.push('/dashboard')
           })
           .catch(error => {

@@ -59,7 +59,7 @@ describe('Tela de login', () => {
   })
 
   it('Deve redirecionar para a página inicial se o usuário já estiver autenticado', async () => {
-    localStorage.setItem('@token_fitmanage', 'token')
+    localStorage.setItem('@token', 'token')
 
     const component = mount(Login, {
       global: {
