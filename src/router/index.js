@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Dashboard from '../views/Dashbord.vue'
+import AdminDashboard  from '../views/AdminDashboard.vue'
 import Login from '../views/Login.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
 
@@ -13,9 +13,15 @@ const router = createRouter({
       component: Login
     },
     {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: Dashboard
+      path: '/dashboard/admin',
+      name: 'AdminDashboard ',
+      component: AdminDashboard 
+    },
+
+    {
+      path: '/dashboard/students',
+      name: 'StudentDashboard ',
+      component: Exemplo 
     },
 
     //perfil usuário
