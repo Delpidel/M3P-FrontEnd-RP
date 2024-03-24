@@ -8,7 +8,7 @@
         style="z-index: 9999"
       ></v-img>
 
-      <div class="text-subtitle-1 text-medium-emphasis mt-4">Account</div>
+      <div class="text-subtitle-1 text-medium-emphasis mt-4">Email</div>
 
       <v-text-field
         density="compact"
@@ -22,10 +22,10 @@
       />
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
-        Password
+        Senha
       </div>
       <v-text-field
-        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+        :append-inner-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
         :type="visible ? 'text' : 'password'"
         density="compact"
         placeholder="Enter your password"
@@ -38,13 +38,13 @@
         :error-messages="errors.password"
       />
 
-      <v-alert
-        v-if="showError"
-        class="mb-8"
+      <v-snackbar
+        v-model="showError"
+        :timeout="5000" 
         color="error"
-        closable
-        title="Credenciais inválidas"
-      ></v-alert>
+      >
+        Credenciais inválidas
+      </v-snackbar>
 
       <v-btn
         block
