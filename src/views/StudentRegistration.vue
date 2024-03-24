@@ -78,7 +78,7 @@
                                         label="Data de Nascimento"
                                         type="date"
                                         variant="outlined"
-                                        :max="new Date()"
+                                        :max="maxDate"
                                         :error-messages="errors.dateBirth"
                                     />
                                 </v-col>
@@ -213,7 +213,8 @@
                 name: "",
                 email: "",
                 contact: "",
-                dateBirth: new Date(),
+                dateBirth: null,
+                maxDate: this.calculateMaxDate(),
                 cep: "",
                 street: "",
                 number: "",
@@ -232,6 +233,10 @@
             'simple-v-camera': Camera
         },
         methods: {
+            calculateMaxDate() {
+                const now = new Date()
+                return `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`
+            },
             handleCameraEnabled() {
                 this.open = !this.open;
             },
