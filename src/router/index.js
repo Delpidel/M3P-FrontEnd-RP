@@ -63,12 +63,12 @@ const router = createRouter({
 
     //perfil aluno
     {
-      path: '/meal-plans',
+      path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
       component: Exemplo
     },
     {
-      path: '/workouts',
+      path: '/student/workouts',
       name: 'Treinos do aluno',
       component: Exemplo
     }
