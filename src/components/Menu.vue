@@ -1,53 +1,10 @@
-<!-- <template>
-  <v-navigation-drawer :rail="rail" permanent>
-    <v-list>
-      <v-list-item
-        prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
-        :title="name"
-        :subtitle="profile"
-      ></v-list-item>
-    </v-list>
-
-    <v-divider></v-divider>
-
-    <v-list density="compact" nav>
-      <router-link to="/home">
-        <v-list-item prepend-icon="mdi-folder" title="Home" value="home"> </v-list-item>
-      </router-link>
-    </v-list>
-    <div class="pa-8">
-      <v-btn :loading="loading" @click="handleLogout" block>
-        Saindo
-        <template v-slot:loader>
-          <v-progress-linear indeterminate></v-progress-linear>
-        </template>
-      </v-btn>
-    </div>
-  </v-navigation-drawer>
-</template>
-
-<script>
-
-export default {
-  data() {
-    return {
-      permissions: JSON.parse(localStorage.getItem('@permissions_petshop')),
-      name: localStorage.getItem('@name'),
-      profile: localStorage.getItem('@profile'),
-      loading: false
-    }
-  },
-  methods: {}
-}
-</script> -->
-
 <template>
   <v-layout>
     <v-navigation-drawer
       theme="dark"
       v-model="drawer"
       :permanent="lgAndUp"
-      width="100%"
+      width="15%"
       id="sidebar"
       border="none"
       :style="mdAndDown ? 'display:none;' : ''"
@@ -65,19 +22,25 @@ export default {
       <v-divider></v-divider>
       <v-list>
         <v-list-item
-          prepend-avatar="https://fanese.perseus.com.br/Servicos/Conta/Foto"
+          :prepend-avatar="imagePath"
           :title="name"
-          subtitle="ALUNO"
+          :subtitle="profile"
           class="font-weight-bold pl-8"
         ></v-list-item>
       </v-list>
 
       <v-list nav dense class="ma-0 pa-0 pl-0 pl-md-4 mt-5">
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.link" link :ripple="false">
+        <v-list-item
+          v-for="(item, i) in menu[profile]"
+          :key="i"
+          :to="item.link"
+          link
+          :ripple="false"
+        >
           <v-list-item
             class="font-weight-bold pl-0pl-lg-5 menuItem"
             :prepend-icon="item.icon"
-            :active="isChildrenActive(item)"
+            :active="item.link === $route.path"
             active-class="border"
           >
             {{ item.text }}
@@ -100,13 +63,15 @@ export default {
         <v-card-title
           class="bg-grey-darken-4 d-flex align-center justify-space-between pt-4 pl-8 pl-sm-4"
         >
-          <router-link to="/">
+          <router-link to="/dashboard">
             <img
               src="../assets/logo.svg"
               alt="logo fitmanage tech, braço flexionado mostrando músculos e um halter grande."
               :style="xs ? 'width: 30%; margin-left: 5% ' : 'width: 40%; margin-left: 10%'"
             />
           </router-link>
+
+          <h2>FITMANAGE TECH</h2>
 
           <v-menu theme="dark" class="menu-dropdown">
             <template v-slot:activator="{ props }">
@@ -121,7 +86,7 @@ export default {
             </template>
 
             <v-list theme="dark">
-              <v-list-item v-for="(item, i) in items" :key="i" :to="item.link" link>
+              <v-list-item v-for="(item, i) in menu[profile]" :key="i" :to="item.link" link>
                 <v-list-item :append-icon="item.icon">{{ item.text }}</v-list-item>
               </v-list-item>
               <v-list-item class="pt-10" align="center">
@@ -143,48 +108,51 @@ const { xs, lgAndUp, mdAndDown } = useDisplay()
 </script>
 
 <script>
+import accountImage from '../assets/account-image.jpg'
+
 export default {
   name: 'MenuPag',
   data() {
     return {
+      imagePath: accountImage,
       permissions: localStorage.getItem('@permissions'),
       name: localStorage.getItem('@name'),
       profile: localStorage.getItem('@profile'),
       token: localStorage.getItem('@token'),
       loading: false,
-
-      items: [
-        {
-          icon: 'mdi-view-dashboard-outline',
-          text: 'Dashboard',
-          link: '/dashboard'
-        },
-        {
-          icon: 'mdi-account-group-outline',
-          text: 'Alunos',
-          link: '/students'
-        },
-        {
-          icon: 'mdi-weight-lifter',
-          text: 'Exercícios',
-          link: '/exercises'
-        }
-      ],
-      drawer: true
+      drawer: true,
+      menu: {
+        ADMIN: [
+          { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
+          { icon: 'mdi-account-plus', text: 'Cadastrar Usuário', link: '/users/new' },
+          { icon: 'mdi-account-multiple', text: 'Usuários', link: '/users' }
+        ],
+        RECEPCIONISTA: [
+          { icon: 'mdi-account-plus', text: 'Cadastrar Estudante', link: '/students/new' },
+          { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/students' }
+        ],
+        INSTRUTOR: [
+          { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
+          { icon: 'mdi-dumbbell', text: 'Exercícios', link: '/exercises' },
+          { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/instructor/students' }
+        ],
+        NUTRICIONISTA: [
+          { icon: 'mdi-account-check', text: 'Estudantes Ativos', link: '/students-active' }
+        ],
+        ALUNO: [
+          { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
+          { icon: 'mdi-food-apple', text: 'Minhas Dietas', link: '/meal-plans' },
+          { icon: 'mdi-dumbbell', text: 'Meus Treinos', link: '/workouts' }
+        ]
+      }
     }
   },
   methods: {
     logout() {
-      localStorage.removeItem('@permissions')
-      localStorage.removeItem('@name')
-      localStorage.removeItem('@profile')
-      localStorage.removeItem('@token')
+      const storage = ['@permissions', '@name', '@profile', '@token']
+      storage.forEach((item) => localStorage.removeItem(item))
 
       this.$router.push('/')
-    },
-    isChildrenActive(item) {
-      if (item.link !== '/students') return
-      return this.$route.path.includes('students')
     }
   }
 }
@@ -209,6 +177,7 @@ nav {
   color: #424242;
   margin-right: -10px;
 }
+
 #sidebar a.v-list-item--active::before,
 #sidebar a:has(.v-list-item--active)::before {
   position: absolute;
@@ -222,6 +191,7 @@ nav {
   box-shadow: 30px 30px 0px white;
   z-index: 1005;
 }
+
 #sidebar a.v-list-item--active + .v-list-item::before,
 #sidebar a:has(.v-list-item--active) + .v-list-item::before {
   position: absolute;
@@ -235,9 +205,11 @@ nav {
   box-shadow: 30px -30px 0px white;
   z-index: 1005;
 }
+
 .menuItem {
   z-index: 1010;
 }
+
 .v-list-item:not(:last-child):not(:first-child):hover {
   border-radius: 30px;
   background: rgb(73, 73, 73);

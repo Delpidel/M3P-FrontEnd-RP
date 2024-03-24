@@ -65,3 +65,13 @@ e por isso o valor do padding left é alterado */
     padding-left: 5% !important;
   }
 }
+
+@media (min-width: 1280px) and (max-width: 1600px) {
+  nav[data-v-e065371e] {
+    width: 18% !important;
+  }
+
+  .container {
+    padding-left: 23% !important;
+  }
+}
