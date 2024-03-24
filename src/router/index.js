@@ -19,7 +19,25 @@ const router = createRouter({
     },
 
     {
-      path: '/dashboard/students',
+      path: '/dashboard/recepcionista',
+      name: 'ReceptionistDashboard ',
+      component: Exemplo 
+    },
+
+    {
+      path: '/dashboard/instrutor',
+      name: 'InstructorDashboard ',
+      component: Exemplo 
+    },
+
+    {
+      path: '/dashboard/nutricionista',
+      name: 'NutrictionistDashboard ',
+      component: Exemplo 
+    },
+
+    {
+      path: '/dashboard/aluno',
       name: 'StudentDashboard ',
       component: Exemplo 
     },

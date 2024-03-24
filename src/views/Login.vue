@@ -38,11 +38,7 @@
         :error-messages="errors.password"
       />
 
-      <v-snackbar
-        v-model="showError"
-        :timeout="5000" 
-        color="error"
-      >
+      <v-snackbar v-model="showError" :timeout="5000" color="error">
         Credenciais inválidas
       </v-snackbar>
 
@@ -65,8 +61,8 @@
 import api from '../services/api'
 import * as yup from 'yup'
 import { captureErrorYup } from '../utils/captureErrorYup.js'
-
 import AuthenticationService from '../services/AuthenticationService'
+import router from '@/router'
 
 export default {
   data() {
@@ -75,11 +71,10 @@ export default {
       email: '',
       password: '',
       errors: {},
-      showError: false 
+      showError: false
     }
   },
   methods: {
-
     handleSubmit() {
       try {
         const schema = yup.object().shape({
@@ -98,28 +93,57 @@ export default {
           email: this.email,
           password: this.password
         })
-        .then(({ data }) => {
+          .then(({ data }) => {
             api.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
             localStorage.setItem('@token', data.token)
             localStorage.setItem('@permissions', JSON.stringify(data.permissions))
             localStorage.setItem('@name', data.name)
             localStorage.setItem('@profile', data.profile)
-            this.$router.push('/dashboard')
+
+            // Carrega o perfil do usuário após o login
+            this.loadUserProfile()
           })
-          .catch(error => {
-          if (error.response && error.response.status === 401) {
-            this.showError = true
-          } else {
-            this.showError = false
-            console.error('Ocorreu um erro ao processar sua solicitação:', error.message)
-          }
-        })
+          .catch((error) => {
+            if (error.response && error.response.status === 401) {
+              this.showError = true
+            } else {
+              this.showError = false
+              console.error('Ocorreu um erro ao processar sua solicitação:', error.message)
+            }
+          })
       } catch (error) {
         if (error instanceof yup.ValidationError) {
           console.log(error)
           this.errors = captureErrorYup(error)
         }
       }
+    },
+    loadUserProfile() {
+      const profile = localStorage.getItem('@profile')
+      let dashboardRoute = ''
+
+      switch (profile) {
+        case 'ADMIN':
+          dashboardRoute = '/dashboard/admin'
+          break
+        case 'RECEPCIONISTA':
+          dashboardRoute = '/dashboard/recepcionista'
+          break
+        case 'INSTRUTOR':
+          dashboardRoute = '/dashboard/instrutor'
+          break
+        case 'NUTRICIONISTA':
+          dashboardRoute = '/dashboard/nutricionista'
+          break
+        case 'ALUNO':
+          dashboardRoute = '/dashboard/aluno'
+          break
+        default:
+          console.error('Perfil de usuário inválido:', profile)
+          break
+      }
+
+      router.push(dashboardRoute)
     }
   }
 }
