@@ -95,6 +95,9 @@
                                 type="number"
                                 variant="outlined"
                                 :error-messages="errors.cep"
+                                maxLength="9"
+                                v-on:focusout="getAddressInfo()"
+                                v-on:keyup.enter="getAddressInfo()"
                             />
                         </v-col>
                         <v-col cols="12" sm="12" md="6">
@@ -181,6 +184,9 @@
                         </v-btn>
                     </v-col>
                 </v-form>
+                <v-snackbar v-model="snackbarError" :timeout="duration" color="red-darken-2" location="top">
+                    {{ errorMessage }}
+                </v-snackbar>
             </div>
         </div>
     </div>
@@ -192,6 +198,7 @@
 
     import Camera from 'simple-vue-camera'
     import * as yup from 'yup'
+    import axios from 'axios'
 
     export default {
         data() {
@@ -219,6 +226,28 @@
             handleCameraEnabled() {
                 this.open = !this.open;
             },
+            getAddressInfo() {
+                const cep = this.cep.replace('-', '')
+                if (cep.length === 8) {
+                    axios
+                    .get(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(({ data }) => {
+                        if (data.erro) return
+                        this.street = data.logradouro
+                        this.neighborhood = data.bairro
+                        this.city = data.localidade
+                        this.state = data.uf
+                        this.addressFound = true
+                        this.errors = {}
+                        this.validateSync()
+                    })
+                    .catch((error) => {
+                        this.snackbarError = true
+                        this.errorMessage = `Erro ao consultar o CEP: ${cep}`
+                        console.log(error)
+                    })
+                }
+            },
             handleSubmitStudentRegistration() {
                 try {
                     const body = {
@@ -233,7 +262,9 @@
                         city: this.city,
                         state: this.state,
                     }
+
                     schemaStudentRegistrationForm.validateSync(body, { abortEarly: false })
+
                 } catch (error) {
                     if (error instanceof yup.ValidationError) {
                         this.errors = captureErrorYup(error)
