@@ -28,7 +28,7 @@
           <router-link to="/home">
             <v-list-item prepend-icon="mdi-folder" title="Home" value="home"> </v-list-item>
           </router-link>
-          <router-link to="/avaliacao/step1">
+          <router-link to="/avaliation/step1">
             <v-list-item prepend-icon="mdi-folder" title="Avaliações" value="Avaliation"> </v-list-item>
           </router-link>
         </v-list>
