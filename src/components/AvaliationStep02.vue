@@ -61,12 +61,33 @@ export default {
       input.addEventListener('change', (event) => this.uploadImage(event, index))
       input.click()
     },
-    uploadImage(event) {
+    uploadImage(event, index) {
       const file = event.target.files[0]
-      console.log('Cheguei aqui? (upload)', file)
+      if (file) {
+        this.imageLinks[index] = URL.createObjectURL(file)
+        const imageUrl = URL.createObjectURL(file)
+        this.imageLinks[index] = imageUrl
+        localStorage.setItem(`image_${index}`, imageUrl)
+        console.log('Imagem adicionada:', imageUrl)
+      }
     },
     deletePhoto(index) {
-      console.log('Cheguei aqui? (delete)', index)
+      this.imageLinks[index] = `../src/assets/avaliation-images/${this.getOriginalImageName(index)}`
+      console.log('Imagem restaurada:', this.imageLinks[index])
+    },
+    getOriginalImageName(index) {
+      switch (index) {
+        case 0:
+          return 'front.svg'
+        case 1:
+          return 'right.svg'
+        case 2:
+          return 'back.svg'
+        case 3:
+          return 'left.svg'
+        default:
+          return ''
+      }
     },
     toggleHover(index) {
       this.hoverIndex = index
