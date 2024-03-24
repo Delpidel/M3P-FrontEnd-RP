@@ -28,9 +28,10 @@
                                 <v-btn
                                     class="ma-2"
                                     color="amber"
-                                    title="Capturar foto"
+                                    title="Clique para capturar uma foto"
                                     size="large"
                                     icon="mdi-camera-plus"
+                                    @click="capturePhoto('snap')"
                                 ></v-btn>
                                 <v-btn
                                     class="ma-2"
@@ -184,6 +185,9 @@
                         </v-btn>
                     </v-col>
                 </v-form>
+                <v-snackbar v-model="snackbarSuccess" :timeout="duration" color="success" location="top">
+                    {{ successMessage }}
+                </v-snackbar>
                 <v-snackbar v-model="snackbarError" :timeout="duration" color="red-darken-2" location="top">
                     {{ errorMessage }}
                 </v-snackbar>
@@ -193,6 +197,8 @@
 </template>
 
 <script>
+    import StudentRegistrationService from '../services/StudentRegistrationService'
+
     import { schemaStudentRegistrationForm } from '../validations/studentRegistration.validations'
     import { captureErrorYup } from '../utils/captureErrorsYup'
 
@@ -215,7 +221,10 @@
                 city: "",
                 state: "",
                 complement: "",
+                photo: "",
 
+                snackbarSuccess: false,
+                snackbarError: false,
                 errors: {},
             }
         },
@@ -225,6 +234,27 @@
         methods: {
             handleCameraEnabled() {
                 this.open = !this.open;
+            },
+            capturePhoto(opt) {
+                if (opt === 'snap') {
+                    const studentPhoto = this.$refs.camera?.snapshot()
+                    studentPhoto.then((data) => {
+                        const formData = new FormData()
+                        formData.append('file', data)
+                        StudentRegistrationService.createphotograph(formData)
+                    })
+                    .then((data) => {
+                        this.photo = data;
+                        this.snackbarSuccess = true
+                        this.successMessage = `Foto capturada com sucesso`
+                        console.log('Foto capturada com sucesso')
+                    })
+                    .catch((error) => {
+                        this.snackbarError = true
+                        this.errorMessage = `Erro ao capturar foto`
+                        console.log(error)
+                    })
+                }
             },
             getAddressInfo() {
                 const cep = this.cep.replace('-', '')
