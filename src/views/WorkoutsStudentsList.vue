@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+   <div class="container">
     <h1 class="title">Treinos - {{ formattedWorkouts.name }}</h1>
    
-    <v-card color="#757575" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
+    <v-card color="#424242" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
       <v-toolbar-title class="orange-text">HOJE : {{ currentDay }}</v-toolbar-title>
       <br>
       
@@ -23,7 +23,7 @@
     </v-card>
     <br>
 
-    <v-card class="custom-card" color="#757575" elevation="10" width="100%" >
+    <v-card class="custom-card" color="#424242" elevation="10" width="100%" >
       <v-toolbar color="#FFC107">
         <v-toolbar-title>TREINOS DA SEMANA</v-toolbar-title>
       </v-toolbar>
@@ -54,7 +54,7 @@
         </v-window-item>
       </v-window>
     </v-card>
-  </v-container>
+  </div>
 </template>
 
 <script>
