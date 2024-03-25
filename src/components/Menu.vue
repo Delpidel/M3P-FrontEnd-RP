@@ -134,8 +134,8 @@ export default {
         ],
         ALUNO: [
           { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
-          { icon: 'mdi-food-apple', text: 'Minhas Dietas', link: '/meal-plans' },
-          { icon: 'mdi-dumbbell', text: 'Meus Treinos', link: '/workouts' }
+          { icon: 'mdi-food-apple', text: 'Minhas Dietas', link: '/student/meal-plans' },
+          { icon: 'mdi-dumbbell', text: 'Meus Treinos', link: '/student/workouts' }
         ]
       }
     }

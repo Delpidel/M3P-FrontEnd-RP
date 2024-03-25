@@ -2157,10 +2157,17 @@ vue-screen-utils@^1.0.0-beta.13:
     "@vue/server-renderer" "3.4.21"
     "@vue/shared" "3.4.21"
 
+<<<<<<< HEAD
 vuetify@^3.5.11:
   version "3.5.11"
   resolved "https://registry.npmjs.org/vuetify/-/vuetify-3.5.11.tgz"
   integrity sha512-us5I0jyFwIQYG4v41PFmVMkoc/oJddVT4C2RFjJTI99ttigbQ92gsTeG5SB8BPfmfnUS4paR5BedZwk6W3KlJw==
+=======
+vuetify@^3.4.17:
+  version "3.5.8"
+  resolved "https://registry.npmjs.org/vuetify/-/vuetify-3.5.8.tgz"
+  integrity sha512-8nGS+lKejZkev55HFwIfsRt+9fOqbeDQNmXxfmLKAlnUT8FtynVwbjAwHMtX/OQAQ3ZwRaR1ptqQQmx3OgxzbQ==
+>>>>>>> 6525751bfeb3a66bdcde86296aa4051b3909de78
 
 w3c-xmlserializer@^5.0.0:
   version "5.0.0"
