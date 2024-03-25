@@ -2,8 +2,8 @@
   <div class="background">
     <v-container fluid>
       <v-row justify="center">
-        <v-col cols="12" md="8">
-          <v-card class="glass-card mt-8">
+        <v-col cols="12" md="6" class="ml-md-3">
+          <v-card class="card mt-8 mx-4"> 
             <v-row align="center">
               <v-col cols="auto">
                 <v-img
@@ -35,7 +35,15 @@
               </v-col>
 
               <v-col cols="12" class="text-center">
-                <v-btn color="amber" @click="sendDocument">Enviar</v-btn>
+                <v-btn
+                  type="submit"
+                  variant="elevated"
+                  color="amber"
+                  class="font-weight-bold"
+                  size="large"
+                  @click="sendDocument"
+                  >Enviar</v-btn
+                >
               </v-col>
             </v-row>
           </v-card>
@@ -104,17 +112,11 @@ export default {
   min-height: 100vh;
 }
 
-.glass-card {
+.card {
   background-color: whitesmoke;
   box-shadow: 0 px 32px 0 black;
   backdrop-filter: blur(13.5px);
   border-radius: 10px;
   padding: 40px;
-}
-
-@media (max-width: 400px) {
-  .text-center {
-    text-align: center;
-  }
 }
 </style>
