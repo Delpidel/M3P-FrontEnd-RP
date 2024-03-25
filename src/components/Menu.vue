@@ -1,51 +1,48 @@
 <template>
-  <v-navigation-drawer :rail="rail" permanent>
-    <v-list>
-      <v-list-item prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg" :title="name"
-        :subtitle="profile"></v-list-item>
-    </v-list>
+  <v-layout>
+    <v-navigation-drawer
+      theme="dark"
+      v-model="drawer"
+      :permanent="lgAndUp"
+      width="15%"
+      id="sidebar"
+      border="none"
+      :style="mdAndDown ? 'display:none;' : ''"
+    >
+      <v-list-item>
+        <router-link to="/dashboard">
+          <img
+            src="../assets/fit-manage-tech-white.svg"
+            alt="logo fitmanage tech, braço flexionado mostrando músculos e um halter grande."
+            class="my-4 pb-5 w-100 mx-auto d-block"
+          />
+        </router-link>
+      </v-list-item>
 
-    <v-layout>
-      <v-navigation-drawer theme="dark" v-model="drawer" :permanent="lgAndUp" width="15%" id="sidebar" border="none"
-        :style="mdAndDown ? 'display:none;' : ''">
-        <v-list-item>
-          <router-link to="/dashboard">
-            <img src="../assets/fit-manage-tech-white.svg"
-              alt="logo fitmanage tech, braço flexionado mostrando músculos e um halter grande."
-              class="my-4 pb-5 w-100 mx-auto d-block" />
-          </router-link>
-        </v-list-item>
-
-
-        <v-divider></v-divider>
-        <v-list>
-          <v-list-item :prepend-avatar="imagePath" :title="name" :subtitle="profile"
-            class="font-weight-bold pl-8"></v-list-item>
-        </v-list>
-
-
-        <v-list density="compact" nav>
-          <router-link to="/home">
-            <v-list-item prepend-icon="mdi-folder" title="Home" value="home"> </v-list-item>
-          </router-link>
-          <router-link to="/avaliation/step1">
-            <v-list-item prepend-icon="mdi-folder" title="Avaliações" value="Avaliation"> </v-list-item>
-          </router-link>
-        </v-list>
-        <div class="pa-8">
-          <v-btn :loading="loading" @click="handleLogout" block>
-            Saindo
-            <template v-slot:loader>
-              <v-progress-linear indeterminate></v-progress-linear>
-            </template>
-          </v-btn>
-        </div>
-      </v-navigation-drawer>
+      <v-divider></v-divider>
+      <v-list>
+        <v-list-item
+          :prepend-avatar="imagePath"
+          :title="name"
+          :subtitle="profile"
+          class="font-weight-bold pl-8"
+        ></v-list-item>
+      </v-list>
 
       <v-list nav dense class="ma-0 pa-0 pl-0 pl-md-4 mt-5">
-        <v-list-item v-for="(item, i) in menu[profile]" :key="i" :to="item.link" link :ripple="false">
-          <v-list-item class="font-weight-bold pl-0pl-lg-5 menuItem" :prepend-icon="item.icon"
-            :active="item.link === $route.path" active-class="border">
+        <v-list-item
+          v-for="(item, i) in menu[profile]"
+          :key="i"
+          :to="item.link"
+          link
+          :ripple="false"
+        >
+          <v-list-item
+            class="font-weight-bold pl-0pl-lg-5 menuItem"
+            :prepend-icon="item.icon"
+            :active="item.link === $route.path"
+            active-class="border"
+          >
             {{ item.text }}
           </v-list-item>
         </v-list-item>
@@ -57,25 +54,34 @@
           <v-btn block append-icon="mdi-logout" variant="plain" @click="logout">Sair</v-btn>
         </div>
       </template>
-    </v-layout>
-  </v-navigation-drawer>
+    </v-navigation-drawer>
+  </v-layout>
 
   <div class="d-flex justify-center" id="menuMobile">
     <v-row :style="lgAndUp ? 'display:none' : ''">
       <v-col cols="12" class="pa-0 ma-0">
-        <v-card-title class="bg-grey-darken-4 d-flex align-center justify-space-between pt-4 pl-8 pl-sm-4">
+        <v-card-title
+          class="bg-grey-darken-4 d-flex align-center justify-space-between pt-4 pl-8 pl-sm-4"
+        >
           <router-link to="/dashboard">
-            <img src="../assets/logo.svg"
+            <img
+              src="../assets/logo.svg"
               alt="logo fitmanage tech, braço flexionado mostrando músculos e um halter grande."
-              :style="xs ? 'width: 30%; margin-left: 5% ' : 'width: 40%; margin-left: 10%'" />
+              :style="xs ? 'width: 30%; margin-left: 5% ' : 'width: 40%; margin-left: 10%'"
+            />
           </router-link>
 
           <h2>FITMANAGE TECH</h2>
 
           <v-menu theme="dark" class="menu-dropdown">
             <template v-slot:activator="{ props }">
-              <v-btn icon="mdi-dots-vertical" v-bind="props" class="my-2 my-sm-4 mx-2 mx-sm-12" theme="dark"
-                variant="plain">
+              <v-btn
+                icon="mdi-dots-vertical"
+                v-bind="props"
+                class="my-2 my-sm-4 mx-2 mx-sm-12"
+                theme="dark"
+                variant="plain"
+              >
               </v-btn>
             </template>
 
@@ -84,7 +90,9 @@
                 <v-list-item :append-icon="item.icon">{{ item.text }}</v-list-item>
               </v-list-item>
               <v-list-item class="pt-10" align="center">
-                <v-btn append-icon="mdi-logout" variant="plain" @click="logout" width="100%">Sair</v-btn>
+                <v-btn append-icon="mdi-logout" variant="plain" @click="logout" width="100%"
+                  >Sair</v-btn
+                >
               </v-list-item>
             </v-list>
           </v-menu>
@@ -92,7 +100,6 @@
       </v-col>
     </v-row>
   </div>
-
 </template>
 
 <script setup>
@@ -185,8 +192,8 @@ nav {
   z-index: 1005;
 }
 
-#sidebar a.v-list-item--active+.v-list-item::before,
-#sidebar a:has(.v-list-item--active)+.v-list-item::before {
+#sidebar a.v-list-item--active + .v-list-item::before,
+#sidebar a:has(.v-list-item--active) + .v-list-item::before {
   position: absolute;
   content: '';
   width: 70px;
@@ -206,10 +213,12 @@ nav {
 .v-list-item:not(:last-child):not(:first-child):hover {
   border-radius: 30px;
   background: rgb(73, 73, 73);
-  background: linear-gradient(90deg,
-      rgba(73, 73, 73, 1) 0%,
-      rgba(33, 33, 33, 1) 75%,
-      rgba(33, 33, 33, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(73, 73, 73, 1) 0%,
+    rgba(33, 33, 33, 1) 75%,
+    rgba(33, 33, 33, 1) 100%
+  );
 }
 
 a.v-list-item--active:hover .v-list-item,
