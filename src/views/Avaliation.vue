@@ -1,7 +1,9 @@
 <template>
-    <v-layout>
-        <AvaliationStep01/>        
-    </v-layout>
+    <div>
+        <v-layout>
+            <AvaliationStep01 />
+        </v-layout>
+    </div>
 </template>
 
 <script>
@@ -11,7 +13,7 @@ export default {
 
     components: {
         AvaliationStep01,
-      
+
     }
 }
 </script>
