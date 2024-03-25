@@ -96,8 +96,7 @@ export default {
   },
 
   mounted() {
-    const studentId = this.$route.params.id;
-    this.fetchWorkoutsByStudent(studentId);
+    this.fetchWorkoutsByStudent();
   }
 }
 </script>
