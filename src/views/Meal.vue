@@ -1,24 +1,55 @@
 <template>
     <div class="container">
 
-        <div class="tabela">
-            <h2>Alimentação - {{ studentName }}</h2>
-            <v-table>
-                <thead>
-                    <tr>
-                        <th class="text-left">
-                            <button @click="segunda()">Segunda</button>
-                        </th>
-                        <th class="text-left"><button @click="terca()">Terça</button></th>
-                        <th class="text-left"><button @click="quarta()">Quarta</button></th>
-                        <th class="text-left"><button @click="quinta()">Quinta</button></th>
-                        <th class="text-left"><button @click="sexta()">Sexta</button></th>
-                        <th class="text-left"><button @click="sabado()">Sábado</button></th>
-                        <th class="text-left"><button @click="domingo()">Domingo</button></th>
-                    </tr>
-                </thead>
-            </v-table>
-        </div>
+        <h2>Alimentação - {{ studentName }}</h2>
+
+        <v-card>
+            <v-tabs v-model="diaDaSemana" bg-color="grey-darken-4 text-amber">
+                <v-tab value="segunda">Segunda</v-tab>
+                <v-tab value="terca">Terça</v-tab>
+                <v-tab value="quarta">Quarta</v-tab>
+                <v-tab value="quinta">Quinta</v-tab>
+                <v-tab value="sexta">Sexta</v-tab>
+                <v-tab value="sabado">Sábado</v-tab>
+                <v-tab value="domingo">Domingo</v-tab>
+            </v-tabs>
+
+            <v-card-text>
+                <v-window v-model="tab">
+                    <v-window-item value="one">
+                        <v-form @submit.prevent="handleSubmit">
+                          
+                            <select v-model="selectedPlanoAlimentacao" class="select" id="select" type="text" variant="outlined">
+                                <option v-for="item in planoAlimentacao" :key="item.id" :value="item.id">
+                                    {{ item.description }}
+                                </option>
+                            </select>
+
+                            <v-autocomplete v-model="selectedPlanoAlimentacao" :items="planoAlimentacao"
+                                item-text="description" item-value="id" label="Plano de Alimentação" type="text"
+                                variant="outlined" :error-messages="errors.name">
+                            </v-autocomplete>
+
+
+
+                            <v-text-field v-model="horario" label="Horário" type="text" variant="outlined"
+                                :error-messages="errors.name">
+                            </v-text-field>
+                            <v-text-field v-model="titulo" label="Título" type="text" variant="outlined"
+                                :error-messages="errors.name">
+                            </v-text-field>
+                            <v-text-field v-model="descricao" label="Descrição" type="text" variant="outlined"
+                                :error-messages="errors.name">
+                            </v-text-field>
+                            <v-btn type="submit" variant="elevated" color="grey-darken-4 text-amber">
+                                {{ isEditing ? 'Atualizar' : 'Cadastrar' }}
+                            </v-btn>
+
+                        </v-form>
+                    </v-window-item>
+                </v-window>
+            </v-card-text>
+        </v-card>
 
         <div class="tabela">
             <h2>Refeições</h2>
@@ -38,9 +69,15 @@
                         <td>{{ meal.description }}</td>
 
                         <td>
-                            <div class="d-flex justify-space-around"> 
-                                <v-icon :icon="`mdiSvg:${mdiPencil}`"></v-icon>
-                                <v-icon :icon="`mdiSvg:${mdiDelete}`"></v-icon>
+                            <div class="d-flex justify-space-around">
+                                <v-btn @click="editDieta(meal)" type="submit" variant="elevated"
+                                    color="grey-darken-4 text-amber">
+                                    Editar
+                                </v-btn>
+                                <v-btn @click="excluirDieta(meal.id)" type="submit" variant="elevated"
+                                    color="grey-darken-4 text-amber">
+                                    Excluir
+                                </v-btn>
                             </div>
                         </td>
                     </tr>
@@ -51,13 +88,11 @@
 </template>
 
 <script>
-import axios from "axios";
+
+import MealService from "../services/MealService";
 
 import { format } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-
-
-const token = localStorage.getItem("usuario_token");
 
 export default {
 
@@ -65,6 +100,16 @@ export default {
         item: [],
         itemDia: [],
         diaDaSemana: "",
+        idPlanoAlimentacao: "",
+        planoAlimentacao: [],
+        selectedPlanoAlimentacao: '',
+        mealId: "",
+        horario: "",
+        titulo: "",
+        descricao: "",
+        errors: [],
+        tab: null,
+        isEditing: false,
 
     }),
 
@@ -80,6 +125,8 @@ export default {
 
         this.buscarDieta();
         this.buscarDietaDia();
+
+        this.getMealPlans()
     },
 
     watch: {
@@ -89,48 +136,96 @@ export default {
     },
 
     methods: {
+        editDieta(meal) {
+            this.isEditing = true;
+            this.mealId = meal.id;
+            this.idPlanoAlimentacao = meal.meal_plan_id;
+            this.horario = meal.hour;
+            this.titulo = meal.title;
+            this.descricao = meal.description;
+
+            console.log(this.mealId)
+        },
+        resetForm() {
+            this.isEditing = false;
+            this.mealId = '';
+            this.planoAlimentacao = '';
+            this.horario = '';
+            this.titulo = '';
+            this.descricao = '';
+
+        },
+
+
+        getMealPlans() {
+            MealService.getMealPlans()
+                .then((data) => {
+                    this.planoAlimentacao = data;
+                    console.log(data)
+                })
+                .catch(() => {
+                    console.log('dados não encontrados');
+                });
+        },
+
+        handleSubmit(meal) {
+            try {
+                const data = {
+                    student_id: this.$route.params.id,
+                    meal_plan_id: meal.id,
+                    day: this.diaDaSemana.toUpperCase(),
+                    hour: this.horario,
+                    title: this.titulo,
+                    description: this.descricao,
+                };
+
+                if (this.isEditing) {
+                    MealService.updateMeal(this.mealId, data)
+                        .then(() => {
+                            this.buscarDieta()
+                            this.resetForm()
+                            alert('Refeição atualizada com sucesso');
+
+                        })
+                        .catch(() => alert('Houve um erro ao atualizar a refeição'));
+                } else {
+
+                    MealService.createMeal(data)
+                        .then(() => {
+                            console.log("Cadastrado com sucesso");
+                            this.errors = [];
+                            this.buscarDieta()
+                        })
+                        .catch(() => {
+                            this.showError = true
+                        })
+                }
+            } catch (error) {
+                if (error instanceof yup.ValidationError) {
+                    //this.errors = captureErrorYup(error)
+                }
+
+            }
+        },
+
+
         removerAcentos(info) {
             return info.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         },
 
-        segunda() {
-            this.diaDaSemana = "segunda";
-        },
-        terca() {
-            this.diaDaSemana = "terca";
-        },
-        quarta() {
-            this.diaDaSemana = "quarta";
-        },
-        quinta() {
-            this.diaDaSemana = "quinta";
-        },
-        sexta() {
-            this.diaDaSemana = "sexta";
-        },
-        sabado() {
-            this.diaDaSemana = "sabado";
-        },
-        domingo() {
-            this.diaDaSemana = "domingo";
-        },
 
         buscarDieta() {
-            axios({
-                url: `http://127.0.0.1:8000/api/meal/${this.$route.params.id}`,
-                method: "GET",
-                headers: {
-                    Authorization: `Bearen ${token}`,
-                },
-            })
-                .then((response) => {
-                    this.item = response.data;
+            MealService.getMealStudent(this.$route.params.id)
+                .then((data) => {
+                    this.item = data;
                     this.filtrarDieta();
                 })
                 .catch(() => {
-                    console.log("dados não encontrados");
+                    console.log('dados não encontrados');
                 });
         },
+
+
 
         filtrarDieta() {
             const dieta = this.diaDaSemana.toLocaleLowerCase();
@@ -140,19 +235,13 @@ export default {
         },
 
         buscarDietaDia() {
-            axios({
-                url: `http://127.0.0.1:8000/api/meal/${this.$route.params.id}`,
-                method: "GET",
-                headers: {
-                    Authorization: `Bearen ${token}`,
-                },
-            })
-                .then((response) => {
-                    this.itemDia = response.data;
+            MealService.getMealStudent(this.$route.params.id)
+                .then((data) => {
+                    this.itemDia = data;
                     this.filtrarDietaDia();
                 })
                 .catch(() => {
-                    console.log("dados não encontrados");
+                    console.log('dados não encontrados');
                 });
         },
 
@@ -163,11 +252,71 @@ export default {
             );
         },
 
-    },
+
+        cadastrarDieta() {
+            const data = {
+                student_id: this.$route.params.id,
+                meal_plan_id: this.idPlanoAlimentacao,
+                day: this.diaDaSemana.toUpperCase(),
+                hour: this.horario,
+                title: this.titulo,
+                description: this.descricao,
+            };
+
+            MealService.createMeal(data)
+                .then(() => {
+                    console.log("Cadastrado com sucesso");
+                    this.errors = [];
+                    this.buscarDieta()
+                })
+                .catch((error) => {
+                    if (error.response?.data?.message) {
+                        alert(error.response.data.message);
+                    } else {
+                        alert("Houve uma falha ao tentar cadastrar");
+                    }
+                });
+        },
+
+        excluirDieta(id) {
+            MealService.deleteMeal(id)
+                .then(() => {
+                    console.log("Excluído com sucesso");
+                    this.buscarDieta()
+                })
+                .catch((error) => {
+                    if (error.response?.data?.message) {
+                        alert(error.response.data.message);
+                    } else {
+                        alert("Houve uma falha ao tentar excluir");
+                    }
+                });
+        }
+
+
+    }
+
 };
 </script>
 
 <style>
+.select {
+  width: 100%;
+  height: 60px;
+  background-color: rgb(243, 243, 242);
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border-bottom: 1px solid rgb(180, 178, 178);
+  color: rgb(136, 136, 136);
+}
+.select {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-bottom: 20px;
+    width: 80%;
+  }
+
 .cabecalho {
     display: flex;
     flex-direction: column;
