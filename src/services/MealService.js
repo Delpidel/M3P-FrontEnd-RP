@@ -7,6 +7,11 @@ class MealService {
         return response.data;
     }
 
+    async getStudents() {
+        const response = await api.get(`/students`);
+        return response.data;
+    }
+
     async getMealPlans() {
         const response = await api.get(`/meal_plans`);
         return response.data;

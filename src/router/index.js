@@ -4,6 +4,7 @@ import Dashboard from '../views/Dashbord.vue'
 import Login from '../views/Login.vue'
 import Meal from '../views/Meal.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
+import ActiveStudents from '@/views/ActiveStudents.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,7 +60,7 @@ const router = createRouter({
     {
       path: '/active/students',
       name: 'Listagem de estudantes ativos',
-      component: Exemplo
+      component: ActiveStudents
     },
 
     {
