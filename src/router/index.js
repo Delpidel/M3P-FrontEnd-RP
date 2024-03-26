@@ -75,8 +75,8 @@ const router = createRouter({
     },
     {
       path: '/student/workouts',
-      name: 'Treinos do aluno',
-      component: Exemplo
+      name: 'WorkoutsStudentsList',
+      component: WorkoutsStudentsList
     }
   ]
 })
