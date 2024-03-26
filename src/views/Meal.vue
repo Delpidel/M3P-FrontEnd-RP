@@ -19,18 +19,10 @@
                     <v-window-item value="one">
                         <v-form @submit.prevent="handleSubmit">
                           
-                            <select v-model="selectedPlanoAlimentacao" class="select" id="select" type="text" variant="outlined">
-                                <option v-for="item in planoAlimentacao" :key="item.id" :value="item.id">
-                                    {{ item.description }}
-                                </option>
-                            </select>
-
-                            <v-autocomplete v-model="selectedPlanoAlimentacao" :items="planoAlimentacao"
-                                item-text="description" item-value="id" label="Plano de Alimentação" type="text"
+                            <v-autocomplete v-model="idPlanoAlimentacao" :items="planoAlimentacao"
+                                item-title="description" item-value="id" label="Plano de Alimentação" type="text"
                                 variant="outlined" :error-messages="errors.name">
                             </v-autocomplete>
-
-
 
                             <v-text-field v-model="horario" label="Horário" type="text" variant="outlined"
                                 :error-messages="errors.name">
@@ -102,7 +94,6 @@ export default {
         diaDaSemana: "",
         idPlanoAlimentacao: "",
         planoAlimentacao: [],
-        selectedPlanoAlimentacao: '',
         mealId: "",
         horario: "",
         titulo: "",
@@ -144,7 +135,7 @@ export default {
             this.titulo = meal.title;
             this.descricao = meal.description;
 
-            console.log(this.mealId)
+            console.log(meal)
         },
         resetForm() {
             this.isEditing = false;
@@ -168,11 +159,11 @@ export default {
                 });
         },
 
-        handleSubmit(meal) {
+        handleSubmit() {
             try {
                 const data = {
                     student_id: this.$route.params.id,
-                    meal_plan_id: meal.id,
+                    meal_plan_id: this.idPlanoAlimentacao,
                     day: this.diaDaSemana.toUpperCase(),
                     hour: this.horario,
                     title: this.titulo,
@@ -283,6 +274,7 @@ export default {
                 .then(() => {
                     console.log("Excluído com sucesso");
                     this.buscarDieta()
+                    this.resetForm()
                 })
                 .catch((error) => {
                     if (error.response?.data?.message) {
@@ -328,9 +320,9 @@ export default {
 }
 
 
-.tabelaDieta {
+/* .tabelaDieta {
     border: 1px solid black;
-}
+} */
 
 
 
