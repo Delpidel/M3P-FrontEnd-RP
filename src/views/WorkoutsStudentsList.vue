@@ -1,59 +1,66 @@
 <template>
-   <div class="container">
-    <h1 class="title">Treinos - {{ formattedWorkouts.name }}</h1>
-   
-    <v-card color="#424242" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
-      <v-toolbar-title class="orange-text">HOJE : {{ currentDay }}</v-toolbar-title>
+  <div class="container">
+    <v-card v-if="!formattedWorkouts.workouts || Object.keys(formattedWorkouts.workouts).length === 0" color="#424242" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
+      <v-card-text>
+        <p class="orange-text">Ainda não há treinos agendados para você</p>
+      </v-card-text>
+    </v-card>
+    <template v-else>
+      <h1 class="title">Treinos - {{ formattedWorkouts.name }}</h1>
+
+      <v-card color="#424242" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
+        <v-toolbar-title class="orange-text">HOJE : {{ currentDay }}</v-toolbar-title>
+        <br>
+        
+        <v-table v-if="formattedWorkouts.workouts[currentDay]">
+          <tbody>
+            <tr v-for="(workout, index) in formattedWorkouts.workouts[currentDay]" :key="index">
+              <td class="orange-checkbox"><input type="checkbox"></td>
+              <td>{{ workout.description }}</td>
+              <td> | {{ workout.weight }} KG </td>
+              <td> | {{ workout.repetitions }} repetições </td>
+              <td> | {{ workout.break_time }} min de pausa</td>
+            </tr>
+          </tbody>
+        </v-table>
+        <template v-else>
+          <p class="orange-text">Não há sessões de treinamento agendadas para hoje!</p>
+        </template>
+      </v-card>
       <br>
-      
-      <v-table v-if="formattedWorkouts.workouts[currentDay]">
-        <tbody>
-          <tr v-for="(workout, index) in formattedWorkouts.workouts[currentDay]" :key="index">
-            <td class="orange-checkbox"><input type="checkbox"></td>
-            <td>{{ workout.description }}</td>
-            <td> | {{ workout.weight }} KG </td>
-            <td> | {{ workout.repetitions }} repetições </td>
-            <td> | {{ workout.break_time }} min de pausa</td>
-          </tr>
-        </tbody>
-      </v-table>
-      <template v-else>
-        <p class="orange-text">Não há sessões de treinamento agendadas para hoje!</p>
-      </template>
-    </v-card>
-    <br>
 
-    <v-card class="custom-card" color="#424242" elevation="10" width="100%" >
-      <v-toolbar color="#FFC107">
-        <v-toolbar-title>TREINOS DA SEMANA</v-toolbar-title>
-      </v-toolbar>
+      <v-card class="custom-card" color="#424242" elevation="10" width="100%" >
+        <v-toolbar color="#FFC107">
+          <v-toolbar-title>TREINOS DA SEMANA</v-toolbar-title>
+        </v-toolbar>
 
-      <div class="d-flex flex-row py-3 px-2" >
-        <v-tabs v-model="tab" direction="horizontal" color="#FFC107">
-          <v-tab v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
-            <v-icon v-if="icons[index]">{{ icons[index] }}</v-icon>
-            {{ day }}
-          </v-tab>
-        </v-tabs>
-      </div>     
+        <div class="d-flex flex-row py-3 px-2" >
+          <v-tabs v-model="tab" direction="horizontal" color="#FFC107">
+            <v-tab v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
+              <v-icon v-if="icons[index]">{{ icons[index] }}</v-icon>
+              {{ day }}
+            </v-tab>
+          </v-tabs>
+        </div>     
 
-      <v-window v-model="tab">
-        <v-window-item v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
-          <v-card flat>
-            <v-card-text>
-              <table>
-                <tr class="text-body-1" v-for="workout in formattedWorkouts.workouts[day]" :key="workout.id">
-                  <td>{{ workout.description }}</td>
-                  <td> | {{ workout.weight }} KG </td>
-                  <td> | {{ workout.repetitions }} repetições </td>
-                  <td> | {{ workout.break_time }} min de pausa</td>
-                </tr>
-              </table>
-            </v-card-text>
-          </v-card>
-        </v-window-item>
-      </v-window>
-    </v-card>
+        <v-window v-model="tab">
+          <v-window-item v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
+            <v-card flat>
+              <v-card-text>
+                <table>
+                  <tr class="text-body-1" v-for="workout in formattedWorkouts.workouts[day]" :key="workout.id">
+                    <td>{{ workout.description }}</td>
+                    <td> | {{ workout.weight }} KG </td>
+                    <td> | {{ workout.repetitions }} repetições </td>
+                    <td> | {{ workout.break_time }} min de pausa</td>
+                  </tr>
+                </table>
+              </v-card-text>
+            </v-card>
+          </v-window-item>
+        </v-window>
+      </v-card>
+    </template>
   </div>
 </template>
 
