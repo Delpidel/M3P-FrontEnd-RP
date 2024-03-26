@@ -71,9 +71,9 @@
             />
           </router-link>
 
-          <h2>FITMANAGE TECH</h2>
-
+          <h2>FITMANAGE TECH</h2>      
           <v-menu theme="dark" class="menu-dropdown">
+            
             <template v-slot:activator="{ props }">
               <v-btn
                 icon="mdi-dots-vertical"

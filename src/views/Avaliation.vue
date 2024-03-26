@@ -1,7 +1,8 @@
 <template>
     <div>
         <v-layout>
-            <AvaliationStep01 />
+            <AvaliationStep01  />
+            
         </v-layout>
     </div>
 </template>

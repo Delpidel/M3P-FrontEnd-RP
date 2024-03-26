@@ -5,19 +5,17 @@
         <!-- Calendário -->
         <v-col cols="12" md="4">
           <v-col>
-            <v-date-picker v-model="date" color="yellow" @input="selectDate"></v-date-picker>
-          </v-col>
-          <v-col md="10">
-            <v-text-field type="time"> Horário: </v-text-field>
-          </v-col>
+            <h3>{{ student_id }}</h3>
+            <v-date-picker v-model="date" color="yellow" mode="dateTime" :timezone="timezone" is24hr  ></v-date-picker>
+          </v-col>         
         </v-col>
 
         <!-- Formulário de Avaliação -->
         <v-col cols="12" md="8">
-          <v-form>
+          <v-form @submit.prevent="submitForm">
             <v-row>
               <v-col cols="12" sm="4">
-                <v-text-field v-model="name" label="Nome" color="yellow-darken-1"></v-text-field>
+                <v-text-field v-model="age" label="Idade" color="yellow-darken-1"></v-text-field>
               </v-col>
               <v-col cols="12" sm="4">
                 <v-text-field v-model="weight" label="Peso" color="yellow-darken-2" type="number"></v-text-field>
@@ -34,8 +32,8 @@
                   color="yellow-darken-2"></v-textarea>
               </v-col>
               <v-col cols="12">
-                <v-btn type="button" variant="elevated" color="grey-darken-4 text-amber" class="font-weight-bold"
-                  size="large" @Click="this.$router.push('/avaliation/step2')">Proximo ></v-btn>
+                <v-btn type="submit" variant="elevated" color="grey-darken-4 text-amber" class="font-weight-bold"
+                  size="large">Proximo ></v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -46,23 +44,67 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
+      student_id: '1',
       date: null,
+      timezone: '',
       time: null,
-      name: '',
+      age: '',
       weight: '',
       height: '',
       observationsToNutritionist: '',
-      observationsToStudent: ''
+      observationsToStudent: '',
+      measures: '',
     }
   },
   methods: {
     selectDate(date) {
       // Lógica para lidar com a seleção de data
       console.log('Data selecionada:', date)
+    },
+    submitForm() {
+      const dataForm = {
+        student_id: this.student_id,
+        age: this.age,
+        date: this.formatDate(this.date),
+        weight: this.weight,
+        height: this.height,
+        observations_to_student: this.observationsToStudent,
+        observations_to_nutritionist: this.observationsToNutritionist,
+        measures: this.measures
+      }
+      const token = localStorage.getItem('@token');
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      axios.post('http://127.0.0.1:8000/api/avaliations/step1', dataForm)
+
+        .then(response => {
+          console.log(response.data);
+          this.$router.push('/avaliation/step2');
+        })
+        .catch(error => {
+          console.log(dataForm, token)
+          console.error('erro ao enviar dados', error)
+        });
+
+    },
+    //Logica para formatar data conforme backEnd
+    formatDate(date) {
+      const formattedDate = new Date(date);
+      const year = formattedDate.getFullYear();
+      const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(formattedDate.getDate()).padStart(2, '0');
+      const hours = String(formattedDate.getHours()).padStart(2, '0');
+      const minutes = String(formattedDate.getMinutes()).padStart(2, '0');
+      const seconds = String(formattedDate.getSeconds()).padStart(2, '0');
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
+
   }
 }
 </script>
