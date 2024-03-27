@@ -9,36 +9,37 @@
         <img src="@/assets/logo.svg" alt="Logo" style="height: 80px;">
       </v-card-title>
     </v-card>
+    <v-toolbar color="#757575">
+      <v-btn class="ml-auto" type="submit" variant="elevated font-weight-bold" size="large">
+        Novo Treino
+      </v-btn>
 
-    <v-card color="#212121" class="pb-6">
-      <v-toolbar color="#757575">
-        <v-btn class="ml-auto" type="submit" variant="elevated font-weight-bold" size="large">
-          Novo Treino
-        </v-btn>
+      <template v-slot:extension>
+        <v-tabs v-model="tab" direction="horizontal" color="#212121">
+          <v-tab v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
+            {{ day }}
+          </v-tab>
+        </v-tabs>
+      </template>
+    </v-toolbar>
+    <v-window v-model="tab">
+      <v-window-item v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
 
-        <template v-slot:extension>
-          <v-tabs v-model="dias">
-            <v-tab v-for="(dia, index) in diasDaSemana" :key="index" :value="dia.toLowerCase()">{{ dia }}</v-tab>
-          </v-tabs>
-        </template>
-      </v-toolbar>
+        <v-card-text>
+          <v-data-table :items="formattedWorkouts[day]" :headers="headers" :items-per-page="5">
 
-      <v-container>
-        <v-row justify="center">
-          <v-col cols="12" md="8" lg="8">
-            <v-card class="pa-2 mb-4" v-for="(workout, index) in listaTreinos" :key="index">
-              <div class="headline">{{ workout.exercise_description }}</div>
-              <div>Peso: {{ workout.weight }}</div>
-              <div>Repetições: {{ workout.repetitions }}</div>
-              <div>Descanso: {{ workout.break_time }}</div>
-            </v-card>
-            <v-card v-if="listaTreinos.length === 0" color="#212121" class="fill-height d-flex align-center justify-center">
-              <v-card-text>Sem treino para este dia.</v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
+            <tr class="text-body-1" v-for="workout in formattedWorkouts[day]" :key="workout.id">
+
+              <td> {{ workout.exercise.description }}</td>
+              <td> {{ workout.weight }} KG </td>
+              <td> {{ workout.repetitions }} repetições </td>
+              <td> {{ workout.break_time }} min de pausa</td>
+            </tr>
+
+          </v-data-table>
+        </v-card-text>
+      </v-window-item>
+    </v-window>
   </div>
 </template>
 
@@ -49,47 +50,42 @@ export default {
   data() {
     return {
       studentName: '',
-      studentId: this.$route.params.id,
-      listaTreinos: [],
-      dias: '',
-      diasDaSemana: ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
-    };
+      formattedWorkouts: {},
+      today: ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'],
+      tab: 'option-1',
+      days: ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO', 'DOMINGO'],
+
+    }
+  },
+
+  computed: {
+    currentDay() {
+      const todayIndex = new Date().getDay();
+      return this.today[todayIndex];
+    }
   },
   mounted() {
-    this.loadWorkout();
-    const dataAtual = new Date();
-    const diaSemana = dataAtual.getDay();
-    const diasSemana = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
-    this.dias = diasSemana[diaSemana];
-  },
-  watch: {
-    dias() {
-      this.loadWorkout();
-    }
+    this.fetchWorkoutsByStudent();
   },
   methods: {
-  loadWorkout() {
-    const studentId = this.$route.params.id;
+    fetchWorkoutsByStudent() {
+      const studentId = this.$route.params.id;
 
-    // Verifica se o usuário tem permissão 'get-workouts' antes de fazer a solicitação GET
-    const permissions = JSON.parse(localStorage.getItem('@permissions'));
-    if (!permissions || !permissions.includes('get-workouts')) {
-      alert('Você não tem permissão para acessar esta página.');
-      // Ou redireciona para outra página
-      this.$router.push('/outra-pagina');
-      return; // Encerra a execução do método
-    }
-
-    axios.get(`http://127.0.0.1:8000/api/students/${studentId}/workouts`)
-      .then(response => {
-        this.studentName = response.data.student_name;
-        this.listaTreinos = response.data.workouts.filter(item => item.day.toLowerCase() === this.dias);
+      axios.get(`http://127.0.0.1:8000/api/students/${studentId}/workouts`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('@token')}`
+        }
       })
-      .catch(() => {
-        alert('Não foi possível acessar a lista de exercícios.');
-      });
-  },
-}
-
+        .then(response => {
+          this.studentName = response.data.student_name;
+          this.formattedWorkouts = response.data.workouts;
+        })
+        .catch(error => {
+          alert('Não foi possível acessar a lista de treinos.');
+        });
+    }
   }
+
+
+}
 </script>
