@@ -245,7 +245,7 @@ export default {
         }
         formattedCpf += value[i];
       }
-
+      
       this.cpf = formattedCpf;
     },
     handleCameraEnabled() {
@@ -333,6 +333,7 @@ export default {
             this.name = ''
             this.email = ''
             this.contact = ''
+            this.cpf = ''
             this.dateBirth = ''
             this.cep = ''
             this.street = ''
@@ -346,11 +347,9 @@ export default {
             this.snackbarError = true
             this.errorMessage = `Erro ao cadastrar o aluno`
           })
-
       } catch (error) {
         if (error instanceof yup.ValidationError) {
           this.errors = captureErrorYup(error)
-
         }
       }
     },
