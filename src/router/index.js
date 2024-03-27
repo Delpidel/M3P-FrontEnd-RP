@@ -18,8 +18,8 @@ const router = createRouter({
       component: Home
     },
     {
-      path: '/cadastro-de-estudante',
-      name: 'StudentRegistration',
+      path: '/students/new',
+      name: 'Novo Estudante',
       component: StudentRegistration
     },
   ]

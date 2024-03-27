@@ -15,7 +15,7 @@
                 <v-form @submit.prevent="handleSubmitStudentRegistration"> 
                     <div class="formContent-data d-flex">
                         <div class="d-flex formContent-data-cameraContent">
-                            <div class="formContent-data-cameraContent-camera"> 
+                            <div class="formContent-data-cameraContent-camera">
                                 <div class="formContent-data-cameraContent-camera-photo">
                                     <simple-v-camera
                                         v-if="open"
@@ -63,7 +63,17 @@
                                 />
                             </v-col>
                             <div class="d-flex formContent-data-contactDate">
-                                <v-col cols="12" sm="12" md="6">
+                                <v-col cols="12" sm="12" md="4">
+                                    <v-text-field
+                                        v-model="cpf"
+                                        label="CPF"
+                                        type="text"
+                                        variant="outlined"
+                                        @input="handleChange"
+                                        :error-messages="errors.cpf"
+                                    />
+                                </v-col>
+                                <v-col cols="12" sm="12" md="4">
                                     <v-text-field
                                         v-model="contact"
                                         label="Telefone para contato"
@@ -72,7 +82,7 @@
                                         :error-messages="errors.contact"
                                     />
                                 </v-col>
-                                <v-col cols="12" sm="12" md="6">
+                                <v-col cols="12" sm="12" md="4">
                                     <v-text-field
                                         v-model="dateBirth"
                                         label="Data de Nascimento"
@@ -84,6 +94,11 @@
                                 </v-col>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="formContent-data-important-informations d-flex">
+                        <v-icon size="small">mdi-alert-circle</v-icon>
+                        <h3 class="subtitle font-weight-light ms-2">A última foto capturada será a usada em seu cadastro.</h3>
                     </div>
 
                     <v-divider class="mb-4"></v-divider>
@@ -213,7 +228,8 @@
                 name: "",
                 email: "",
                 contact: "",
-                dateBirth: null,
+                cpf: "",
+                dateBirth: "",
                 maxDate: this.calculateMaxDate(),
                 cep: "",
                 street: "",
@@ -223,6 +239,7 @@
                 state: "",
                 complement: "",
                 photo: "",
+                photoId: null,
 
                 snackbarSuccess: false,
                 snackbarError: false,
@@ -237,28 +254,38 @@
                 const now = new Date()
                 return `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`
             },
+            handleChange(event) {
+                let value = event.target.value.replace(/\D/g, '');
+
+                let formattedCpf = '';
+                for (let i = 0; i < value.length; i++) {
+                    if (i === 3 || i === 6) {
+                        formattedCpf += '.';
+                    } else if (i === 9) {
+                        formattedCpf += '-';
+                    }
+                    formattedCpf += value[i];
+                }
+
+                this.cpf = formattedCpf;
+            },
             handleCameraEnabled() {
                 this.open = !this.open;
             },
             capturePhoto(opt) {
                 if (opt === 'snap') {
-                    const studentPhoto = this.$refs.camera?.snapshot()
+                    const studentPhoto = this.$refs.camera?.snapshot();
                     studentPhoto.then((data) => {
-                        const formData = new FormData()
-                        formData.append('file', data)
-                        StudentRegistrationService.createphotograph(formData)
-                    })
-                    .then((data) => {
-                        this.photo = data;
-                        this.snackbarSuccess = true
-                        this.successMessage = `Foto capturada com sucesso`
-                        console.log('Foto capturada com sucesso')
+                        this.photo = data; 
+                        this.snackbarSuccess = true;
+                        this.successMessage = `Foto capturada com sucesso`;
+                        console.log('Foto capturada com sucesso');
                     })
                     .catch((error) => {
-                        this.snackbarError = true
-                        this.errorMessage = `Erro ao capturar foto`
-                        console.log(error)
-                    })
+                        this.snackbarError = true;
+                        this.errorMessage = `Erro ao capturar foto`;
+                        console.error(error);
+                    });
                 }
             },
             getAddressInfo() {
@@ -277,8 +304,6 @@
                         this.validateSync()
                     })
                     .catch((error) => {
-                        this.snackbarError = true
-                        this.errorMessage = `Erro ao consultar o CEP: ${cep}`
                         console.log(error)
                     })
                 }
@@ -288,6 +313,7 @@
                     const body = {
                         name: this.name,
                         email: this.email,
+                        cpf: this.cpf,
                         contact: this.contact,
                         dateBirth: this.dateBirth,
                         cep: this.cep,
@@ -300,9 +326,52 @@
 
                     schemaStudentRegistrationForm.validateSync(body, { abortEarly: false })
 
+                    const formData = new FormData()
+                    formData.append('photo', this.photo);
+                    formData.append('name', this.name)
+                    formData.append('email', this.email)
+                    formData.append('contact', this.contact)
+                    formData.append('cpf', this.cpf)
+                    formData.append('date_birth', this.dateBirth)
+                    formData.append('cep', this.cep)
+                    formData.append('street', this.street)
+                    formData.append('number', this.number)
+                    formData.append('neighborhood', this.neighborhood)
+                    formData.append('city', this.city)
+                    formData.append('state', this.state)
+
+                    if (!this.photo) {
+                        this.snackbarError = true;
+                        this.errorMessage = `Por favor, capture uma foto antes de enviar o formulário`;
+                        return;
+                    }
+
+                    StudentRegistrationService.createStudent(formData)
+                        .then(() => {
+                            this.snackbarSuccess = true
+                            this.successMessage = `Aluno cadastrado com sucesso`
+
+                            this.name = ''
+                            this.email = ''
+                            this.contact = ''
+                            this.dateBirth = ''
+                            this.cep = ''
+                            this.street = ''
+                            this.number = ''
+                            this.neighborhood = ''
+                            this.city = ''
+                            this.province = ''
+                            this.complement = ''
+                        })
+                        .catch(() => {
+                            this.snackbarError = true
+                            this.errorMessage = `Erro ao cadastrar o aluno`
+                        })
+
                 } catch (error) {
                     if (error instanceof yup.ValidationError) {
                         this.errors = captureErrorYup(error)
+                        
                     }
                 }
             },
@@ -348,6 +417,16 @@
     margin: 18px;
 }
 
+.formContent-data-important-informations {
+    color: #D50000;
+    font-size: 14px;
+    margin-top: -22px;
+}
+
+.subtitle {
+    margin-top: -4px;
+}
+
 @media (max-width:960px) {
 
     .formContent-data {
@@ -366,6 +445,14 @@
 
     .formContent-data-cameraContent-camera-photo {
         width: 17.5rem;
+    }
+    .formContent-data-nameEmail, 
+    .formContent-data-contactDate, 
+    .formContent-data-address, 
+    .formContent-data-neighborhoodComplement, 
+    .formContent-data-cityState {
+        display: flex;
+        flex-direction: column;
     }
 }
 

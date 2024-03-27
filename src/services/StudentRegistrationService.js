@@ -2,8 +2,8 @@ import api from "./api"
 
 class StudentRegistrationService {
 
-    async createphotograph(formData) {
-        const response = await api.post('upload', formData, {
+    async createStudent(formData) {
+        const response = await api.post('students', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
