@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-row justify="center">
         <v-col cols="12" md="6" class="ml-md-3">
-          <v-card class="card mt-8 mx-4"> 
+          <v-card class="card mt-8 mx-4">
             <v-row align="center">
               <v-col cols="auto">
                 <v-img
@@ -30,7 +30,7 @@
                   v-model="selectedFile"
                   label="Selecione o arquivo"
                   outlined
-                  accept=".pdf,.doc,.docx,.txt,.jpg,.png"
+                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
                 ></v-file-input>
               </v-col>
 
