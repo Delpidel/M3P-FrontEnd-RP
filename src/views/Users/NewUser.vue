@@ -14,6 +14,15 @@
             :style="smAndDown ? 'display:flex; justify-content:center;' : ''"
           >
             <ImageUploadPreview></ImageUploadPreview>
+            <div
+              class="v-messages__message v-messages errorFile mx-5 my-3"
+              tag="div"
+              role="alert"
+              aria-live="polite"
+              id="input-13-messages"
+            >
+              {{ errors.photo }}
+            </div>
           </v-col>
 
           <v-col cols="12" sm="7" md="8" class="my-auto">
@@ -99,6 +108,25 @@ const { smAndDown } = useDisplay()
 <script>
 import ImageUploadPreview from '@/components/File/ImageUploadPreview.vue'
 
+import * as yup from 'yup'
+import { captureErrorYup } from '../../utils/captureErrorYup'
+
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .min(6, 'O nome deve ter no mínimo 6 caracteres.')
+    .required('O nome é obrigatório.'),
+  email: yup
+    .string()
+    .required('O campo email é obrigatório.')
+    .email('O campo email deve conter um e-mail válido.'),
+  profile: yup
+    .string()
+    .required('O perfil é obrigatório.')
+    .oneOf(['2', '3', '4'], 'Selecione um perfil válido.'),
+  photo: yup.mixed().nullable()
+})
+
 export default {
   data() {
     return {
@@ -124,8 +152,32 @@ export default {
     ImageUploadPreview
   },
   methods: {
+    validateSync() {
+      this.errors = {}
+      try {
+        schema.validateSync(
+          {
+            name: this.name,
+            email: this.email,
+            profile: this.profile,
+            photo: this.photo
+          },
+          { abortEarly: false }
+        )
+
+        this.errors = {}
+      } catch (error) {
+        if (error instanceof yup.ValidationError) {
+          console.log(error)
+          this.errors = captureErrorYup(error)
+          return false
+        }
+      }
+      return true
+    },
+
     createNewUser() {
-      //logica cadastro user
+      if (this.validateSync() === false) return
     }
   }
 }
@@ -136,5 +188,11 @@ export default {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.errorFile {
+  color: rgb(176, 0, 32);
+  opacity: 1;
+  font-size: 12px;
 }
 </style>
