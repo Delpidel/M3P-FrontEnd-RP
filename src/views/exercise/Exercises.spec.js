@@ -53,13 +53,10 @@ describe('Tela de Exercícios', () => {
             }
         })
 
-        // Dispara o evento de submit do formulário
         wrapper.find('form').trigger('submit')
 
-        // Aguarda o próximo tick para que as promessas sejam resolvidas
         await wrapper.vm.$nextTick()
 
-        // Verifica se a mensagem de erro é exibida corretamente
         expect(wrapper.vm.errors.description).toBeTruthy()
     })
 
@@ -70,19 +67,14 @@ describe('Tela de Exercícios', () => {
             }
         })
 
-        // Define uma descrição muito longa
         const longDescription = 'a'.repeat(151)
 
-        // Preenche o campo de descrição com uma descrição muito longa
         await wrapper.setData({ description: longDescription })
 
-        // Dispara o evento de submit do formulário
         wrapper.find('form').trigger('submit')
 
-        // Aguarda o próximo tick para que as promessas sejam resolvidas
         await wrapper.vm.$nextTick()
 
-        // Verifica se a mensagem de erro é exibida corretamente
         expect(wrapper.vm.errors.description).toBeTruthy()
     })
 
@@ -113,29 +105,26 @@ describe('Tela de Exercícios', () => {
 
 
     it('Deve exibir mensagem de erro ao tentar cadastrar um exercício que já existe', async () => {
-        // Mock da função createExercise para lançar um erro de exercício já existente
+
         const createExercise = vi.spyOn(ExerciseService, 'createExercise').mockRejectedValueOnce(new Error('Exercício já existe'));
-    
+
         const component = mount(ExercisesPage, {
             global: {
                 plugins: [vuetify]
             }
         });
-    
-        // Define o valor de descrição como um exercício que já existe
+
         component.getComponent(concatId("input-description")).setValue("Exercício Existente");
-    
-        // Dispara o evento de submit do formulário
+
         component.getComponent(concatId("submit-button")).trigger("submit");
-    
+
         await flushPromises();
-    
-        // Verifica se a função createExercise foi chamada corretamente
+
         expect(createExercise).toBeCalledWith({
             description: 'Exercício Existente',
         });
-    
-        
+
+
     });
-    
+
 })
