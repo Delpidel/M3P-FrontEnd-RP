@@ -140,7 +140,7 @@ export default {
         resetForm() {
             this.isEditing = false;
             this.mealId = '';
-            this.planoAlimentacao = '';
+            this.idPlanoAlimentacao = '';
             this.horario = '';
             this.titulo = '';
             this.descricao = '';
@@ -173,8 +173,8 @@ export default {
                 if (this.isEditing) {
                     MealService.updateMeal(this.mealId, data)
                         .then(() => {
-                            this.buscarDieta()
                             this.resetForm()
+                            this.buscarDieta()
                             alert('Refeição atualizada com sucesso');
 
                         })
