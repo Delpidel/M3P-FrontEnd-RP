@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Dashboard from '../views/Dashbord.vue'
 import Login from '../views/Login.vue'
+import NewUser from '../views/Users/NewUser.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
 
 const router = createRouter({
@@ -27,7 +28,7 @@ const router = createRouter({
     {
       path: '/users/new',
       name: 'Novo usuário',
-      component: Exemplo
+      component: NewUser
     },
 
     //perfil recepcionista
