@@ -11,18 +11,18 @@
         <v-form @submit.prevent="addExercise" ref="form" class="d-flex"
           :style="xs ? 'flex-direction: column;' : 'flex-direction: row'">
           <v-text-field v-model="description" label="Digite o nome do exercício" :error-messages="errors.description"
-            variant="outlined" class="pl-md-2">
+            variant="outlined" class="pl-md-2" data-test="input-description">
           </v-text-field>
           <v-btn type="submit" variant="elevated" color="grey-darken-4 text-amber"
             class="font-weight-bold px-md-16 ml-sm-5 ml-md-10 mt-2 mt-md-0" height="60px" :ripple="false"
-            :style="xs ? 'height: 45px;' : 'height: 60px'">Cadastrar</v-btn>
+            :style="xs ? 'height: 45px;' : 'height: 60px'" data-test="submit-button">Cadastrar</v-btn>
         </v-form>
 
         <div>
-          <v-snackbar v-model="snackbarSuccess" :timeout="duration" color="success" location="top">
+          <v-snackbar v-model="snackbarSuccess" :timeout="duration" color="success" location="top" data-test="snackbar">
             Cadastrado com sucesso!
           </v-snackbar>
-          <v-snackbar v-model="signUpError" :timeout="duration" color="red-darken-2" location="top">
+          <v-snackbar v-model="signUpError" :timeout="duration" color="red-darken-2" location="top"  data-test="snackbar">
             O exercício já existe!
           </v-snackbar>
         </div>
@@ -65,13 +65,16 @@ export default {
 
         ExerciseService.createExercise(body)
           .then(() => {
+            console.log('Exercício cadastrado com sucesso');
             this.snackbarSuccess = true
             this.description = ''
             this.$refs.form.reset()
           })
           .catch((error) => {
             console.log(error)
-            this.signUpError = true
+            if (error.message === 'Exercício já existe') {
+              this.signUpError = true
+            }
           })
       } catch (error) {
         if (error instanceof yup.ValidationError) {
