@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import Login from './Login.vue'
 import { flushPromises, mount } from '@vue/test-utils'
 
-import AuthenticationService from '../services/AuthenticationService'
+import AuthenticationService from '../../services/AuthenticationService'
 
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
