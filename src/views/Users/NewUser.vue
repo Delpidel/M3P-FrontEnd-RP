@@ -121,7 +121,14 @@ const schema = yup.object().shape({
     .string()
     .required('O perfil é obrigatório.')
     .oneOf(['2', '3', '4'], 'Selecione um perfil válido.'),
-  photo: yup.mixed().nullable()
+  photo: yup
+    .mixed()
+    .nullable()
+    .test('is-image', 'O arquivo deve ser uma imagem', (value) => {
+      if (!value) return true
+      const mimeTypes = ['image/jpeg', 'image/png', 'image/gif']
+      return mimeTypes.includes(value.type)
+    })
 })
 
 export default {
