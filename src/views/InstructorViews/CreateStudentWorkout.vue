@@ -123,13 +123,13 @@ export default {
       breakTime: 45,
       dayOfWeek: getCurrentDay(new Date().getDay()),
       daysOfWeek: [
-        { title: 'Segunda-feira', value: 'segunda' },
-        { title: 'Terça-feira', value: 'terca' },
-        { title: 'Quarta-feira', value: 'quarta' },
-        { title: 'Quinta-feira', value: 'quinta' },
-        { title: 'Sexta-feira', value: 'sexta' },
-        { title: 'Sábado', value: 'sabado' },
-        { title: 'Domingo', value: 'domingo' }
+        { title: 'Segunda-feira', value: 'SEGUNDA' },
+        { title: 'Terça-feira', value: 'TERÇA' },
+        { title: 'Quarta-feira', value: 'QUARTA' },
+        { title: 'Quinta-feira', value: 'QUINTA' },
+        { title: 'Sexta-feira', value: 'SEXTA' },
+        { title: 'Sábado', value: 'SÁBADO' },
+        { title: 'Domingo', value: 'DOMINGO' }
       ],
       observations: '',
       repetitionOfExerciseRules: [
@@ -165,15 +165,13 @@ export default {
           const result = await axios.post(
             'http://localhost:8000/api/workouts',
             {
-              user_id: 3, //pegar valor dinamicamente (talvez através do localStorage durante o login)
               student_id: this.$route.params.id,
               exercise_id: this.exercisesSelected,
               repetitions: this.repetitionOfExercise,
               weight: this.exerciseLoad,
               break_time: this.breakTime,
               observations: this.observations,
-              day: this.dayOfWeek,
-              time: 10 //verificar se esse campo é necessario
+              day: this.dayOfWeek
             },
             {
               headers: {
@@ -186,7 +184,11 @@ export default {
             this.$refs.addWorkoutForm.reset()
           }
         } catch (error) {
-          alert('Não foi possível cadastrar o treino neste momento')
+          if (error.response.data.message) {
+            alert(error.response.data.message)
+          } else {
+            alert('Não foi possível cadastrar o treino neste momento')
+          }
         }
       }
     }
