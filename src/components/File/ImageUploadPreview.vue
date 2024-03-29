@@ -52,7 +52,7 @@ export default {
         const reader = new FileReader()
         reader.onload = () => {
           this.previewImage = reader.result
-          this.$emit('update:selectedImage', reader.result)
+          this.$emit('update:selectedImage', file)
         }
         reader.readAsDataURL(file)
       }

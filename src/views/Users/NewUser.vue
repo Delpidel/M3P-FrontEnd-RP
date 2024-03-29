@@ -105,6 +105,7 @@ const { smAndDown } = useDisplay()
 <script>
 import ImageUploadPreview from '@/components/File/ImageUploadPreview.vue'
 
+import axios from 'axios'
 import * as yup from 'yup'
 import { captureErrorYup } from '../../utils/captureErrorYup'
 
@@ -127,7 +128,7 @@ const schema = yup.object().shape({
     .test('is-image', 'O arquivo deve ser uma imagem', (value) => {
       if (!value) return true
       const mimeTypes = ['image/jpeg', 'image/jpg', 'image/png']
-      return mimeTypes.some((mimeType) => value.includes(mimeType))
+      return mimeTypes.some((mimeType) => value.type.includes(mimeType))
     })
 })
 
@@ -188,6 +189,32 @@ export default {
 
     createNewUser() {
       if (this.validateSync() === false) return
+
+      const formData = new FormData()
+      formData.append('name', this.name)
+      formData.append('email', this.email)
+      formData.append('profile_id', this.profile)
+      if (this.photo) formData.append('photo', this.photo)
+
+      const token = localStorage.getItem('@token')
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+
+      axios
+        .post('http://127.0.0.1:8000/api/users', formData, config)
+        .then(() => {
+          this.snackbarSuccess = true
+          this.$refs.form.reset()
+          this.photo = null
+        })
+        .catch((error) => {
+          this.errorMessage = error.response.data.message
+          this.snackbarError = true
+        })
     }
   }
 }
