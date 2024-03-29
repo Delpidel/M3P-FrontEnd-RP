@@ -4,7 +4,6 @@ import { flushPromises, mount } from '@vue/test-utils'
 
 import ExercisePage from './ExercisesPage.vue'
 
-
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -21,17 +20,6 @@ global.ResizeObserver = require('resize-observer-polyfill')
 
 describe('Tela de Exercícios', () => {
 
-    vi.spyOn(ExerciseService, 'createExercise').mockResolvedValue([
-        {
-            id: 1,
-            name: 'Supino'
-        },
-        {
-            id: 2,
-            name: 'Remada'
-        }
-    ])
-
     it('Deve renderizar a tela corretamente', () => {
         const wrapper = mount(ExercisePage, {
             global: {
@@ -44,7 +32,6 @@ describe('Tela de Exercícios', () => {
         expect(wrapper.find('.v-text-field').exists()).toBeTruthy()
         expect(wrapper.find('.v-btn').exists()).toBeTruthy()
     })
-
 
     it('Deve exibir mensagem de erro ao submeter o formulário com campos vazios', async () => {
         const wrapper = mount(ExercisePage, {
@@ -80,7 +67,7 @@ describe('Tela de Exercícios', () => {
 
     it('Deve exibir mensagem de sucesso ao cadastrar um exercício', async () => {
 
-        const createExercise = vi.spyOn(ExerciseService, 'createExercise').mockRejectedValue(new Error())
+        const createExercise = vi.spyOn(ExerciseService, 'createExercise').mockResolvedValue({ success: true });
 
         const component = mount(ExercisesPage, {
             global: {
@@ -89,7 +76,6 @@ describe('Tela de Exercícios', () => {
         })
 
         component.getComponent(concatId("input-description")).setValue("Supino")
-
 
         component.getComponent(concatId("submit-button")).trigger("submit")
 
@@ -103,7 +89,6 @@ describe('Tela de Exercícios', () => {
 
     })
 
-
     it('Deve exibir mensagem de erro ao tentar cadastrar um exercício que já existe', async () => {
 
         const createExercise = vi.spyOn(ExerciseService, 'createExercise').mockRejectedValueOnce(new Error('Exercício já existe'));
@@ -114,16 +99,15 @@ describe('Tela de Exercícios', () => {
             }
         });
 
-        component.getComponent(concatId("input-description")).setValue("Exercício Existente");
+        component.getComponent(concatId("input-description")).setValue('Supino');
 
         component.getComponent(concatId("submit-button")).trigger("submit");
 
         await flushPromises();
 
         expect(createExercise).toBeCalledWith({
-            description: 'Exercício Existente',
+            description: 'Supino',
         });
-
 
     });
 
