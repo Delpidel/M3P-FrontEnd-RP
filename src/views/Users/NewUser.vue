@@ -126,8 +126,8 @@ const schema = yup.object().shape({
     .nullable()
     .test('is-image', 'O arquivo deve ser uma imagem', (value) => {
       if (!value) return true
-      const mimeTypes = ['image/jpeg', 'image/png', 'image/gif']
-      return mimeTypes.includes(value.type)
+      const mimeTypes = ['image/jpeg', 'image/jpg', 'image/png']
+      return mimeTypes.some((mimeType) => value.includes(mimeType))
     })
 })
 

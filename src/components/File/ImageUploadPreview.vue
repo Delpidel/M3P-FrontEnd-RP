@@ -60,6 +60,7 @@ export default {
     removeImage() {
       this.previewImage = null
       this.$refs.fileInput.value = ''
+      this.$emit('update:selectedImage', null)
     }
   }
 }
