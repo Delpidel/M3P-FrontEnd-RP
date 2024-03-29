@@ -7,14 +7,11 @@
     <div class="cardImage pa-10 mt-10">
       <v-form ref="form" @submit.prevent="createNewUser">
         <v-row>
-          <v-col
-            cols="12"
-            sm="5"
-            md="4"
-            :style="smAndDown ? 'display:flex; justify-content:center;' : ''"
-          >
-            <ImageUploadPreview></ImageUploadPreview>
-            <div
+          <v-col cols="12" sm="5" md="4">
+            <div :style="smAndDown ? 'display:flex; justify-content:center;' : ''">
+              <ImageUploadPreview @update:selectedImage="updatePhoto" />
+            </div>
+            <span
               class="v-messages__message v-messages errorFile mx-5 my-3"
               tag="div"
               role="alert"
@@ -22,7 +19,7 @@
               id="input-13-messages"
             >
               {{ errors.photo }}
-            </div>
+            </span>
           </v-col>
 
           <v-col cols="12" sm="7" md="8" class="my-auto">
@@ -128,6 +125,10 @@ const schema = yup.object().shape({
 })
 
 export default {
+  components: {
+    ImageUploadPreview
+  },
+
   data() {
     return {
       photo: null,
@@ -148,9 +149,7 @@ export default {
       errors: {}
     }
   },
-  components: {
-    ImageUploadPreview
-  },
+
   methods: {
     validateSync() {
       this.errors = {}
@@ -174,6 +173,10 @@ export default {
         }
       }
       return true
+    },
+
+    updatePhoto(imageData) {
+      this.photo = imageData
     },
 
     createNewUser() {

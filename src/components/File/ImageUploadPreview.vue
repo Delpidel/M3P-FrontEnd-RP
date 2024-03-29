@@ -30,6 +30,12 @@
 import accountImage from '@/assets/account-image.jpg'
 
 export default {
+  props: {
+    selectedImage: {
+      type: File,
+      default: null
+    }
+  },
   data() {
     return {
       previewImage: null,
@@ -46,6 +52,7 @@ export default {
         const reader = new FileReader()
         reader.onload = () => {
           this.previewImage = reader.result
+          this.$emit('update:selectedImage', reader.result)
         }
         reader.readAsDataURL(file)
       }
