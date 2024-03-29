@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/Dashbord.vue'
 import Login from '../views/Login.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
+import CreateStudentWorkout from '@/views/InstructorViews/CreateStudentWorkout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,11 @@ const router = createRouter({
       path: '/instructor/students',
       name: 'Listagem de estudantes',
       component: Exemplo
+    },
+    {
+      path: '/newWorkout/:id',
+      name: 'CreateWorkout',
+      component: CreateStudentWorkout
     },
 
     //perfil nutricionista
