@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <v-card v-if="!formattedWorkouts.workouts || Object.keys(formattedWorkouts.workouts).length === 0" color="#424242" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
-      <v-card-text>
-        <p class="orange-text">Ainda não há treinos agendados para você</p>
+      <v-card-text class="text-center">
+        <p class="orange-text">{{ formattedWorkouts.name }} : Ainda não há treinos agendados para você!</p>
       </v-card-text>
     </v-card>
     <template v-else>
