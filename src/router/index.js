@@ -1,27 +1,79 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Home from '../views/Home.vue'
+import Dashboard from '../views/Dashbord.vue'
 import Login from '../views/Login.vue'
-import StudentRegistration from '../views/StudentRegistration.vue'
+import StudentRegistration from '../views/RecepcionistaViews/StudentRegistration.vue'
+import Exemplo from '../views/PaginaExemplo.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'login',
+      name: 'Login',
       component: Login
     },
     {
-      path: '/home',
-      name: 'home',
-      component: Home
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard
+    },
+
+    //perfil usuário
+    {
+      path: '/users',
+      name: 'Listagem de usuários',
+      component: Exemplo
+    },
+    {
+      path: '/users/new',
+      name: 'Novo usuário',
+      component: Exemplo
+    },
+
+    //perfil recepcionista
+    {
+      path: '/students',
+      name: 'Listagem de estudantes',
+      component: Exemplo
     },
     {
       path: '/students/new',
       name: 'Novo Estudante',
       component: StudentRegistration
     },
+
+    //perfil instrutor
+    {
+      path: '/exercises',
+      name: 'Exercícios',
+      component: Exemplo
+    },
+    {
+      path: '/instructor/students',
+      name: 'Listagem de estudantes',
+      component: Exemplo
+    },
+
+    //perfil nutricionista
+    {
+      path: '/active/students',
+      name: 'Listagem de estudantes ativos',
+      component: Exemplo
+    },
+
+    //perfil aluno
+    {
+      path: '/student/meal-plans',
+      name: 'Planos de refeições do aluno',
+      component: Exemplo
+    },
+    {
+      path: '/student/workouts',
+      name: 'Treinos do aluno',
+      component: Exemplo
+    }
   ]
 })
 
