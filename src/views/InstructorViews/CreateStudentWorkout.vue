@@ -15,12 +15,7 @@
             </v-card>
             <v-window>
               <v-window-item>
-                <v-form
-                  class="ma-5"
-                  ref="addWorkoutForm"
-                  @submit.prevent="handleSubmit"
-                  v-if="exercises.length"
-                >
+                <v-form class="ma-5" @submit.prevent="handleSubmit" v-if="exercises.length">
                   <v-row>
                     <v-col cols="12">
                       <v-autocomplete
@@ -42,7 +37,7 @@
                         min="0"
                         variant="outlined"
                         v-model="repetitionOfExercise"
-                        :error-messages="errors.repetitionOfExercise"
+                        :error-messages="errors.repetitions"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="3">
@@ -52,24 +47,16 @@
                         min="0"
                         variant="outlined"
                         v-model="exerciseLoad"
-                        :error-messages="errors.exerciseLoad"
+                        :error-messages="errors.weight"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
-                      <!-- <div class="text-caption">Pausa (em segundos)</div>
-                      <v-slider
-                        thumb-label="always"
-                        v-model="breakTime"
-                        :min="0"
-                        :max="120"
-                        :step="15"
-                      ></v-slider> -->
                       <v-select
                         v-model="breakTime"
                         :items="[0, 15, 30, 45, 60, 75, 90, 105, 120]"
                         label="Selecionar pausa (em segundos)"
                         variant="outlined"
-                        :error-messages="errors.breakTime"
+                        :error-messages="errors.break_time"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -112,6 +99,22 @@
                     </router-link>
                   </v-col>
                 </v-form>
+                <v-snackbar
+                  v-model="snackbarSuccess"
+                  :timeout="duration"
+                  color="success"
+                  location="top"
+                >
+                  {{ successMessage }}
+                </v-snackbar>
+                <v-snackbar
+                  v-model="snackbarError"
+                  :timeout="duration"
+                  color="red-darken-2"
+                  location="top"
+                >
+                  {{ errorMessage }}
+                </v-snackbar>
               </v-window-item>
             </v-window>
           </v-col>
@@ -143,7 +146,10 @@ export default {
       dayOfWeek: getCurrentDay(new Date().getDay()),
       daysOfWeek: daysOfWeek,
       observations: '',
-      errors: []
+      snackbarSuccess: false,
+      snackbarError: false,
+      duration: 3000,
+      errors: {}
     }
   },
   components: {},
@@ -153,7 +159,8 @@ export default {
         this.exercises = response.data.data
       })
       .catch(() => {
-        alert('Falha ao carregar dados')
+        this.snackbarError = true
+        this.errorMessage = 'Falha ao carregar os exercícios cadastrados.'
       })
   },
   methods: {
@@ -173,26 +180,27 @@ export default {
         this.errors = {}
         CreateWorkoutService.createWorkout(body)
           .then(() => {
-            alert('Treino cadastrado com sucesso')
-            this.$refs.form.reset()
+            this.snackbarSuccess = true
+            this.successMessage = 'Treino cadastrado com sucesso'
+            //limpa os campos
+            this.exercisesSelected = ''
+            this.repetitionOfExercise = ''
+            this.exerciseLoad = ''
+            this.breakTime = 45
+            this.observations = ''
+            this.dayOfWeek = getCurrentDay(new Date().getDay())
           })
-          // .then(() => {
-          //   this.$refs.form.reset()
-          // })
           .catch((error) => {
             if (error) {
-              alert(error.response.data.message)
+              this.snackbarError = true
+              this.errorMessage = `Erro ao cadastrar treino: ${error.response.data.message}`
             }
           })
-        // .catch((error) => {
-        //   if (error) {
-        //     this.signUpError = true
-        //   }
-        // })
       } catch (error) {
         if (error instanceof yup.ValidationError) {
           this.errors = captureErrorYup(error)
-          alert(Object.values(this.errors).join('\n'))
+          this.snackbarError = true
+          this.errorMessage = 'Erro ao validar os dados.'
         }
       }
     }
