@@ -16,8 +16,8 @@
             <v-card-text>
               <div class="text-center">
                 <img src="../../assets/exercises.svg" class="card-image" alt="Imagem" />
-                <div class="text-h2 my-3">123</div>
-                <div class="text-h5">Usuários Registrados</div>
+                <div class="text-h2 my-3">{{ registeredStudents }}</div>
+                <div class="text-h5">Alunos Registrados</div>
                 <v-btn color="black" class="mt-2">
                   <span style="color: #ffc107">VER</span>
                 </v-btn>
@@ -31,8 +31,8 @@
             <v-card-text>
               <div class="text-center">
                 <img src="../../assets/exercises.svg" class="card-image" alt="Imagem" />
-                <div class="text-h2 my-3">123</div>
-                <div class="text-h5">Usuários Registrados</div>
+                <div class="text-h2 my-3">{{ registeredExercises }}</div>
+                <div class="text-h5">Exercícios Cadastrados</div>
                 <v-btn color="black" class="mt-2">
                   <span style="color: #ffc107">VER</span>
                 </v-btn>
@@ -44,6 +44,30 @@
     </div>
   </v-container>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+const registeredStudents = ref(0);
+const registeredExercises = ref(0);
+
+onMounted(async () => {
+  const token = localStorage.getItem('@token');
+  try {
+    const response = await axios.get('http://localhost:8000/api/dashboard/instrutor', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    registeredStudents.value = response.data.registered_students;
+    registeredExercises.value = response.data.registered_exercises;
+  } catch (error) {
+    console.error('Falha ao buscar dados do instrutor:', error);
+  }
+});
+</script>
 
 <style scoped>
 .container {
