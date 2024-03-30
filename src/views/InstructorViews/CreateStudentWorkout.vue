@@ -50,15 +50,12 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
-                      <div class="text-caption">Pausa (em segundos)</div>
-                      <v-slider
-                        thumb-label="always"
-                        variant="outlined"
+                      <v-select
                         v-model="breakTime"
-                        :min="0"
-                        :max="120"
-                        :step="15"
-                      ></v-slider>
+                        :items="[0, 15, 30, 45, 60, 75, 90, 105, 120]"
+                        label="Selecionar pausa (em segundos)"
+                        variant="outlined"
+                      ></v-select>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -112,6 +109,8 @@
 <script>
 import axios from 'axios'
 import { getCurrentDay } from '../../utils/Instructor/getCurrentDay'
+import { daysOfWeek } from '../../constants/Instructor/daysOfWeek'
+import GetExercises from '../../services/InstructorServices/GetExercises'
 
 export default {
   data() {
@@ -122,15 +121,7 @@ export default {
       exerciseLoad: '',
       breakTime: 45,
       dayOfWeek: getCurrentDay(new Date().getDay()),
-      daysOfWeek: [
-        { title: 'Segunda-feira', value: 'SEGUNDA' },
-        { title: 'Terça-feira', value: 'TERÇA' },
-        { title: 'Quarta-feira', value: 'QUARTA' },
-        { title: 'Quinta-feira', value: 'QUINTA' },
-        { title: 'Sexta-feira', value: 'SEXTA' },
-        { title: 'Sábado', value: 'SÁBADO' },
-        { title: 'Domingo', value: 'DOMINGO' }
-      ],
+      daysOfWeek: daysOfWeek,
       observations: '',
       repetitionOfExerciseRules: [
         (v) => (v && v >= 1) || 'O exercício deve ter no minimo 1 repetição'
@@ -140,12 +131,7 @@ export default {
   },
   components: {},
   mounted() {
-    axios
-      .get('http://localhost:8000/api/exercises/', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('@token')}`
-        }
-      })
+    GetExercises.getAllUserExercises()
       .then((response) => {
         this.exercises = response.data.data
       })
