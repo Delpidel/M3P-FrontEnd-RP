@@ -15,7 +15,7 @@
             </v-card>
             <v-window>
               <v-window-item>
-                <v-form class="ma-5" @submit.prevent="handleSubmit" v-if="exercises.length">
+                <v-form class="ma-5" @submit.prevent="handleSubmit" v-if="exercises">
                   <v-row>
                     <v-col cols="12">
                       <v-autocomplete
@@ -26,6 +26,7 @@
                         item-value="id"
                         variant="outlined"
                         v-model="exercisesSelected"
+                        data-test="selected-exercise"
                       ></v-autocomplete>
                     </v-col>
                   </v-row>
@@ -38,6 +39,7 @@
                         variant="outlined"
                         v-model="repetitionOfExercise"
                         :error-messages="errors.repetitions"
+                        data-test="repetitions-input"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="3">
@@ -48,6 +50,7 @@
                         variant="outlined"
                         v-model="exerciseLoad"
                         :error-messages="errors.weight"
+                        data-test="weight-input"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
@@ -57,6 +60,7 @@
                         label="Selecionar pausa (em segundos)"
                         variant="outlined"
                         :error-messages="errors.break_time"
+                        data-test="break-input"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -67,6 +71,7 @@
                         variant="outlined"
                         :items="daysOfWeek"
                         v-model="dayOfWeek"
+                        data-test="day-input"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -79,6 +84,7 @@
                         label="Observações"
                         variant="outlined"
                         v-model="observations"
+                        data-test="observations-input"
                       ></v-textarea>
                     </v-col>
                   </v-row>
@@ -89,6 +95,7 @@
                       variant="elevated"
                       color="amber text-grey-darken-4"
                       size="large"
+                      data-test="submition-input"
                     >
                       Cadastrar
                     </v-btn>
@@ -139,7 +146,7 @@ export default {
   data() {
     return {
       exercises: [],
-      exercisesSelected: [],
+      exercisesSelected: null,
       repetitionOfExercise: '',
       exerciseLoad: '',
       breakTime: 45,
