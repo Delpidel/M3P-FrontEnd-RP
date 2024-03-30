@@ -1,8 +1,9 @@
 <template>
   <div class="container">
-    <v-card v-if="!formattedWorkouts.workouts || Object.keys(formattedWorkouts.workouts).length === 0" color="#424242" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
+    <v-card v-if="!formattedWorkouts.workouts || Object.keys(formattedWorkouts.workouts).length === 0" color="#424242" width="100%" class="px-6 py-6 mt-10 custom-card-1" elevation="10">
       <v-card-text class="text-center">
-        <p class="orange-text">{{ formattedWorkouts.name }} : Ainda não há treinos agendados para você!</p>
+        <img src="@/assets/memsagemtreinos.jpg" alt="Memsagem treinos" width="300px"> <br>
+        <h2 class="white-text">Preciado estudante {{ formattedWorkouts.name }}, ainda não há treinos agendados para você!</h2>
       </v-card-text>
     </v-card>
     <template v-else>
