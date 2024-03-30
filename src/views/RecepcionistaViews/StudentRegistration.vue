@@ -51,7 +51,7 @@
                   label="Nome completo" 
                   type="text" 
                   variant="outlined"
-                  :error-messages="errors.name"/>
+                  :error-messages="error.name"/>
             </v-col>
             <v-col cols="12" sm="12" md="12">
               <v-text-field 
@@ -59,7 +59,7 @@
                 label="E-mail" 
                 type="email" 
                 variant="outlined"
-                :error-messages="errors.email"/>
+                :error-messages="error.email"/>
             </v-col>
             <div class="d-flex formContent-data-responsiveInput">
               <v-col cols="12" sm="12" md="4">
@@ -69,7 +69,7 @@
                 type="text" 
                 variant="outlined" 
                 @input="handleChange"
-                :error-messages="errors.cpf"/>
+                :error-messages="error.cpf"/>
               </v-col>
               <v-col cols="12" sm="12" md="4">
                 <v-text-field 
@@ -77,7 +77,7 @@
                   label="Telefone para contato" 
                   type="number" 
                   variant="outlined"
-                  :error-messages="errors.contact" />
+                  :error-messages="error.contact" />
               </v-col>
               <v-col cols="12" sm="12" md="4">
                 <v-text-field 
@@ -86,7 +86,7 @@
                   type="date" 
                   variant="outlined"
                   :max="maxDate" 
-                  :error-messages="errors.dateBirth" />
+                  :error-messages="error.dateBirth" />
               </v-col>
               </div>
             </div>
@@ -103,7 +103,7 @@
                 label="CEP" 
                 type="number" 
                 variant="outlined" 
-                :error-messages="errors.cep"
+                :error-messages="error.cep"
                 maxLength="9" 
                 v-on:focusout="getAddressInfo()" 
                 v-on:keyup.enter="getAddressInfo()"/>
@@ -114,7 +114,7 @@
                 label="Logradouro" 
                 type="text" 
                 variant="outlined"
-                :error-messages="errors.street"/>
+                :error-messages="error.street"/>
             </v-col>
             <v-col cols="12" sm="12" md="3">
               <v-text-field 
@@ -122,7 +122,7 @@
                 label="Número" 
                 type="text" 
                 variant="outlined"
-                :error-messages="errors.number"/>
+                :error-messages="error.number"/>
             </v-col>
           </div>
           <div class="d-flex formContent-data-responsiveInput">
@@ -132,7 +132,7 @@
                 label="Bairro" 
                 type="text" 
                 variant="outlined"
-                :error-messages="errors.neighborhood"/>
+                :error-messages="error.neighborhood"/>
             </v-col>
             <v-col cols="12" sm="12" md="7">
               <v-text-field 
@@ -149,7 +149,7 @@
                 label="Cidade" 
                 type="text" 
                 variant="outlined"
-                :error-messages="errors.city" />
+                :error-messages="error.city" />
             </v-col>
             <v-col cols="12" sm="12" md="6">
               <v-text-field 
@@ -157,7 +157,7 @@
                 label="Estado" 
                 type="text" 
                 variant="outlined"
-                :error-messages="errors.state"/>
+                :error-messages="error.state"/>
             </v-col>
           </div>
           <v-col class="d-flex justify-center pt-sm-6 pb-sm-0">
@@ -192,10 +192,10 @@
 </template>
 
 <script>
-import StudentRegistrationService from '../services/StudentRegistrationService'
+import StudentRegistrationService from '../../services/StudentRegistrationService'
 
-import { schemaStudentRegistrationForm } from '../validations/studentRegistration.validations'
-import { captureErrorYup } from '../utils/captureErrorsYup'
+import { schemaStudentRegistrationForm } from '../../validations/studentRegistration.validations'
+import { captureErrorYup } from '../../utils/captureErrorYup'
 
 import Camera from 'simple-vue-camera'
 import * as yup from 'yup'
@@ -222,7 +222,7 @@ export default {
 
       snackbarSuccess: false,
       snackbarError: false,
-      errors: {},
+      error: {},
     }
   },
   components: {
@@ -349,7 +349,7 @@ export default {
           })
       } catch (error) {
         if (error instanceof yup.ValidationError) {
-          this.errors = captureErrorYup(error)
+          this.error = captureErrorYup(error)
         }
       }
     },
@@ -372,7 +372,7 @@ export default {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url(../assets/background-student-registration.jpg);
+  background-image: url(../../assets/background-student-registration.jpg);
   background-size: cover;
   z-index: -1;
   opacity: 0.5;
