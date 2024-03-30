@@ -51,6 +51,7 @@
                   label="Nome completo" 
                   type="text" 
                   variant="outlined"
+                  @focus="clearError('name')"
                   :error-messages="error.name"/>
             </v-col>
             <v-col cols="12" sm="12" md="12">
@@ -59,6 +60,7 @@
                 label="E-mail" 
                 type="email" 
                 variant="outlined"
+                @focus="clearError('email')"
                 :error-messages="error.email"/>
             </v-col>
             <div class="d-flex formContent-data-responsiveInput">
@@ -69,6 +71,7 @@
                 type="text" 
                 variant="outlined" 
                 @input="handleChange"
+                @focus="clearError('cpf')"
                 :error-messages="error.cpf"/>
               </v-col>
               <v-col cols="12" sm="12" md="4">
@@ -77,6 +80,7 @@
                   label="Telefone para contato" 
                   type="number" 
                   variant="outlined"
+                  @focus="clearError('contact')"
                   :error-messages="error.contact" />
               </v-col>
               <v-col cols="12" sm="12" md="4">
@@ -85,6 +89,7 @@
                   label="Data de Nascimento" 
                   type="date" 
                   variant="outlined"
+                  @focus="clearError('dateBirth')"
                   :max="maxDate" 
                   :error-messages="error.dateBirth" />
               </v-col>
@@ -103,6 +108,7 @@
                 label="CEP" 
                 type="number" 
                 variant="outlined" 
+                @focus="clearError('cep')"
                 :error-messages="error.cep"
                 maxLength="9" 
                 v-on:focusout="getAddressInfo()" 
@@ -114,6 +120,7 @@
                 label="Logradouro" 
                 type="text" 
                 variant="outlined"
+                @focus="clearError('street')"
                 :error-messages="error.street"/>
             </v-col>
             <v-col cols="12" sm="12" md="3">
@@ -122,6 +129,7 @@
                 label="Número" 
                 type="text" 
                 variant="outlined"
+                @focus="clearError('number')"
                 :error-messages="error.number"/>
             </v-col>
           </div>
@@ -132,6 +140,7 @@
                 label="Bairro" 
                 type="text" 
                 variant="outlined"
+                @focus="clearError('neighborhood')"
                 :error-messages="error.neighborhood"/>
             </v-col>
             <v-col cols="12" sm="12" md="7">
@@ -149,6 +158,7 @@
                 label="Cidade" 
                 type="text" 
                 variant="outlined"
+                @focus="clearError('city')"
                 :error-messages="error.city" />
             </v-col>
             <v-col cols="12" sm="12" md="6">
@@ -157,6 +167,7 @@
                 label="Estado" 
                 type="text" 
                 variant="outlined"
+                @focus="clearError('state')"
                 :error-messages="error.state"/>
             </v-col>
           </div>
@@ -247,6 +258,9 @@ export default {
       }
       
       this.cpf = formattedCpf;
+    },
+    clearError(field) {
+        this.error[field] = '';
     },
     handleCameraEnabled() {
       this.open = !this.open;
