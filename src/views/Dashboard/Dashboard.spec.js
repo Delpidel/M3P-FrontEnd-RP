@@ -1,95 +1,40 @@
-import { describe, expect, it, vi } from 'vitest'
-import Login from './Login.vue'
-import { flushPromises, mount } from '@vue/test-utils'
+import { describe, expect, it, vi } from 'vitest';
+import { mount } from '@vue/test-utils'
+import Dashboard from './Dashbord.vue'
+import DashboardAdmin from '../../components/DashboardAdmin.vue'
+import DashboardReceptionist from '../../components/DashboardReceptionist.vue'
+import DashboardInstructor from '../../components/DashboardInstructor.vue'
+import DashboardNutritionist from '../../components/DashboardNutritionist.vue'
+import DashboardStudent from '../../components/DashboardStudent.vue'
 
-import AuthenticationService from '../services/AuthenticationService'
+describe('Dashboard Component', () => {
+  it('Deve renderizar o componente DashboardAdmin se o perfil for ADMIN', async () => {
+    const localStorageMock = {
+      getItem: vi.spy().andReturn('ADMIN')
+    }
+    global.localStorage = localStorageMock
 
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
+    const wrapper = mount(Dashboard)
 
-const vuetify = createVuetify({
-  components,
-  directives
-})
-
-global.ResizeObserver = require('resize-observer-polyfill')
-
-describe('Tela de login', () => {
-  it('Espera-se que a tela seja renderizada', () => {
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
-    expect(component).toBeTruthy()
+    expect(wrapper.findComponent(DashboardAdmin).exists()).toBe(true)
+    expect(wrapper.findComponent(DashboardReceptionist).exists()).toBe(false)
+    expect(wrapper.findComponent(DashboardInstructor).exists()).toBe(false)
+    expect(wrapper.findComponent(DashboardNutritionist).exists()).toBe(false)
+    expect(wrapper.findComponent(DashboardStudent).exists()).toBe(false)
   })
 
-  it('Espera-se que ao submeter o formulário, seja redirecionado para tela home', () => {
-    const login = vi.spyOn(AuthenticationService, 'login').mockResolvedValue({
-      data: {
-        token: 'token',
-        permissions: []
-      }
-    })
+  it('Deve renderizar o componente DashboardReceptionist se o perfil for RECEPCIONISTA', async () => {
+    const localStorageMock = {
+      getItem: vi.spy().andReturn('RECEPCIONISTA')
+    }
+    global.localStorage = localStorageMock
 
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
-  })
+    const wrapper = mount(Dashboard)
 
-  it('Espera-se que ao submeter o formulário, receba uma mensagem de erro', async () => {
-    vi.spyOn(AuthenticationService, 'login').mockRejectedValue(new Error())
-
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
-  })
-
-  it('Deve exibir mensagem de erro ao submeter o formulário com campos vazios', async () => {
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
-  })
-
-  it('Deve redirecionar para a página inicial se o usuário já estiver autenticado', async () => {
-    localStorage.setItem('@token', 'token')
-
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
-  })
-
-  it('Deve exibir mensagem de erro específica para credenciais inválidas', async () => {
-    vi.spyOn(AuthenticationService, 'login').mockRejectedValue({ response: { status: 401 } })
-
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
-  })
-
-  it('Deve armazenar o token de autenticação no armazenamento local após o login', async () => {
-    vi.spyOn(AuthenticationService, 'login').mockResolvedValue({
-      data: {
-        token: 'token',
-        permissions: []
-      }
-    })
-
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
+    expect(wrapper.findComponent(DashboardAdmin).exists()).toBe(false)
+    expect(wrapper.findComponent(DashboardReceptionist).exists()).toBe(true)
+    expect(wrapper.findComponent(DashboardInstructor).exists()).toBe(false)
+    expect(wrapper.findComponent(DashboardNutritionist).exists()).toBe(false)
+    expect(wrapper.findComponent(DashboardStudent).exists()).toBe(false)
   })
 })
