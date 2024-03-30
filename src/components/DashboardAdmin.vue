@@ -1,56 +1,62 @@
 <template>
   <div class="container">
-    <v-card>
-      <h1 class="mx-3 my-3">Bem-vindo, {{ profileName }}</h1>
+    <v-card class="welcome-card">
+      <v-card-title class="py-8">{{ greetingMessage }}</v-card-title>
     </v-card>
-    <div class="dashboard-cards">
-      <v-card class="dashboard-card">
-        <v-card-title>Exercícios Registrados</v-card-title>
-        <v-card-text>{{ registeredExercises }}
-        </v-card-text>
-        <v-button>
-          Visualizar
-        </v-button>
-      </v-card>
-<v-card>
-  <v-card v-for="(count, profile) in profiles" :key="profile" class="dashboard-card">
-        <v-card-title>{{ profile }}</v-card-title>
-        <v-card-text>{{ count }}</v-card-text>
-      </v-card>
-</v-card>
 
-    </div>
+    <v-row>
+      <v-col cols="12" md="6">
+        <v-card class="dashboard-card">
+          <v-card-title>Exercícios Registrados</v-card-title>
+          <v-card-text>
+            <span v-if="!showExercises">{{ registeredExercises }}</span>
+            <v-list v-else>
+              <v-list-item v-for="exercise in exercises" :key="exercise.id">
+                <v-list-item-content>
+                  <v-list-item-title>{{ exercise.description }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+          <v-card-actions class="text-center"> <!-- Adicionando a classe text-center aqui -->
+            <v-btn block class="mb-8" color="#ffc107" size="large" variant="flat" @click="toggleExercises">Visualizar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" md="6">
+        <v-card class="dashboard-card">
+          <v-card-title>Usuários</v-card-title>
+          <v-card-text>Total: {{ totalUsers }}</v-card-text>
+          <v-list>
+            <v-list-item v-for="(count, profile) in profiles" :key="profile">
+              <v-list-item-content>
+                <v-list-item-title>{{ profile }}: {{ count }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-card-actions class="text-center"> <!-- Adicionando a classe text-center aqui -->
+            <v-btn block class="mb-8" color="#ffc107" size="large" variant="flat" @click="navigateToCreateUser">Cadastrar Usuário</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
-
-import axios from 'axios'
+import axios from 'axios';
 
 export default {
   data() {
     return {
-      profileName: 'ADMIN', 
+      profileName: 'ADMIN',
       registeredExercises: 0,
-      profiles: {} 
+      profiles: {},
+      exercises: [],
+      showExercises: false
     };
   },
-
-  const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
-  timeout: 10000,
-})
-
-api.interceptors.request.use(config => {
-  const token = localStorage.getItem('@token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
-
   created() {
     this.fetchDashboardData();
   },
@@ -63,33 +69,47 @@ api.interceptors.request.use(config => {
           return;
         }
 
-        this.$axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        const api = axios.create({
+          baseURL: 'http://localhost:8000/api',
+          timeout: 10000,
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-        const response = await this.$axios.get('dashboard/admin');
+        const response = await api.get('dashboard/admin');
         const data = response.data.data;
         this.registeredExercises = data.registered_exercises;
         this.profiles = data.profiles;
+        this.exercises = data.exercises;
       } catch (error) {
         console.error('Erro ao buscar dados do painel de administração:', error);
       }
+    },
+    toggleExercises() {
+      this.showExercises = !this.showExercises;
+    },
+    navigateToCreateUser() {
+      this.$router.push('/users/new');
+    }
+  },
+  computed: {
+    totalUsers() {
+      return Object.values(this.profiles).reduce((total, count) => total + count, 0);
+    },
+    greetingMessage() {
+      const greetings = ['Olá', 'Oi', 'Bem-vindo', 'Boa tarde'];
+      const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+      return `${randomGreeting}, ${this.profileName}!`;
     }
   }
 };
 </script>
 
 <style scoped>
-.dashboard-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 20px;
+.welcome-card {
+  margin-bottom: 20px;
 }
 
 .dashboard-card {
-  width: calc(50% - 20px);
-}
-
-.v-card {
   margin-bottom: 20px;
 }
 </style>
