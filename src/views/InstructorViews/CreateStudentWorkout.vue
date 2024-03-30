@@ -15,7 +15,12 @@
             </v-card>
             <v-window>
               <v-window-item>
-                <v-form class="ma-5" ref="addWorkoutForm" @submit.prevent="addWorkout">
+                <v-form
+                  class="ma-5"
+                  ref="addWorkoutForm"
+                  @submit.prevent="handleSubmit"
+                  v-if="exercises.length"
+                >
                   <v-row>
                     <v-col cols="12">
                       <v-autocomplete
@@ -34,9 +39,10 @@
                       <v-text-field
                         label="Repetições"
                         type="number"
+                        min="0"
                         variant="outlined"
                         v-model="repetitionOfExercise"
-                        :rules="repetitionOfExerciseRules"
+                        :error-messages="errors.repetitionOfExercise"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="3">
@@ -46,15 +52,24 @@
                         min="0"
                         variant="outlined"
                         v-model="exerciseLoad"
-                        :rules="exerciseLoadRules"
+                        :error-messages="errors.exerciseLoad"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
+                      <!-- <div class="text-caption">Pausa (em segundos)</div>
+                      <v-slider
+                        thumb-label="always"
+                        v-model="breakTime"
+                        :min="0"
+                        :max="120"
+                        :step="15"
+                      ></v-slider> -->
                       <v-select
                         v-model="breakTime"
                         :items="[0, 15, 30, 45, 60, 75, 90, 105, 120]"
                         label="Selecionar pausa (em segundos)"
                         variant="outlined"
+                        :error-messages="errors.breakTime"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -107,10 +122,15 @@
 </template>
 
 <script>
-import axios from 'axios'
+import * as yup from 'yup'
+import { workoutSchema } from '@/validations/InstructorValidations/workout.validations'
+import { captureErrorYup } from '../../utils/captureErrorYup'
+
 import { getCurrentDay } from '../../utils/Instructor/getCurrentDay'
 import { daysOfWeek } from '../../constants/Instructor/daysOfWeek'
+
 import GetExercises from '../../services/InstructorServices/GetExercises'
+import CreateWorkoutService from '../../services/InstructorServices/CreateWorkoutService'
 
 export default {
   data() {
@@ -123,10 +143,7 @@ export default {
       dayOfWeek: getCurrentDay(new Date().getDay()),
       daysOfWeek: daysOfWeek,
       observations: '',
-      repetitionOfExerciseRules: [
-        (v) => (v && v >= 1) || 'O exercício deve ter no minimo 1 repetição'
-      ],
-      exerciseLoadRules: [(v) => !!v || 'É necessário uma carga para o exercício']
+      errors: []
     }
   },
   components: {},
@@ -139,42 +156,43 @@ export default {
         alert('Falha ao carregar dados')
       })
   },
-
   methods: {
-    async addWorkout() {
-      const { valid } = await this.$refs.addWorkoutForm.validate()
-      if (!valid) {
-        alert('Preencha todos os dados')
-        return
-      } else {
-        try {
-          const result = await axios.post(
-            'http://localhost:8000/api/workouts',
-            {
-              student_id: this.$route.params.id,
-              exercise_id: this.exercisesSelected,
-              repetitions: this.repetitionOfExercise,
-              weight: this.exerciseLoad,
-              break_time: this.breakTime,
-              observations: this.observations,
-              day: this.dayOfWeek
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('@token')}`
-              }
-            }
-          )
-          if (result.status == 201) {
+    handleSubmit() {
+      try {
+        const body = {
+          student_id: this.$route.params.id,
+          exercise_id: this.exercisesSelected,
+          repetitions: this.repetitionOfExercise,
+          weight: this.exerciseLoad,
+          break_time: this.breakTime,
+          observations: this.observations,
+          day: this.dayOfWeek
+        }
+
+        workoutSchema.validateSync(body, { abortEarly: false })
+        this.errors = {}
+        CreateWorkoutService.createWorkout(body)
+          .then(() => {
             alert('Treino cadastrado com sucesso')
-            this.$refs.addWorkoutForm.reset()
-          }
-        } catch (error) {
-          if (error.response.data.message) {
-            alert(error.response.data.message)
-          } else {
-            alert('Não foi possível cadastrar o treino neste momento')
-          }
+            this.$refs.form.reset()
+          })
+          // .then(() => {
+          //   this.$refs.form.reset()
+          // })
+          .catch((error) => {
+            if (error) {
+              alert(error.response.data.message)
+            }
+          })
+        // .catch((error) => {
+        //   if (error) {
+        //     this.signUpError = true
+        //   }
+        // })
+      } catch (error) {
+        if (error instanceof yup.ValidationError) {
+          this.errors = captureErrorYup(error)
+          alert(Object.values(this.errors).join('\n'))
         }
       }
     }
