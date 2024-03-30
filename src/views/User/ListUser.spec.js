@@ -37,7 +37,7 @@ describe("Tela de listagem de usuários", () => {
         expect(component.text()).toContain("Ações")
     })
 
-    it("Espera-se que exiba na tela os dados dos usuários", async () => {
+    it("Espera-se que exiba na tela os dados dos usuários.", async () => {
         const mockedUsers = [
             {
                 "id": 1,
