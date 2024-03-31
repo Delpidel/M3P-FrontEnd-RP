@@ -54,7 +54,7 @@ const router = createRouter({
       component: Exemplo
     },
     {
-      path: '/listagem-treinos/:id/lista-treino', 
+      path: '/instructor/:id/list-workouts', 
       name: 'Listagem de treinos do aluno',
       component: ListStudentWorkout
     },
