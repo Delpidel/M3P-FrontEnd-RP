@@ -3,13 +3,16 @@
     <div class="container">
       <v-row class="px-16">
         <v-col cols="12" md="10" offset-md="1">
-          <v-card class="title-card elevation-10" flat>
+          <v-card class="title-card elevation-10" flat @click="atualizarFraseAleatoria">
             <v-card-text class="d-flex flex-column align-center">
-              <h1 class="font-weight-bold" :style="smAndDown ? 'text-align: center;' : ''">
-                Olá, {{ userName }}!
-              </h1>
+              <div class="d-flex align-center justify-center">
+                <v-icon class="mr-3" size="36">mdi-weight-lifter</v-icon>
+                <h1 class="font-weight-bold" :style="smAndDown ? 'text-align: center;' : ''">
+                  Olá, {{ userName }}!
+                </h1>
+              </div>
               <h3 class="mt-3 font-weight-medium" :style="smAndDown ? 'text-align: center;' : ''">
-                O sucesso de seus alunos começa com você. Vamos começar!
+                {{ fraseAtual }}
               </h3>
             </v-card-text>
           </v-card>
@@ -18,7 +21,7 @@
 
       <v-row justify="center" class="px-16">
         <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
-          <v-card class="user-card elevation-10">
+          <v-card class="user-card elevation-10" @click="gotoStudents" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
                 src="../../assets/instructor/dashboard/left-card-img-woman.png"
@@ -29,6 +32,8 @@
                 <div class="text-h5 font-weight-bold">ALUNOS<br />CADASTRADOS</div>
                 <div class="text-h3 font-weight-bold">{{ registeredStudents }}</div>
                 <v-btn
+                  @click.stop="gotoStudents"
+                  append-icon="mdi-account-circle"
                   size="large"
                   variant="elevated"
                   color="grey-darken-4 text-amber"
@@ -45,7 +50,7 @@
         </v-col>
 
         <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
-          <v-card class="user-card elevation-10">
+          <v-card class="user-card elevation-10" @click="gotoExercises" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
                 src="../../assets/instructor/dashboard/right-card-img-man.png"
@@ -56,6 +61,8 @@
                 <div class="text-h5 font-weight-bold">EXERCÍCIOS<br />CADASTRADOS</div>
                 <div class="text-h3 font-weight-bold">{{ registeredExercises }}</div>
                 <v-btn
+                  @click.stop="gotoExercises"
+                  append-icon="mdi-dumbbell"
                   size="large"
                   variant="elevated"
                   color="grey-darken-4 text-amber"
@@ -76,36 +83,45 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
-import { useDisplay } from 'vuetify'
+import { ref, onMounted, computed } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import { useDisplay } from 'vuetify';
 
-const registeredStudents = ref(0)
-const registeredExercises = ref(0)
-const userName = ref('Instrutor')
+const router = useRouter();
+const registeredStudents = ref(0);
+const registeredExercises = ref(0);
+const userName = ref(localStorage.getItem('@name') || 'Instrutor');
 
-const { smAndDown, mdAndDown, lgAndDown } = useDisplay()
+const { smAndDown, mdAndDown, lgAndDown } = useDisplay();
 
-onMounted(async () => {
-  userName.value = localStorage.getItem('@name') || 'Instrutor'
+const frases = [
+  'Inspire grandeza em seus alunos. Comece agora!',
+  'Faça a diferença para seus alunos. Vamos lá!',
+  'Seja o guia. Inicie a jornada com seu aluno!',
+  'O sucesso de seus alunos começa com você! Vamos começar!'
+];
 
-  const token = localStorage.getItem('@token')
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    try {
-      const response = await axios.get('http://localhost:8000/api/dashboard/instrutor', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      registeredStudents.value = response.data.registered_students
-      registeredExercises.value = response.data.registered_exercises
-    } catch (error) {
-      console.error('Falha ao buscar dados do instrutor:', error)
-    }
-  }
-})
+const fraseAtual = ref('');
+
+function atualizarFraseAleatoria() {
+  fraseAtual.value = frases[Math.floor(Math.random() * frases.length)];
+}
+
+onMounted(() => {
+  atualizarFraseAleatoria();
+});
+
+function gotoStudents() {
+  router.push('/instructor/students');
+}
+
+function gotoExercises() {
+  router.push('/exercises');
+}
 </script>
+
+
 
 <style scoped>
 .container {
@@ -146,10 +162,10 @@ onMounted(async () => {
 
 @media (max-width: 768px) {
   .text-h3 {
-    font-size: 1.5rem; /* Menor que o tamanho padrão */
+    font-size: 1.5rem; 
   }
   .v-btn {
-    padding: 8px 12px; /* Menor espaçamento para botões em telas menores */
+    padding: 8px 12px; 
   }
 }
 </style>
