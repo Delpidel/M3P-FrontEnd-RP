@@ -19,7 +19,7 @@ class AuthenticationService {
 
     async fetchDashboardData(){
             const response = await api.get('dashboard/admin');
-            return response.data;
+            return response.data.data;
     }
 
     async logout(){
