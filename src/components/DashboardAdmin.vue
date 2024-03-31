@@ -18,7 +18,7 @@
               </v-list-item>
             </v-list>
           </v-card-text>
-          <v-card-actions class="text-center"> <!-- Adicionando a classe text-center aqui -->
+          <v-card-actions class="text-center">
             <v-btn block class="mb-8" color="#ffc107" size="large" variant="flat" @click="toggleExercises">Visualizar</v-btn>
           </v-card-actions>
         </v-card>
@@ -35,7 +35,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <v-card-actions class="text-center"> <!-- Adicionando a classe text-center aqui -->
+          <v-card-actions class="text-center"> 
             <v-btn block class="mb-8" color="#ffc107" size="large" variant="flat" @click="navigateToCreateUser">Cadastrar Usuário</v-btn>
           </v-card-actions>
         </v-card>
