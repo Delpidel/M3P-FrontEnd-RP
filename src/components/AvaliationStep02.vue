@@ -81,6 +81,7 @@ export default {
     deletePhoto(index) {
       this.imageLinks[index] = `../src/assets/avaliation-images/${this.getOriginalImageName(index)}`
       console.log('Imagem restaurada:', this.imageLinks[index])
+      localStorage.removeItem(`image_${index}`)
     },
     getOriginalImageName(index) {
       switch (index) {
