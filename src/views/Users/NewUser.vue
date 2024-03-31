@@ -105,9 +105,10 @@ const { smAndDown } = useDisplay()
 <script>
 import ImageUploadPreview from '@/components/File/ImageUploadPreview.vue'
 
-import axios from 'axios'
+import UserService from '@/services/User/UserService'
+
 import * as yup from 'yup'
-import { captureErrorYup } from '../../utils/captureErrorYup'
+import { captureErrorYup } from '@/utils/captureErrorYup'
 import { schemaCreateUser } from '@/validations/User/userCreate.validations'
 
 export default {
@@ -178,8 +179,7 @@ export default {
         }
       }
 
-      axios
-        .post('http://127.0.0.1:8000/api/users', formData, config)
+      UserService.createUser(formData, config)
         .then(() => {
           this.snackbarSuccess = true
           this.$refs.form.reset()
