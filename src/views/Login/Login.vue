@@ -123,7 +123,7 @@ export default {
             localStorage.setItem('@name', data.name)
             localStorage.setItem('@profile', data.profile)
 
-            this.loadUserProfile()
+            router.push('/dashboard')
           })
           .catch((error) => {
             if (error.response && error.response.status === 401) {
@@ -140,32 +140,6 @@ export default {
         }
       }
     },
-    loadUserProfile() {
-      const profile = localStorage.getItem('@profile')
-      let dashboardRoute = ''
-
-      switch (profile) {
-        case 'ADMIN':
-          dashboardRoute = '/dashboard/admin'
-          break
-        case 'RECEPCIONISTA':
-          dashboardRoute = '/dashboard/recepcionista'
-          break
-        case 'INSTRUTOR':
-          dashboardRoute = '/dashboard/instrutor'
-          break
-        case 'NUTRICIONISTA':
-          dashboardRoute = '/dashboard/nutricionista'
-          break
-        case 'ALUNO':
-          dashboardRoute = '/dashboard/aluno'
-          break
-        default:
-          console.error('Perfil de usuário inválido:', profile)
-          break
-      }
-      router.push(dashboardRoute)
-    }
   }
 }
 </script>
