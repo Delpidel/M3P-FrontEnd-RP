@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <v-card v-if="!formattedWorkouts.workouts || Object.keys(formattedWorkouts.workouts).length === 0" color="#424242" width="100%" class="px-6 py-6 mt-10 custom-card" elevation="10">
+    <v-card v-if="!formattedWorkouts.workouts || Object.keys(formattedWorkouts.workouts).length === 0" color="#424242" width="100%" class="px-6 py-6 mt-10 custom-card" elevation="10">     
       <v-card-text class="text-center">
         <img src="@/assets/memsagemtreinos.jpg" alt="Memsagem treinos" width="300px"> <br>
         <h2 class="white-text">Preciado estudante {{ formattedWorkouts.name }}, ainda não há treinos agendados para você!</h2>
@@ -10,6 +10,7 @@
       <h1 class="title mt-10">Treinos - {{ formattedWorkouts.name }}</h1>
 
       <v-card color="#424242" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
+        data-test="card-item"
         <v-toolbar-title class="orange-text">HOJE : {{ currentDay }}</v-toolbar-title>
         <br>
         
@@ -27,11 +28,12 @@
         <template v-else>
           
           <p class="orange-text">Não há sessões de treinamento agendadas para hoje! <img src="@/assets/memsagemtreinos1.jpg" alt="Memsagem treinos" width="50px"></p>
-        </template>
+        </template>        
       </v-card>
       <br>
 
       <v-card class="custom-card" color="#424242" elevation="10" width="100%" >
+        data-test="card-item"
         <v-toolbar color="#FFC107">
           <v-toolbar-title>TREINOS DA SEMANA</v-toolbar-title>
         </v-toolbar>
@@ -60,7 +62,7 @@
               </v-card-text>
             </v-card>
           </v-window-item>
-        </v-window>
+        </v-window>        
       </v-card>
     </template>
   </div>
