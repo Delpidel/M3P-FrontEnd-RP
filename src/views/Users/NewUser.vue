@@ -10,7 +10,7 @@
         <v-row>
           <v-col cols="12" sm="5" md="4">
             <div :style="smAndDown ? 'display:flex; justify-content:center;' : ''">
-              <ImageUploadPreview @update:selectedImage="updatePhoto" ref="image" />
+              <ImageUploadPreview @update:selectedImage="updatePhoto" />
             </div>
             <span
               class="v-messages__message v-messages errorFile mx-5 my-3"
@@ -32,6 +32,7 @@
                   :items="profileUsers"
                   :error-messages="errors.profile"
                   variant="outlined"
+                  data-test="profile-select"
                 ></v-select>
               </v-col>
 
@@ -42,6 +43,7 @@
                   type="text"
                   variant="outlined"
                   :error-messages="errors.name"
+                  data-test="name-input"
                 >
                 </v-text-field>
               </v-col>
@@ -53,6 +55,7 @@
                   type="email"
                   variant="outlined"
                   :error-messages="errors.email"
+                  data-test="email-input"
                 >
                 </v-text-field>
               </v-col>
@@ -82,6 +85,7 @@
               :ripple="false"
               size="large"
               v-if="!loading"
+              data-test="submit-button"
             >
               Cadastrar
             </v-btn>
