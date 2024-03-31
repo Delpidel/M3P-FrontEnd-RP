@@ -25,9 +25,37 @@ describe("Tela Treinos por estudante", () => {
             "student_id": 5,
             "name": "Henrique Douglas",
             "workouts": {
-                "SEGUNDA": [],
-                "DOMINGO": [],
-                "QUARTA": []
+                "SEGUNDA": [
+                    {
+                        "description": "Salto",
+                        "repetitions": 3,
+                        "weight": "23.00",
+                        "break_time": 2,
+                        "observations": null,
+                        "time": 3,
+                        "created_at": null
+                    },
+                    {
+                        "description": "Triceps",
+                        "repetitions": 3,
+                        "weight": "23.00",
+                        "break_time": 2,
+                        "observations": null,
+                        "time": 3,
+                        "created_at": null
+                    }
+                ],
+                "DOMINGO": [
+                    {
+                        "description": "Salto",
+                        "repetitions": 3,
+                        "weight": "23.00",
+                        "break_time": 2,
+                        "observations": null,
+                        "time": 3,
+                        "created_at": null
+                    }
+                ],
             }
         }
     ])
@@ -49,9 +77,37 @@ describe("Tela Treinos por estudante", () => {
             "student_id": 5,
             "name": "Henrique Douglas",
             "workouts": {
-                "SEGUNDA": [],
-                "DOMINGO": [],
-                "QUARTA": []
+                "SEGUNDA": [
+                    {
+                        "description": "Salto",
+                        "repetitions": 3,
+                        "weight": "23.00",
+                        "break_time": 2,
+                        "observations": null,
+                        "time": 3,
+                        "created_at": null
+                    },
+                    {
+                        "description": "Triceps",
+                        "repetitions": 3,
+                        "weight": "23.00",
+                        "break_time": 2,
+                        "observations": null,
+                        "time": 3,
+                        "created_at": null
+                    }
+                ],
+                "DOMINGO": [
+                    {
+                        "description": "Salto",
+                        "repetitions": 3,
+                        "weight": "23.00",
+                        "break_time": 2,
+                        "observations": null,
+                        "time": 3,
+                        "created_at": null
+                    }
+                ],
             }
         };
 
@@ -63,8 +119,13 @@ describe("Tela Treinos por estudante", () => {
 
         // Verifica que a respuesta é o objeto esperado
         expect(workouts).toEqual([expectedWorkouts]);
-    });   
-   
+
+        // Acessa a propriedade `name` do objeto dentro do array
+        expect(workouts[0].name).toContain("Henrique Douglas");
+        
+        // Acessa a descrição do primeiro treino do Domingo
+        expect(workouts[0].workouts.DOMINGO[0].description).toContain("Salto");
+    });  
 })
 
 
