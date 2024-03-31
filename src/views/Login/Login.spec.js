@@ -1,12 +1,12 @@
-import { describe, expect, it, vi } from 'vitest'
-import Login from './Login.vue'
+import { describe, expect, it } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
-
-import AuthenticationService from '../../services/AuthenticationService'
 
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+
+import Login from './Login.vue'
+import AuthenticationService from '@/services/AuthenticationService'
 
 const vuetify = createVuetify({
   components,
@@ -25,11 +25,41 @@ describe('Tela de login', () => {
     expect(component).toBeTruthy()
   })
 
-  it('Espera-se que ao submeter o formulário, seja redirecionado para tela home', () => {
+  it('Espera-se que o formulário seja renderizado', () => {
+    const component = mount(Login, {
+      global: {
+        plugins: [vuetify]
+      }
+    })
+
+    expect(component.find('form').exists()).toBeTruthy()
+    expect(component.find("[data-test='input-email']").exists()).toBeTruthy()
+    expect(component.find("[data-test='input-password']").exists()).toBeTruthy()
+    expect(component.find("[data-test='submit-button']").exists()).toBeTruthy()
+  })
+
+  it('Espera-se que o formulário seja validado', async () => {
+    const component = mount(Login, {
+      global: {
+        plugins: [vuetify]
+      }
+    })
+
+    // evita que o erro de validação que estamos verificando nesse teste, polua o console
+    console.log = () => {}
+
+    component.getComponent("[data-test='submit-button']").trigger('submit')
+
+    await flushPromises()
+
+    expect(component.text()).toContain('Email é obrigatório')
+    expect(component.text()).toContain('A senha é obrigatória')
+  })
+
+  it('Espera-se que ao submeter o formulário de login, a função correspondente seja executada', async () => {
     const login = vi.spyOn(AuthenticationService, 'login').mockResolvedValue({
       data: {
-        token: 'token',
-        permissions: []
+        token: 'token'
       }
     })
 
@@ -38,9 +68,18 @@ describe('Tela de login', () => {
         plugins: [vuetify]
       }
     })
+
+    await component.getComponent("[data-test='input-email']").setValue('test@gmail.com')
+    await component.getComponent("[data-test='input-password']").setValue('12345678')
+    await component.getComponent("[data-test='submit-button']").trigger('submit')
+
+    await flushPromises()
+
+    expect(login).toBeCalledTimes(1)
+    expect(login).toBeCalledWith({ email: 'test@gmail.com', password: '12345678' })
   })
 
-  it('Espera-se que ao submeter o formulário, receba uma mensagem de erro', async () => {
+  it('Espera-se que ao submeter o formulário com credenciais inválidas, receba uma mensagem de erro', async () => {
     vi.spyOn(AuthenticationService, 'login').mockRejectedValue(new Error())
 
     const component = mount(Login, {
@@ -48,48 +87,13 @@ describe('Tela de login', () => {
         plugins: [vuetify]
       }
     })
-  })
 
-  it('Deve exibir mensagem de erro ao submeter o formulário com campos vazios', async () => {
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
-  })
+    await component.getComponent("[data-test='input-email']").setValue('invalid@gmail.com')
+    await component.getComponent("[data-test='input-password']").setValue('wrongpassword')
+    await component.getComponent("[data-test='submit-button']").trigger('submit')
 
-  it('Deve redirecionar para a página inicial se o usuário já estiver autenticado', async () => {
-    localStorage.setItem('@token', 'token')
+    await flushPromises()
 
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
-  })
-
-  it('Deve exibir mensagem de erro específica para credenciais inválidas', async () => {
-    vi.spyOn(AuthenticationService, 'login').mockRejectedValue({ response: { status: 401 } })
-
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
-  })
-
-  it('Deve armazenar o token de autenticação no armazenamento local após o login', async () => {
-    vi.spyOn(AuthenticationService, 'login').mockResolvedValue({
-      data: {
-        token: 'token',
-        permissions: []
-      }
-    })
-
-    const component = mount(Login, {
-      global: {
-        plugins: [vuetify]
-      }
-    })
+    expect(component.findComponent({ name: 'v-snackbar' }).exists()).toBe(true)
   })
 })
