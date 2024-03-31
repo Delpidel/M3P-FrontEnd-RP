@@ -4,12 +4,13 @@
       <h1 class="py-4 py-md-12 font-weight-medium">Cadastrar Usuário</h1>
       <v-icon size="x-large" class="pl-10" color="amber">mdi-account-outline</v-icon>
     </div>
-    <div class="cardImage pa-10 mt-10">
+
+    <div class="cardImage pa-10 mt-10" :class="{ disabled: loading }">
       <v-form ref="form" @submit.prevent="createNewUser">
         <v-row>
           <v-col cols="12" sm="5" md="4">
             <div :style="smAndDown ? 'display:flex; justify-content:center;' : ''">
-              <ImageUploadPreview @update:selectedImage="updatePhoto" />
+              <ImageUploadPreview @update:selectedImage="updatePhoto" ref="image" />
             </div>
             <span
               class="v-messages__message v-messages errorFile mx-5 my-3"
@@ -80,8 +81,48 @@
               class="font-weight-bold"
               :ripple="false"
               size="large"
+              v-if="!loading"
             >
               Cadastrar
+            </v-btn>
+            <v-btn
+              type="submit"
+              variant="elevated"
+              color="grey-darken-4 text-amber"
+              class="font-weight-bold"
+              :ripple="false"
+              size="large"
+              v-if="loading"
+            >
+              Cadastrando
+              <svg
+                version="1.1"
+                id="loader-1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                x="0px"
+                y="0px"
+                width="40px"
+                height="40px"
+                viewBox="0 0 50 50"
+                style="enable-background: new 0 0 50 50"
+                xml:space="preserve"
+              >
+                <path
+                  fill="#FFC107"
+                  d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
+                >
+                  <animateTransform
+                    attributeType="xml"
+                    attributeName="transform"
+                    type="rotate"
+                    from="0 25 25"
+                    to="360 25 25"
+                    dur="0.6s"
+                    repeatCount="indefinite"
+                  />
+                </path>
+              </svg>
             </v-btn>
           </v-col>
         </v-row>
@@ -110,6 +151,9 @@ import UserService from '@/services/User/UserService'
 import * as yup from 'yup'
 import { captureErrorYup } from '@/utils/captureErrorYup'
 import { schemaCreateUser } from '@/validations/User/userCreate.validations'
+import { ref } from 'vue'
+
+const loading = ref(false)
 
 export default {
   components: {
@@ -179,15 +223,18 @@ export default {
         }
       }
 
+      loading.value = true
       UserService.createUser(formData, config)
         .then(() => {
           this.snackbarSuccess = true
+          loading.value = false
+          this.$refs.image.removeImage()
           this.$refs.form.reset()
-          this.photo = null
         })
         .catch((error) => {
           this.errorMessage = error.response.data.message
           this.snackbarError = true
+          loading.value = false
         })
     },
 
@@ -210,5 +257,9 @@ export default {
   opacity: 1;
   font-size: 12px;
 }
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
 </style>
-@/validations/User/userCreate.validations
