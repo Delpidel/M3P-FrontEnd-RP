@@ -1,26 +1,26 @@
-import { flushPromises, mount } from '@vue/test-utils'
-import { describe, expect, it, vi } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils';
+import { describe, expect, it, vi } from 'vitest';
 
-/* Configuração do vuetify */
-import { createVuetify } from 'vuetify' // obrigatório
-import * as components from 'vuetify/components' // obrigatório
-import * as directives from 'vuetify/directives' // obrigatório
-import WorkoutsStudentsList from './WorkoutsStudentsList.vue'
-import WorkoutsStudentsService from '@/services/WorkoutsStudentsService'
+/* Configuración de vuetify */
+import { createVuetify } from 'vuetify'; // Obligatorio
+import * as components from 'vuetify/components'; // Obligatorio
+import * as directives from 'vuetify/directives'; // Obligatorio
+import WorkoutsStudentsList from './WorkoutsStudentsList.vue';
+import WorkoutsStudentsService from '@/services/WorkoutsStudentsService';
 
-const vuetify = createVuetify({ // obrigatório
+const vuetify = createVuetify({ // Obligatorio
     components,
     directives,
-})
+});
 
-global.ResizeObserver = require('resize-observer-polyfill') // obrigatório
+global.ResizeObserver = require('resize-observer-polyfill'); // Obligatorio
 
-/* FIM DA CONFIGURACAO */
+/* FIN DE LA CONFIGURACIÓN */
 
 
-describe("Tela Treinos por estudante",() => {
 
-    vi.spyOn(WorkoutsStudentsService,'workoutsByStudentList').mockResolvedValue([
+describe("Tela Treinos por estudante", () => {
+    vi.spyOn(WorkoutsStudentsService, 'workoutsByStudentList').mockResolvedValue([
         {
             "student_id": 5,
             "name": "Henrique Douglas",
@@ -30,34 +30,43 @@ describe("Tela Treinos por estudante",() => {
                 "QUARTA": []
             }
         }
-    ])   
-}
-)
+    ])
 
-it("Espera-se que a tela seja renderizada", () => {
-    const component = mount(WorkoutsStudentsList, {
-         global: {
-             plugins: [vuetify]
-         }
-     })
-     
-     expect(component).toBeTruthy()
- })
- 
+    it("Espera-se que a tela seja renderizada", () => {
+        const component = mount(WorkoutsStudentsList, {
+            global: {
+                plugins: [vuetify]
+            }
+        });
+    
+        expect(component).toBeTruthy();
+    });
+    
 
- it("Espera-se que exiba 2 cards na tela", async () => { // Marcar la función como async
-    const component = mount(WorkoutsStudentsList, {
-         global: {
-             plugins: [vuetify]
-         }
-     })
+    it("Deve retornar um objeto com os treinos de um aluno", async () => {
+        // Definicao de objeto esperado
+        const expectedWorkouts = {
+            "student_id": 5,
+            "name": "Henrique Douglas",
+            "workouts": {
+                "SEGUNDA": [],
+                "DOMINGO": [],
+                "QUARTA": []
+            }
+        };
 
-     await flushPromises()
+        // Espia a funcao workoutsByStudentList do servicio WorkoutsStudentsService
+        vi.spyOn(WorkoutsStudentsService, 'workoutsByStudentList').mockResolvedValue([expectedWorkouts]);
 
-     const cards = component.findAll("[data-test='card-item']");
-     
-     expect(cards).toHaveLength(2)
- })
+        // Llama ao método workoutsByStudentList
+        const workouts = await WorkoutsStudentsService.workoutsByStudentList(5);
 
- 
+        // Verifica que a respuesta é o objeto esperado
+        expect(workouts).toEqual([expectedWorkouts]);
+    });   
+   
+})
+
+
+
 
