@@ -3,7 +3,7 @@
     <div class="container">
       <v-row class="px-14">
         <v-col cols="12" md="10" offset-md="1">
-          <v-card class="title-card elevation-10" flat @click="atualizarFraseAleatoria">
+          <v-card class="title-card elevation-10" flat @click="updateRandomPhrase">
             <v-card-text class="d-flex flex-column align-center">
               <div class="d-flex align-center justify-center">
                 <v-icon class="mr-3" size="36">mdi-weight-lifter</v-icon>
@@ -12,7 +12,7 @@
                 </h1>
               </div>
               <h3 class="mt-3 font-weight-medium" :style="smAndDown ? 'text-align: center;' : ''">
-                {{ fraseAtual }}
+                {{ currentPhrase }}
               </h3>
             </v-card-text>
           </v-card>
@@ -82,64 +82,67 @@
   </v-container>
 </template>
 
-<script setup>
-import { ref, onMounted, computed } from 'vue';
+<script>
 import axios from 'axios';
-import { useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
 
-const router = useRouter();
-const registeredStudents = ref(0);
-const registeredExercises = ref(0);
-const userName = ref(localStorage.getItem('@name') || 'Instrutor');
+export default {
+  name: 'DashboardComponent',
+  setup() {
+    const { smAndDown, mdAndDown } = useDisplay();
 
-const { smAndDown, mdAndDown, lgAndDown } = useDisplay();
-
-const frases = [
-  'Inspire grandeza em seus alunos. Comece agora!',
-  'Faça a diferença para seus alunos. Vamos lá!',
-  'Seja o guia. Inicie a jornada com seu aluno!',
-  'O sucesso de seus alunos começa com você! Vamos começar!',
-  'Transforme potencial em realização. Ajude-os a alcançar novas alturas!',
-  'Cada aluno é uma história de sucesso esperando para acontecer.',
-  'Eduque com paixão. Inspire a próxima geração.',
-  'O caminho para o sucesso é através do aprendizado. Guie-os em cada passo.'
-];
-
-const fraseAtual = ref('');
-
-function atualizarFraseAleatoria() {
-  fraseAtual.value = frases[Math.floor(Math.random() * frases.length)];
-}
-
-onMounted(() => {
-  atualizarFraseAleatoria();
-  fetchDashboardData();
-});
-
-async function fetchDashboardData() {
-  const token = localStorage.getItem('@token'); 
-  try {
-    const response = await axios.get('http://localhost:8000/api/dashboard/instrutor', {
-      headers: {
-        'Authorization': `Bearer ${token}`
+    return { smAndDown, mdAndDown };
+  },
+  data() {
+    return {
+      registeredStudents: 0,
+      registeredExercises: 0,
+      userName: localStorage.getItem('@name') || 'Instrutor',
+      currentPhrase: '',
+      frases: [
+        'Inspire grandeza em seus alunos. Comece agora!',
+        'Faça a diferença para seus alunos. Vamos lá!',
+        'Seja o guia. Inicie a jornada com seu aluno!',
+        'O sucesso de seus alunos começa com você! Vamos começar!',
+        'Transforme potencial em realização. Ajude-os a alcançar novas alturas!',
+        'Cada aluno é uma história de sucesso esperando para acontecer.',
+        'Eduque com paixão. Inspire a próxima geração.',
+        'O caminho para o sucesso é através do aprendizado. Guie-os em cada passo.',
+      ],
+    };
+  },
+  methods: {
+    updateRandomPhrase() {
+      this.currentPhrase = this.frases[Math.floor(Math.random() * this.frases.length)];
+    },
+    async fetchDashboardData() {
+      const token = localStorage.getItem('@token'); 
+      try {
+        const response = await axios.get('http://localhost:8000/api/dashboard/instrutor', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        this.registeredStudents = response.data.registered_students;
+        this.registeredExercises = response.data.registered_exercises;
+      } catch (error) {
+        console.error('Erro ao buscar dados do dashboard:', error);
       }
-    });
-    registeredStudents.value = response.data.registered_students;
-    registeredExercises.value = response.data.registered_exercises;
-  } catch (error) {
-    console.error('Erro ao buscar dados do dashboard:', error);
-  }
-}
-
-function gotoStudents() {
-  router.push('/instructor/students');
-}
-
-function gotoExercises() {
-  router.push('/exercises');
-}
+    },
+    gotoStudents() {
+      this.$router.push('/instructor/students');
+    },
+    gotoExercises() {
+      this.$router.push('/exercises');
+    },
+  },
+  mounted() {
+    this.updateRandomPhrase();
+    this.fetchDashboardData();
+  },
+};
 </script>
+
 
 
 
