@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import AuthenticationService from '../services/AuthenticationService'
 
 export default {
   data() {
@@ -62,28 +62,15 @@ export default {
   },
   methods: {
     async fetchDashboardData() {
-      try {
-        const token = localStorage.getItem('@token');
-        if (!token) {
-          console.error('Token de autenticação não encontrado no localStorage.');
-          return;
-        }
-
-        const api = axios.create({
-          baseURL: 'http://localhost:8000/api',
-          timeout: 10000,
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        const response = await api.get('dashboard/admin');
-        const data = response.data.data;
-        this.registeredExercises = data.registered_exercises;
-        this.profiles = data.profiles;
-        this.exercises = data.exercises;
-      } catch (error) {
-        console.error('Erro ao buscar dados do painel de administração:', error);
-      }
-    },
+    try {
+      const { registered_exercises, profiles, exercises } = await AuthenticationService.fetchDashboardData();
+      this.registeredExercises = registered_exercises;
+      this.profiles = profiles;
+      this.exercises = exercises;
+    } catch (error) {
+      console.error('Erro ao buscar dados do painel de administração:', error);
+    }
+  },
     toggleExercises() {
       this.showExercises = !this.showExercises;
     },
@@ -96,7 +83,7 @@ export default {
       return Object.values(this.profiles).reduce((total, count) => total + count, 0);
     },
     greetingMessage() {
-      const greetings = ['Olá', 'Oi', 'Bem-vindo', 'Boa tarde'];
+      const greetings = ['Olá', 'Oi', 'Bem-vindo'];
       const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
       return `${randomGreeting}, ${this.profileName}!`;
     }
