@@ -114,7 +114,23 @@ function atualizarFraseAleatoria() {
 
 onMounted(() => {
   atualizarFraseAleatoria();
+  fetchDashboardData();
 });
+
+async function fetchDashboardData() {
+  const token = localStorage.getItem('@token'); 
+  try {
+    const response = await axios.get('http://localhost:8000/api/dashboard/instrutor', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    registeredStudents.value = response.data.registered_students;
+    registeredExercises.value = response.data.registered_exercises;
+  } catch (error) {
+    console.error('Erro ao buscar dados do dashboard:', error);
+  }
+}
 
 function gotoStudents() {
   router.push('/instructor/students');
