@@ -10,7 +10,7 @@
         <v-row>
           <v-col cols="12" sm="5" md="4">
             <div :style="smAndDown ? 'display:flex; justify-content:center;' : ''">
-              <ImageUploadPreview @update:selectedImage="updatePhoto" />
+              <ImageUploadPreview @update:selectedImage="updatePhoto" ref="image" />
             </div>
             <span
               class="v-messages__message v-messages errorFile mx-5 my-3"
