@@ -29,7 +29,6 @@ describe("Testa página de avaliação", () => {
         const cards = component.findAll(concatId('card-item'))      
         expect(cards).toHaveLength(4)
     })
-
     it("Espera-se que as imagens svg sejam carregadas", async () => {
         const component = mount(AvaliationStep02)
         await flushPromises()
@@ -44,7 +43,7 @@ describe("Testa página de avaliação", () => {
     })
     it("Espera-se que as imagens tenham os atributos corretos", async () => {
         const component = mount(AvaliationStep02)
-        await flushPromises();
+        await flushPromises()
         const images = component.findAll('img')
         images.forEach((img, index) => {
         expect(img.attributes('src')).toContain(`../src/assets/avaliation-images/${getOriginalImageName(index)}`)
@@ -82,6 +81,16 @@ describe("Testa página de avaliação", () => {
             }
         }    
 
+    })
+    it("Espera-se que tenham dois botões em cada card", async () => {
+        const component = mount(AvaliationStep02)
+        await flushPromises()
+        const cards = component.findAll('.button-container')
+        expect(cards).toBeTruthy()
+        cards.forEach(card => {
+            const buttons = card.findAll(concatId('button'))
+            expect(buttons).toHaveLength(2)
+        })
     })
 
 
