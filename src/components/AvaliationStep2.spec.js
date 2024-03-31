@@ -5,6 +5,8 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { concatId } from '@/utils/getComponent'
+import { createRouter } from 'vue-router'
+import { createMemoryHistory } from 'vue-router/dist/vue-router.cjs'
 
 const vuetify = createVuetify({
     components,
@@ -92,6 +94,56 @@ describe("Testa página de avaliação", () => {
             expect(buttons).toHaveLength(2)
         })
     })
-
-
+    it("Espera-se que ao adicionar uma foto a imagem do card mude", async () => {
+        const component = mount(AvaliationStep02)
+        await flushPromises()
+        const cards = component.findAll('.button-container')
+        
+        cards.forEach(async (card) => {
+            const addButton = card.find(concatId('button')) 
+            await addButton.trigger('click')
+            await flushPromises()
+            const image = card.find('.image-container img')
+            expect(image.exists()).toBeTruthy()
+        })
+    })
+    it("Espera-se que ao clickar no botão voltar o usuário seja redirecionado para a avaliation step 1", async () => {
+        const history = createMemoryHistory()
+        const router = createRouter({
+            history,
+            routes: [
+                { path: '/avaliacao/step1' },
+                { path: '/avaliacao/step2' },
+            ]
+        })
+        const component = mount(AvaliationStep02, {
+            global: {
+                plugins: [router]
+            }
+        })
+        const backButton = component.find('.btn-back')
+        await backButton.trigger('click')
+        await router.isReady()
+        expect(router.currentRoute.value.path).toBe('/avaliacao/step1')
+    })
+    it("Espera-se que ao clickar no botão próximo o usuário seja redirecionado para a avaliation step 3", async () => {
+        const history = createMemoryHistory()
+        const router = createRouter({
+            history,
+            routes: [
+                { path: '/avaliacao/step1' },
+                { path: '/avaliacao/step2' },
+                { path: '/avaliacao/step3' }
+            ]
+        })
+        const component = mount(AvaliationStep02, {
+            global: {
+                plugins: [router]
+            }
+        })
+        const backButton = component.find('.btn-next')
+        await backButton.trigger('click')
+        await router.isReady()
+        expect(router.currentRoute.value.path).toBe('/avaliacao/step3')
+    })
 }) 
