@@ -10,82 +10,99 @@
       </v-card-title>
     </v-card>
     <v-toolbar color="#757575">
-      <v-btn class="ml-auto" type="submit" variant="elevated font-weight-bold" size="large">
+      <v-btn class="ml-auto" type="submit" variant="elevated font-weight-bold" size="large" @click="newWorkout">
         Novo Treino
       </v-btn>
 
       <template v-slot:extension>
-        <v-tabs v-model="tab" direction="horizontal" color="#212121">
-          <v-tab v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
-            {{ day }}
-          </v-tab>
+        <v-tabs v-model="days" centered>
+          <v-tab v-for="(day, index) in daysOfWeek" :key="index" :value="day.value" :prepend-icon="day.icon">{{ day.label }}</v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
-    <v-window v-model="tab">
-      <v-window-item v-for="(day, index) in days" :key="index" :value="'option-' + (index + 1)">
-
-        <v-card-text>
-          <v-data-table :items="formattedWorkouts[day]" :headers="headers" :items-per-page="5">
-
-            <tr class="text-body-1" v-for="workout in formattedWorkouts[day]" :key="workout.id">
-
-              <td> {{ workout.exercise.description }}</td>
-              <td> {{ workout.weight }} KG </td>
-              <td> {{ workout.repetitions }} repetições </td>
-              <td> {{ workout.break_time }} min de pausa</td>
+    <v-window v-model="days">
+      <v-window-item v-for="(day, index) in daysOfWeek" :key="index" :value="day.value">
+        <v-table>
+          <thead>
+            <tr class="text-left">
+              <th>Exercício</th>
+              <th>Peso</th>
+              <th>Repetições</th>
+              <th>Pausa (s)</th>
+              <th>Tempo</th>
             </tr>
-
-          </v-data-table>
-        </v-card-text>
+          </thead>
+          <tbody>
+            <tr v-for="workout in workoutsList" :key="workout.id">
+              <td>{{ workout.exercise.description }}</td>
+              <td>{{ workout.weight }} kg</td>
+              <td>{{ workout.repetitions }}</td>
+              <td>{{ workout.break_time }}</td>
+              <td>{{ workout.time }}</td>
+            </tr>
+          </tbody>
+        </v-table>
       </v-window-item>
     </v-window>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   data() {
     return {
       studentName: '',
-      formattedWorkouts: {},
-      today: ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'],
-      tab: 'option-1',
-      days: ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO', 'DOMINGO'],
-
-    }
-  },
-
-  computed: {
-    currentDay() {
-      const todayIndex = new Date().getDay();
-      return this.today[todayIndex];
-    }
+      workoutsList: [],
+      days: '',
+      daysOfWeek: [
+        { label: 'Segunda-feira', value: 'segunda', icon: 'mdi-arm-flex' },
+        { label: 'Terça-feira', value: 'terca', icon: 'mdi-arm-flex' },
+        { label: 'Quarta-feira', value: 'quarta', icon: 'mdi-arm-flex' },
+        { label: 'Quinta-feira', value: 'quinta', icon: 'mdi-arm-flex' },
+        { label: 'Sexta-feira', value: 'sexta', icon: 'mdi-arm-flex' },
+        { label: 'Sábado', value: 'sabado', icon: 'mdi-arm-flex' },
+        { label: 'Domingo', value: 'domingo', icon: 'mdi-arm-flex' }
+      ]
+    };
   },
   mounted() {
-    this.fetchWorkoutsByStudent();
+    this.loadWorkout();
+    const currentDayIndex = new Date().getDay();
+    const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
+    this.days = this.daysOfWeek[adjustedDayIndex].value;
+  },
+  watch: {
+    days() {
+      this.loadWorkout()
+    }
   },
   methods: {
-    fetchWorkoutsByStudent() {
-      const studentId = this.$route.params.id;
-
+    loadWorkout() {
+      const studentId = this.$route.params.id
       axios.get(`http://127.0.0.1:8000/api/students/${studentId}/workouts`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('@token')}`
         }
       })
-        .then(response => {
+        .then((response) => {
           this.studentName = response.data.student_name;
-          this.formattedWorkouts = response.data.workouts;
+          const workouts = response.data.workouts;
+          const currentDay = this.days.toUpperCase();
+          if (workouts[currentDay]) {
+            this.workoutsList = Object.values(workouts[currentDay]); 
+          } else {
+            this.workoutsList = [];
+          }
         })
-        .catch(error => {
-          alert('Não foi possível acessar a lista de treinos.');
+        .catch(() => {
+          alert('Não foi possível acessar a lista de exercícios.');
         });
+    },
+    newWorkout() {
+      this.$router.push('/newWorkout/:id')
     }
   }
-
-
 }
 </script>
