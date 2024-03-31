@@ -23,7 +23,13 @@
                 <v-btn @click="openFileInput(index)" icon class="button" data-test="button">
                   <v-icon color="amber">mdi-camera</v-icon>
                 </v-btn>
-                <v-btn @click="deletePhoto(index)" icon class="button" style="margin-left: 20px" data-test="button">
+                <v-btn
+                  @click="deletePhoto(index)"
+                  icon
+                  class="button"
+                  style="margin-left: 20px"
+                  data-test="button"
+                >
                   <v-icon color="grey-darken-4">mdi-delete</v-icon>
                 </v-btn>
               </div>
@@ -37,10 +43,14 @@
             class="btn-back"
             >Voltar</v-btn
           >
-          <v-btn color="amber" @click="this.$router.push('/avaliacao/step3')" class="btn-next"
-            >Próximo</v-btn
-          >
+          <v-btn color="amber" @click="nextStep" class="btn-next">Próximo</v-btn>
         </div>
+        <v-snackbar v-model="showAlert" color="error" top class="custom-snackbar">
+          {{ alertMessage }}
+          <template v-slot:action="{ attrs }">
+            <v-btn text v-bind="attrs" @click="showAlert = false"> Fechar </v-btn>
+          </template>
+        </v-snackbar>
       </div>
     </v-container>
   </v-layout>
@@ -57,7 +67,10 @@ export default {
         '../src/assets/avaliation-images/left.svg'
       ],
 
-      hoverIndex: -1
+      hoverIndex: -1,
+      allPhotosAdded: false,
+      showAlert: false,
+      alertMessage: 'Por favor, adicione todas as fotos antes de prosseguir para a próxima etapa!'
     }
   },
   methods: {
@@ -76,6 +89,7 @@ export default {
         this.imageLinks[index] = imageUrl
         localStorage.setItem(`image_${index}`, imageUrl)
         console.log('Imagem adicionada:', imageUrl)
+        this.allPhotosAdded = this.imageLinks.every((link) => link.startsWith('blob:'))
       }
     },
     deletePhoto(index) {
@@ -113,6 +127,14 @@ export default {
           return 'Homem virado para esquerda'
         default:
           return ''
+      }
+    },
+    nextStep() {
+      this.allPhotosAdded = this.imageLinks.every((link) => link.startsWith('blob:'))
+      if (!this.allPhotosAdded) {
+        this.showAlert = true
+      } else {
+        this.$router.push('/avaliacao/step3')
       }
     }
   }
@@ -179,5 +201,9 @@ export default {
 .btn-next {
   margin-bottom: 10px;
   border-radius: 1rem;
+}
+
+.custom-snackbar {
+  margin-left: 15%;
 }
 </style>
