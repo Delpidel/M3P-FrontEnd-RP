@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <div class="container">
-      <v-row class="px-16">
+      <v-row class="px-14">
         <v-col cols="12" md="10" offset-md="1">
           <v-card class="title-card elevation-10" flat @click="atualizarFraseAleatoria">
             <v-card-text class="d-flex flex-column align-center">
@@ -99,7 +99,11 @@ const frases = [
   'Inspire grandeza em seus alunos. Comece agora!',
   'Faça a diferença para seus alunos. Vamos lá!',
   'Seja o guia. Inicie a jornada com seu aluno!',
-  'O sucesso de seus alunos começa com você! Vamos começar!'
+  'O sucesso de seus alunos começa com você! Vamos começar!',
+  'Transforme potencial em realização. Ajude-os a alcançar novas alturas!',
+  'Cada aluno é uma história de sucesso esperando para acontecer.',
+  'Eduque com paixão. Inspire a próxima geração.',
+  'O caminho para o sucesso é através do aprendizado. Guie-os em cada passo.'
 ];
 
 const fraseAtual = ref('');
