@@ -51,6 +51,7 @@
                   label="Nome completo" 
                   type="text" 
                   variant="outlined"
+                  data-test="input-name"
                   @focus="clearError('name')"
                   :error-messages="error.name"/>
             </v-col>
@@ -60,6 +61,7 @@
                 label="E-mail" 
                 type="email" 
                 variant="outlined"
+                data-test="input-email"
                 @focus="clearError('email')"
                 :error-messages="error.email"/>
             </v-col>
@@ -70,6 +72,7 @@
                 label="CPF" 
                 type="text" 
                 variant="outlined" 
+                data-test="input-cpf"
                 @input="handleChange"
                 @focus="clearError('cpf')"
                 :error-messages="error.cpf"/>
@@ -80,6 +83,7 @@
                   label="Telefone para contato" 
                   type="number" 
                   variant="outlined"
+                  data-test="input-contact"
                   @focus="clearError('contact')"
                   :error-messages="error.contact" />
               </v-col>
@@ -89,6 +93,7 @@
                   label="Data de Nascimento" 
                   type="date" 
                   variant="outlined"
+                  data-test="input-dateBirth"
                   @focus="clearError('dateBirth')"
                   :max="maxDate" 
                   :error-messages="error.dateBirth" />
@@ -107,7 +112,8 @@
                 v-model="cep" 
                 label="CEP" 
                 type="number" 
-                variant="outlined" 
+                variant="outlined"
+                data-test="input-cep"
                 @focus="clearError('cep')"
                 :error-messages="error.cep"
                 maxLength="9" 
@@ -120,6 +126,7 @@
                 label="Logradouro" 
                 type="text" 
                 variant="outlined"
+                data-test="input-street"
                 @focus="clearError('street')"
                 :error-messages="error.street"/>
             </v-col>
@@ -129,6 +136,7 @@
                 label="Número" 
                 type="text" 
                 variant="outlined"
+                data-test="input-number"
                 @focus="clearError('number')"
                 :error-messages="error.number"/>
             </v-col>
@@ -140,6 +148,7 @@
                 label="Bairro" 
                 type="text" 
                 variant="outlined"
+                data-test="input-neighborhood"
                 @focus="clearError('neighborhood')"
                 :error-messages="error.neighborhood"/>
             </v-col>
@@ -148,7 +157,8 @@
                 v-model="complement" 
                 label="Complemento" 
                 type="text" 
-                variant="outlined"/>
+                variant="outlined"
+                data-test="input-complement"/>
             </v-col>
           </div>
           <div class="d-flex formContent-data-responsiveInput">
@@ -158,6 +168,7 @@
                 label="Cidade" 
                 type="text" 
                 variant="outlined"
+                data-test="input-city"
                 @focus="clearError('city')"
                 :error-messages="error.city" />
             </v-col>
@@ -167,6 +178,7 @@
                 label="Estado" 
                 type="text" 
                 variant="outlined"
+                data-test="input-state"
                 @focus="clearError('state')"
                 :error-messages="error.state"/>
             </v-col>
@@ -186,6 +198,7 @@
               variant="elevated" 
               color="grey-darken-4 text-amber" 
               class="font-weight-bold"
+              data-test="submit-button"
               :ripple="false" size="large">
               Cadastrar
             </v-btn>
@@ -319,6 +332,12 @@ export default {
 
         schemaStudentRegistrationForm.validateSync(body, { abortEarly: false })
 
+        if (!this.photo) {
+          this.snackbarError = true;
+          this.errorMessage = `Por favor, capture uma foto antes de enviar o formulário`;
+          return;
+        }
+
         const formData = new FormData()
         formData.append('photo', this.photo);
         formData.append('name', this.name)
@@ -332,12 +351,6 @@ export default {
         formData.append('neighborhood', this.neighborhood)
         formData.append('city', this.city)
         formData.append('state', this.state)
-
-        if (!this.photo) {
-          this.snackbarError = true;
-          this.errorMessage = `Por favor, capture uma foto antes de enviar o formulário`;
-          return;
-        }
 
         StudentRegistrationService.createStudent(formData)
           .then(() => {
