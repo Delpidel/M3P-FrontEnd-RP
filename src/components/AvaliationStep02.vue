@@ -20,10 +20,10 @@
                 :alt="getImageAlt(index)"
               />
               <div class="button-container" v-if="hoverIndex === index">
-                <v-btn @click="openFileInput(index)" icon class="button">
+                <v-btn @click="openFileInput(index)" icon class="button" data-test="button">
                   <v-icon color="amber">mdi-camera</v-icon>
                 </v-btn>
-                <v-btn @click="deletePhoto(index)" icon class="button" style="margin-left: 20px">
+                <v-btn @click="deletePhoto(index)" icon class="button" style="margin-left: 20px" data-test="button">
                   <v-icon color="grey-darken-4">mdi-delete</v-icon>
                 </v-btn>
               </div>
