@@ -1,42 +1,49 @@
 <template>
-  <h3>implementação da 2º tela de avalição fisica aqui</h3>
-  <v-container>
-    <div class="main-container">
-      <v-row>
-        <v-col cols="3" v-for="(link, index) in imageLinks" :key="index">
-          <div
-            class="image-container"
-            @mouseover="toggleHover(index)"
-            @mouseleave="toggleHover(-1)"
-          >
-            <img
-              :src="link"
-              :class="{ blur: hoverIndex === index }"
-              height="150"
-              width="150"
-              :alt="getImageAlt(index)"
-            />
-            <div class="button-container" v-if="hoverIndex === index">
-              <v-btn @click="openFileInput(index)" icon class="button">
-                <v-icon color="amber">mdi-camera</v-icon>
-              </v-btn>
-              <v-btn @click="deletePhoto(index)" icon class="button" style="margin-left: 20px">
-                <v-icon color="grey-darken-4">mdi-delete</v-icon>
-              </v-btn>
+  <v-layout>
+    <v-container>
+      <div class="main-container">
+        <h2>Envio de imagens para a avaliação</h2>
+        <p>Por favor, faça o upload das fotos do aluno(a):</p>
+        <v-row>
+          <v-col cols="3" v-for="(link, index) in imageLinks" :key="index">
+            <div
+              class="image-container"
+              data-test="card-item"
+              @mouseover="toggleHover(index)"
+              @mouseleave="toggleHover(-1)"
+            >
+              <img
+                :src="link"
+                :class="{ blur: hoverIndex === index }"
+                height="150"
+                width="150"
+                :alt="getImageAlt(index)"
+              />
+              <div class="button-container" v-if="hoverIndex === index">
+                <v-btn @click="openFileInput(index)" icon class="button">
+                  <v-icon color="amber">mdi-camera</v-icon>
+                </v-btn>
+                <v-btn @click="deletePhoto(index)" icon class="button" style="margin-left: 20px">
+                  <v-icon color="grey-darken-4">mdi-delete</v-icon>
+                </v-btn>
+              </div>
             </div>
-          </div>
-        </v-col>
-      </v-row>
-      <div class="button-container-2">
-        <v-btn color="grey-darken-3" @click="this.$router.push('/avaliacao/step1')" class="btn-back"
-          >Voltar</v-btn
-        >
-        <v-btn color="amber" @click="this.$router.push('/avaliacao/step3')" class="btn-next"
-          >Próximo</v-btn
-        >
+          </v-col>
+        </v-row>
+        <div class="button-container-2">
+          <v-btn
+            color="grey-darken-3"
+            @click="this.$router.push('/avaliacao/step1')"
+            class="btn-back"
+            >Voltar</v-btn
+          >
+          <v-btn color="amber" @click="this.$router.push('/avaliacao/step3')" class="btn-next"
+            >Próximo</v-btn
+          >
+        </div>
       </div>
-    </div>
-  </v-container>
+    </v-container>
+  </v-layout>
 </template>
 
 <script>
@@ -116,6 +123,7 @@ export default {
   margin-top: 40px;
   height: 60%;
   border-radius: 2rem;
+  margin-left: 15%;
 }
 
 .image-container {
