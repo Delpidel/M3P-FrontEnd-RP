@@ -108,29 +108,7 @@ import ImageUploadPreview from '@/components/File/ImageUploadPreview.vue'
 import axios from 'axios'
 import * as yup from 'yup'
 import { captureErrorYup } from '../../utils/captureErrorYup'
-
-const schema = yup.object().shape({
-  name: yup
-    .string()
-    .min(6, 'O nome deve ter no mínimo 6 caracteres.')
-    .required('O nome é obrigatório.'),
-  email: yup
-    .string()
-    .required('O campo email é obrigatório.')
-    .email('O campo email deve conter um e-mail válido.'),
-  profile: yup
-    .string()
-    .required('O perfil é obrigatório.')
-    .oneOf(['2', '3', '4'], 'Selecione um perfil válido.'),
-  photo: yup
-    .mixed()
-    .nullable()
-    .test('is-image', 'O arquivo deve ser uma imagem', (value) => {
-      if (!value) return true
-      const mimeTypes = ['image/jpeg', 'image/jpg', 'image/png']
-      return mimeTypes.some((mimeType) => value.type.includes(mimeType))
-    })
-})
+import { schemaCreateUser } from '@/validations/User/userCreate.validations'
 
 export default {
   components: {
@@ -162,7 +140,7 @@ export default {
     validateSync() {
       this.errors = {}
       try {
-        schema.validateSync(
+        schemaCreateUser.validateSync(
           {
             name: this.name,
             email: this.email,
@@ -181,10 +159,6 @@ export default {
         }
       }
       return true
-    },
-
-    updatePhoto(imageData) {
-      this.photo = imageData
     },
 
     createNewUser() {
@@ -215,6 +189,10 @@ export default {
           this.errorMessage = error.response.data.message
           this.snackbarError = true
         })
+    },
+
+    updatePhoto(imageData) {
+      this.photo = imageData
     }
   }
 }
@@ -233,3 +211,4 @@ export default {
   font-size: 12px;
 }
 </style>
+@/validations/User/userCreate.validations
