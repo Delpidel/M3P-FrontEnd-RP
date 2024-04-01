@@ -2,47 +2,47 @@
   <v-layout>
     <v-container>
       <div class="main-container">
-        <h2>Envio de imagens para a avaliação</h2>
-        <p>Por favor, faça o upload das fotos do aluno(a):</p>
-        <v-row>
-          <v-col cols="3" v-for="(link, index) in imageLinks" :key="index">
-            <div
-              class="image-container"
-              data-test="card-item"
-              @mouseover="toggleHover(index)"
-              @mouseleave="toggleHover(-1)"
-            >
-              <img
-                :src="link"
-                :class="{ blur: hoverIndex === index }"
-                height="150"
-                width="150"
-                :alt="getImageAlt(index)"
-              />
-              <div class="button-container" v-if="hoverIndex === index">
-                <v-btn @click="openFileInput(index)" icon class="button" data-test="button">
-                  <v-icon color="amber">mdi-camera</v-icon>
-                </v-btn>
-                <v-btn
-                  @click="deletePhoto(index)"
-                  icon
-                  class="button"
-                  style="margin-left: 20px"
-                  data-test="button"
-                >
-                  <v-icon color="grey-darken-4">mdi-delete</v-icon>
-                </v-btn>
+        <h2>Envio de fotos para a avaliação</h2>
+        <p>Por favor, envie as fotos do aluno(a):</p>
+        <div class="cards-container">
+          <v-row class="card-row">
+            <v-col cols="12" sm="6" md="4" lg="3" v-for="(link, index) in imageLinks" :key="index">
+              <div
+                class="image-container"
+                data-test="card-item"
+                @mouseover="toggleHover(index)"
+                @mouseleave="toggleHover(-1)"
+              >
+                <img
+                  :src="link"
+                  :class="{ blur: hoverIndex === index }"
+                  height="150"
+                  width="150"
+                  :alt="getImageAlt(index)"
+                />
+                <div class="button-container" v-if="hoverIndex === index">
+                  <v-btn @click="openFileInput(index)" icon class="button" data-test="button">
+                    <v-icon color="amber">mdi-camera</v-icon>
+                  </v-btn>
+                  <v-btn
+                    @click="deletePhoto(index)"
+                    icon
+                    class="button"
+                    data-test="button"
+                  >
+                    <v-icon color="grey-darken-4">mdi-delete</v-icon>
+                  </v-btn>
+                </div>
               </div>
-            </div>
-          </v-col>
-        </v-row>
+            </v-col>
+          </v-row>
+        </div>
         <div class="button-container-2">
           <v-btn
             color="grey-darken-3"
-            @click="this.$router.push('/avaliacao/step1')"
+            @click="goToStep1"
             class="btn-back"
-            >Voltar</v-btn
-          >
+          >Voltar</v-btn>
           <v-btn color="amber" @click="nextStep" class="btn-next">Próximo</v-btn>
         </div>
         <v-snackbar v-model="showAlert" color="error" top class="custom-snackbar">
@@ -66,11 +66,10 @@ export default {
         '../src/assets/avaliation-images/back.svg',
         '../src/assets/avaliation-images/left.svg'
       ],
-
       hoverIndex: -1,
       allPhotosAdded: false,
       showAlert: false,
-      alertMessage: 'Adicione todas as fotos antes de prosseguir para a próxima etapa!'
+      alertMessage: 'Favor adicionar todas as fotos antes de prosseguir'
     }
   },
   methods: {
@@ -84,7 +83,6 @@ export default {
     uploadImage(event, index) {
       const file = event.target.files[0]
       if (file) {
-        this.imageLinks[index] = URL.createObjectURL(file)
         const imageUrl = URL.createObjectURL(file)
         this.imageLinks[index] = imageUrl
         localStorage.setItem(`image_${index}`, imageUrl)
@@ -136,12 +134,51 @@ export default {
       } else {
         this.$router.push('/avaliacao/step3')
       }
+    },
+    goToStep1() {
+      this.$router.push('/avaliacao/step1')
     }
   }
 }
 </script>
 
 <style scoped>
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+  }
+  .main-container {
+    margin-left: 0;
+    align-items: flex-start;
+    margin-left: 0;
+  }
+  .button-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .button-container .button {
+    margin-left: 0;
+  }
+  .button-container-2 {
+    align-items: flex-start;
+    margin: 0 auto;
+  }
+  .image-container {
+    position: relative;
+    margin-bottom: 20px;
+  }
+}
+
 .main-container {
   margin-top: 40px;
   height: 60%;
@@ -152,7 +189,7 @@ export default {
 .image-container {
   display: flex;
   justify-content: center;
-  position: absolute;
+  position: relative;
   cursor: pointer;
   overflow: hidden;
   margin-top: 10px;
@@ -180,6 +217,7 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
+  gap: 12px;
 }
 
 .button {
@@ -194,7 +232,7 @@ export default {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 30%;
+  margin-top: 10%;
 }
 
 .btn-back,
