@@ -146,7 +146,7 @@ export default {
   margin-top: 40px;
   height: 60%;
   border-radius: 2rem;
-  margin-left: 15%;
+  margin-left: 20%;
 }
 
 .image-container {
@@ -194,7 +194,7 @@ export default {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 25%;
+  margin-top: 30%;
 }
 
 .btn-back,
@@ -204,6 +204,6 @@ export default {
 }
 
 .custom-snackbar {
-  margin-left: 15%;
+  margin-left: 20%;
 }
 </style>
