@@ -1,59 +1,52 @@
 <template>
-  <v-layout>
-    <v-container>
-      <div class="main-container">
-        <h2>Envio de fotos para a avaliação</h2>
-        <p>Por favor, envie as fotos do aluno(a):</p>
-        <div class="cards-container">
-          <v-row class="card-row">
-            <v-col cols="12" sm="6" md="4" lg="3" v-for="(link, index) in imageLinks" :key="index">
-              <div
-                class="image-container"
-                data-test="card-item"
-                @mouseover="toggleHover(index)"
-                @mouseleave="toggleHover(-1)"
-              >
-                <img
-                  :src="link"
-                  :class="{ blur: hoverIndex === index }"
-                  height="150"
-                  width="150"
-                  :alt="getImageAlt(index)"
-                />
-                <div class="button-container" v-if="hoverIndex === index">
-                  <v-btn @click="openFileInput(index)" icon class="button" data-test="button">
-                    <v-icon color="amber">mdi-camera</v-icon>
-                  </v-btn>
-                  <v-btn
-                    @click="deletePhoto(index)"
-                    icon
-                    class="button"
-                    data-test="button"
-                  >
-                    <v-icon color="grey-darken-4">mdi-delete</v-icon>
-                  </v-btn>
+  <div class="container">
+    <v-layout>
+      <v-container>
+        <div class="main-container">
+          <h1 class="py-12">Envio de fotos para a avaliação</h1>
+          <p class="py-2">Por favor, envie as fotos do aluno(a):</p>
+          <div class="cards-container">
+            <v-row class="card-row">
+              <v-col cols="12" sm="6" md="4" lg="3" v-for="(link, index) in imageLinks" :key="index">
+                <div
+                  class="image-container"
+                  data-test="card-item"
+                  @mouseover="toggleHover(index)"
+                  @mouseleave="toggleHover(-1)"
+                >
+                  <img
+                    :src="link"
+                    :class="{ blur: hoverIndex === index }"
+                    height="150"
+                    width="150"
+                    :alt="getImageAlt(index)"
+                  />
+                  <div class="button-container" v-if="hoverIndex === index">
+                    <v-btn @click="openFileInput(index)" icon class="button" data-test="button">
+                      <v-icon color="amber">mdi-camera</v-icon>
+                    </v-btn>
+                    <v-btn @click="deletePhoto(index)" icon class="button" data-test="button">
+                      <v-icon color="grey-darken-4">mdi-delete</v-icon>
+                    </v-btn>
+                  </div>
                 </div>
-              </div>
-            </v-col>
-          </v-row>
+              </v-col>
+            </v-row>
+          </div>
+          <div class="button-container-2">
+            <v-btn color="grey-darken-4 text-amber" @click="goToStep1" class="btn-back font-weight-bold" size="large">Voltar</v-btn> <!-- Exemplo de botão -->
+            <v-btn color="grey-darken-4 text-amber" @click="nextStep" class="btn-next font-weight-bold" size="large">Próximo</v-btn> <!-- Exemplo de botão -->
+          </div>
+          <v-snackbar v-model="showAlert" color="error" top class="custom-snackbar">
+            {{ alertMessage }}
+            <template v-slot:action="{ attrs }">
+              <v-btn text v-bind="attrs" @click="showAlert = false"> Fechar </v-btn>
+            </template>
+          </v-snackbar>
         </div>
-        <div class="button-container-2">
-          <v-btn
-            color="grey-darken-3"
-            @click="goToStep1"
-            class="btn-back"
-          >Voltar</v-btn>
-          <v-btn color="amber" @click="nextStep" class="btn-next">Próximo</v-btn>
-        </div>
-        <v-snackbar v-model="showAlert" color="error" top class="custom-snackbar">
-          {{ alertMessage }}
-          <template v-slot:action="{ attrs }">
-            <v-btn text v-bind="attrs" @click="showAlert = false"> Fechar </v-btn>
-          </template>
-        </v-snackbar>
-      </div>
-    </v-container>
-  </v-layout>
+      </v-container>
+    </v-layout>
+  </div>
 </template>
 
 <script>
@@ -175,15 +168,12 @@ export default {
   }
   .image-container {
     position: relative;
-    margin-bottom: 20px;
   }
 }
 
 .main-container {
-  margin-top: 40px;
   height: 60%;
   border-radius: 2rem;
-  margin-left: 20%;
 }
 
 .image-container {
@@ -192,7 +182,6 @@ export default {
   position: relative;
   cursor: pointer;
   overflow: hidden;
-  margin-top: 10px;
   border-radius: 2rem;
   width: 220px;
   height: 220px;
@@ -232,13 +221,12 @@ export default {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 10%;
+  margin-top: 6%;
 }
 
 .btn-back,
 .btn-next {
   margin-bottom: 10px;
-  border-radius: 1rem;
 }
 
 .custom-snackbar {
