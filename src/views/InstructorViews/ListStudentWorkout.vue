@@ -71,7 +71,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import InstructorListWorkoutsService from '@/services/InstructorListWorkoutsService.js'
+import DeleteWorkoutService from '@/services/DeleteWorkoutService.js'
 
 export default {
   data() {
@@ -102,26 +103,22 @@ export default {
     }
   },
   methods: {
-    loadWorkout() {
-      const studentId = this.$route.params.id
-      axios.get(`http://127.0.0.1:8000/api/students/${studentId}/workouts`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('@token')}`
+    async loadWorkout() {
+      try {
+        const studentId = this.$route.params.id;
+        const response = await InstructorListWorkoutsService.ListWorkouts(studentId);
+        this.studentName = response.student_name;
+        const workouts = response.workouts;
+        const currentDay = this.days.toUpperCase();
+        if (workouts[currentDay]) {
+          this.workoutsList = Object.values(workouts[currentDay]);
+        } else {
+          this.workoutsList = [];
         }
-      })
-        .then((response) => {
-          this.studentName = response.data.student_name;
-          const workouts = response.data.workouts;
-          const currentDay = this.days.toUpperCase();
-          if (workouts[currentDay]) {
-            this.workoutsList = Object.values(workouts[currentDay]);
-          } else {
-            this.workoutsList = [];
-          }
-        })
-        .catch(() => {
-          alert('Não foi possível acessar a lista de exercícios.');
-        });
+      } catch (error) {
+        console.error('Erro ao carregar treinos:', error);
+        alert('Não foi possível acessar a lista de exercícios.');
+      }
     },
     newWorkout() {
       this.$router.push('/newWorkout/:id')
@@ -129,18 +126,16 @@ export default {
     updateWorkout() {
       this.$router.push('/newWorkout/:id')
     },
-    deleteWorkout(workoutId){
-      axios.delete(`http://127.0.0.1:8000/api/workouts/${workoutId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('@token')}`
-        }
-      }).then(() => {
-        alert("Treino excluído com sucesso!")
-        this.loadWorkout();
-      }).catch(() => {
-        alert('Erro ao excluir o treino.');
-      });
-    }
+    deleteWorkout(workoutId) {
+  DeleteWorkoutService.DeleteWorkout(workoutId)
+    .then(() => {
+      alert("Treino excluído com sucesso!");
+      this.loadWorkout();
+    })
+    .catch(() => {
+      alert('Erro ao excluir o treino.');
+    });
+}
   }
 }
 </script>
