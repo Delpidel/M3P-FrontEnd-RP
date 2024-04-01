@@ -7,7 +7,14 @@
           <p class="py-2">Por favor, envie as fotos do aluno(a):</p>
           <div class="cards-container">
             <v-row class="card-row">
-              <v-col cols="12" sm="6" md="4" lg="3" v-for="(link, index) in imageLinks" :key="index">
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+                lg="3"
+                v-for="(link, index) in imageLinks"
+                :key="index"
+              >
                 <div
                   class="image-container"
                   data-test="card-item"
@@ -34,8 +41,20 @@
             </v-row>
           </div>
           <div class="button-container-2">
-            <v-btn color="grey-darken-4 text-amber" @click="goToStep1" class="btn-back font-weight-bold" size="large">Voltar</v-btn> <!-- Exemplo de botão -->
-            <v-btn color="grey-darken-4 text-amber" @click="nextStep" class="btn-next font-weight-bold" size="large">Próximo</v-btn> <!-- Exemplo de botão -->
+            <v-btn
+              color="grey-darken-4 text-amber"
+              @click="goToStep1"
+              class="btn-back font-weight-bold"
+              size="large"
+              >Voltar</v-btn
+            >
+            <v-btn
+              color="grey-darken-4 text-amber"
+              @click="nextStep"
+              class="btn-next font-weight-bold"
+              size="large"
+              >Próximo</v-btn
+            >
           </div>
           <v-snackbar v-model="showAlert" color="error" top class="custom-snackbar">
             {{ alertMessage }}
