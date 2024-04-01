@@ -5,37 +5,37 @@
         </header>
         <v-divider class="mt-2 mb-2" color="black" :thickness="3"></v-divider>
 
-        <v-select label="Selecione um plano" variant="outlined" v-model="selectedDescription"
+        <v-select data-test="select-plans" label="Selecione um plano" variant="outlined" v-model="selectedDescription"
             :items="plans.map(plan => plan.description)"></v-select>
 
-    <div class="rounded bg-grey-darken-1 py-2">
-        <div class="d-flex align-center flex-column">
-            <div>
-                <v-icon class="my-3 disable mr-2">mdi-calendar-blank</v-icon>
-                <v-btn-toggle color=amber variant="elevated" v-model="toggleDay" divided elevation="3">
-                    <v-btn class="text-capitalize" value="segunda">Segunda</v-btn>
-                    <v-btn class="text-capitalize" value="terca">Terça</v-btn>
-                    <v-btn class="text-capitalize" value="quarta">Quarta</v-btn>
-                    <v-btn class="text-capitalize" value="quinta">Quinta</v-btn>
-                    <v-btn class="text-capitalize" value="sexta">Sexta</v-btn>
-                    <v-btn class="text-capitalize" value="sábado">Sábado</v-btn>
-                    <v-btn class="text-capitalize" value="domingo">Domingo</v-btn>
-                </v-btn-toggle>
+        <div class="rounded bg-grey-darken-1 py-2">
+            <div class="d-flex align-center flex-column">
+                <div>
+                    <v-icon class="my-3 disable mr-2">mdi-calendar-blank</v-icon>
+                    <v-btn-toggle color=amber variant="elevated" v-model="toggleDay" divided elevation="3">
+                        <v-btn class="text-capitalize" data-test="day-segunda" value="segunda">Segunda</v-btn>
+                        <v-btn class="text-capitalize" data-test="day-terca" value="terca">Terça</v-btn>
+                        <v-btn class="text-capitalize" value="quarta">Quarta</v-btn>
+                        <v-btn class="text-capitalize" value="quinta">Quinta</v-btn>
+                        <v-btn class="text-capitalize" value="sexta">Sexta</v-btn>
+                        <v-btn class="text-capitalize" value="sabado">Sábado</v-btn>
+                        <v-btn class="text-capitalize" value="domingo">Domingo</v-btn>
+                    </v-btn-toggle>
+                </div>
             </div>
         </div>
-    </div>
         <div class="d-flex">
             <v-timeline align="start" side="end">
                 <template v-slot:icon><v-icon icon=item.></v-icon></template>
-                
-                <v-timeline-item dot-color="grey-darken-1" size="small" fill-dot >
+
+                <v-timeline-item dot-color="grey-darken-1" size="small" fill-dot>
                     <div>
                         <div>
                             <strong>Café da manhã</strong>
                         </div>
                     </div>
                 </v-timeline-item>
-                <v-timeline-item v-for="(meals, day) in filteredMealPlans" :key="day" dot-color="amber" size="x-small" >
+                <v-timeline-item v-for="(meals, day) in filteredMealPlans" :key="day" dot-color="amber" size="x-small">
                     <div v-for="meal in meals" :key="meal.id">
                         <v-card class="mb-2" v-if="meal.hour < '10:59'">
                             <v-card-title class="bg-amber">
@@ -47,7 +47,7 @@
                         </v-card>
                     </div>
                 </v-timeline-item>
-                <v-timeline-item dot-color="grey-darken-1" size="small" fill-dot >
+                <v-timeline-item dot-color="grey-darken-1" size="small" fill-dot>
                     <div>
                         <div>
                             <strong>Almoço</strong>
@@ -73,8 +73,7 @@
                         </div>
                     </div>
                 </v-timeline-item>
-                <v-timeline-item v-for="(meals, day) in filteredMealPlans" :key="day" dot-color="amber" 
-                    size="x-small">
+                <v-timeline-item v-for="(meals, day) in filteredMealPlans" :key="day" dot-color="amber" size="x-small">
                     <div v-for="meal in meals" :key="meal.id">
                         <v-card class="mb-2" v-if="meal.hour > '16:00' && meal.hour < '24:00'">
                             <v-card-title class="bg-amber">
@@ -87,10 +86,8 @@
                     </div>
                 </v-timeline-item>
             </v-timeline>
-            
         </div>
-
-        <v-snackbar v-model="snackbar" timeout=2000 :color="colorSnack" elevation="5" variant="tonal" multi-line>
+        <v-snackbar data-test="snackbar" vertical v-model="snackbar" timeout=2000 :color="colorSnack" elevation="5" variant="outlined">
             {{ this.snackText }}
         </v-snackbar>
     </v-container>
@@ -108,9 +105,9 @@ export default {
             planSchedule: '',
             day: '',
             toggleDay: "",
-            snackText: '',
+            snackText: 'Erro ao buscar planos de alimentação',
             snackbar: false,
-            colorSnack: '',
+            colorSnack: 'red-darken-2',
         }
     },
     methods: {
@@ -119,19 +116,19 @@ export default {
                 .then((data) => {
                     this.plans = data
                 })
-                .catch(() => alert('Houve um error'))
+                .catch(() => this.snackbar = true)
         },
         getPlanSchedule() {
             MealPlanService.getPlanSchedule(this.selectedPlanId)
                 .then((data) => {
                     this.planSchedule = data
                 })
-                .catch(() => alert('Houve um error'))
+                .catch(() => this.snackbar = true)
         },
         getDay() {
             let today = moment().format('dddd');
             this.day = today === "Sunday" ? "domingo" :
-                today === "Saturday" ? "sábado" :
+                today === "Saturday" ? "sabado" :
                     today === "Monday" ? "segunda" :
                         today === "Tuesday" ? "terca" :
                             today === "Wednesday" ? "quarta" :
