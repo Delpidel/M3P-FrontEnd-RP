@@ -105,7 +105,7 @@ import AuthenticationService from '../services/AuthenticationService'
 export default {
   data() {
     return {
-      profileName: 'ADMIN',
+      profileName: localStorage.getItem('@name'),
       registeredExercises: 0,
       profiles: {},
       exercises: [],
@@ -128,7 +128,6 @@ export default {
       }
     },
     toggleExercises() {
-      // this.$router.push('/exercises)
       this.showExercises = !this.showExercises
     },
     toggleUsers() {
