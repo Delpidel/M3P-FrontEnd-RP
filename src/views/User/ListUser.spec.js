@@ -98,4 +98,40 @@ describe("Tela de listagem de usuários", () => {
         expect(component.text()).toContain("Houve um erro ao carregar as informações dos usuários")
 
     })
+
+    it('Espera-se que o usuário seja ativado/desativado corretamente', async () => {
+        const mockedUsers = [
+          { id: 1, name: 'Usuário 1', is_active: true },
+          { id: 2, name: 'Usuário 2', is_active: true },
+          { id: 3, name: 'Usuário 3', is_active: false }
+        ]
+    
+        vi.spyOn(UserService, 'updateStatusUserDelete').mockImplementation(async (userId, isActive) => {
+          const user = mockedUsers.find((user) => user.id === userId)
+          if (user) user.is_active = isActive
+    
+          return { status: 200 }
+        })
+    
+        const component = mount(ListUser, {
+          global: {
+            plugins: [vuetify]
+          },
+          props: {
+            usersTest: []
+          }
+        })
+    
+        await UserService.updateStatusUserDelete(1, false)
+    
+        await flushPromises()
+        await component.vm.$nextTick()
+    
+        expect(mockedUsers[0].is_active).toBe(false)
+    
+        await UserService.updateStatusUserDelete(2, true)
+        await component.vm.$nextTick()
+    
+        expect(mockedUsers[1].is_active).toBe(true)
+      })
 })
