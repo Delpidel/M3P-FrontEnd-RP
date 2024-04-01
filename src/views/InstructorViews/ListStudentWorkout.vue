@@ -10,9 +10,11 @@
       </v-card-title>
     </v-card>
     <v-toolbar color="#757575">
-      <v-btn class="ml-auto"
-       type="submit" 
-       variant="elevated font-weight-bold" 
+      <v-btn 
+      class="ml-auto"
+      color="grey-darken-4 text-amber"
+      type="submit"
+      variant="elevated"
        size="large" 
        @click="newWorkout">
         Novo Treino
