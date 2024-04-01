@@ -135,7 +135,7 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('@token')}`
         }
       }).then(() => {
-        alert("Treino excluído!")
+        alert("Treino excluído com sucesso!")
         this.loadWorkout();
       }).catch(() => {
         alert('Erro ao excluir o treino.');
