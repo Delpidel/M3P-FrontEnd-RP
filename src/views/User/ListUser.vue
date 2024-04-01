@@ -97,6 +97,7 @@
                   :style="xs ? 'width:100%; margin-bottom: 10px' : ''"
                   @click.prevent
                   @click="updateUserActivation(user.id, false)"
+                  data-test="deactive-button"
                 >
                   Desativar
                 </v-btn>
@@ -143,6 +144,12 @@ const { xs, smAndDown, mdAndDown } = useDisplay()
 import UserService from '@/services/UserService'
 
 export default {
+  props: {
+    usersTest: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {
       search: '',
@@ -164,6 +171,32 @@ export default {
     load() {
       this.loading = true
       setTimeout(() => (this.loading = false), 2000)
+    },
+    async updateUserActivation(userId, is_active) {
+      const user = this.users.find((user) => user.id === userId)
+      if (!user) return
+
+      user.loading = true
+      this.load()
+
+      try {
+        const body = {
+          is_active: is_active ? true : false,
+          deleted_at: is_active ? null : new Date().toISOString()
+        }
+
+        const response = await UserService.updateStatusUserDelete(userId, body)
+
+        if (response.status === 200) {
+          this.snackbarSuccess = true
+          this.getUsers()
+        }
+      } catch (error) {
+        console.error(error)
+        this.snackbarError = true
+      } finally {
+        user.loading = false
+      }
     },
     getUsers() {
       UserService.getAllUsers()
