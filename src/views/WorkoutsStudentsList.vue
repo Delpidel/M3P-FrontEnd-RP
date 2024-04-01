@@ -10,7 +10,6 @@
       <h1 class="title mt-10">Treinos - {{ formattedWorkouts.name }}</h1>
 
       <v-card color="#424242" width="100%" class="px-6 py-6 mt-4 custom-card-1" elevation="10">
-        data-test="card-item"
         <v-toolbar-title class="orange-text">HOJE : {{ currentDay }}</v-toolbar-title>
         <br>
         
@@ -33,7 +32,6 @@
       <br>
 
       <v-card class="custom-card" color="#424242" elevation="10" width="100%" >
-        data-test="card-item"
         <v-toolbar color="#FFC107">
           <v-toolbar-title>TREINOS DA SEMANA</v-toolbar-title>
         </v-toolbar>
