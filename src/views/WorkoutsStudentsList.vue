@@ -3,7 +3,7 @@
     <v-card v-if="!formattedWorkouts.workouts || Object.keys(formattedWorkouts.workouts).length === 0" color="#424242" width="100%" class="px-6 py-6 mt-10 custom-card" elevation="10">     
       <v-card-text class="text-center">
         <img src="@/assets/memsagemtreinos.jpg" alt="Memsagem treinos" width="300px"> <br>
-        <h2 class="white-text">Preciado estudante {{ formattedWorkouts.name }}, ainda não há treinos agendados para você!</h2>
+        <h2 class="white-text">Prezado/a estudante {{ formattedWorkouts.name }}, ainda não há treinos agendados para você!</h2>
       </v-card-text>
     </v-card>
     <template v-else>
