@@ -185,7 +185,7 @@ export default {
           deleted_at: is_active ? null : new Date().toISOString()
         }
 
-        const response = await UserService.uptadeStatusUserDelete(userId, body)
+        const response = await UserService.updateStatusUserDelete(userId, body)
 
         if (response.status === 200) {
           this.snackbarSuccess = true
