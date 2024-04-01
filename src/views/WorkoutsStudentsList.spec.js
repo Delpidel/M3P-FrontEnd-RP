@@ -1,64 +1,64 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
-/* Configuración de vuetify */
-import { createVuetify } from 'vuetify'; // Obligatorio
-import * as components from 'vuetify/components'; // Obligatorio
-import * as directives from 'vuetify/directives'; // Obligatorio
+/* Configuração do Vuetify */
+import { createVuetify } from 'vuetify'; // Obrigatório
+import * as components from 'vuetify/components'; // Obrigatório
+import * as directives from 'vuetify/directives'; // Obrigatório
 import WorkoutsStudentsList from './WorkoutsStudentsList.vue';
 import WorkoutsStudentsService from '@/services/WorkoutsStudentsService';
 
-const vuetify = createVuetify({ // Obligatorio
+const vuetify = createVuetify({ // Obrigatório
     components,
     directives,
 });
 
-global.ResizeObserver = require('resize-observer-polyfill'); // Obligatorio
+global.ResizeObserver = require('resize-observer-polyfill'); // Obrigatório
 
-/* FIN DE LA CONFIGURACIÓN */
-
-
+/* FIM DA CONFIGURAÇÃO */
 
 describe("Tela Treinos por estudante", () => {
-    vi.spyOn(WorkoutsStudentsService, 'workoutsByStudentList').mockResolvedValue([
-        {
-            "student_id": 5,
-            "name": "Henrique Douglas",
-            "workouts": {
-                "SEGUNDA": [
-                    {
-                        "description": "Salto",
-                        "repetitions": 3,
-                        "weight": "23.00",
-                        "break_time": 2,
-                        "observations": null,
-                        "time": 3,
-                        "created_at": null
-                    },
-                    {
-                        "description": "Triceps",
-                        "repetitions": 3,
-                        "weight": "23.00",
-                        "break_time": 2,
-                        "observations": null,
-                        "time": 3,
-                        "created_at": null
-                    }
-                ],
-                "DOMINGO": [
-                    {
-                        "description": "Salto",
-                        "repetitions": 3,
-                        "weight": "23.00",
-                        "break_time": 2,
-                        "observations": null,
-                        "time": 3,
-                        "created_at": null
-                    }
-                ],
-            }
+    // Objeto esperado para os testes
+    const expectedWorkouts = {
+        "student_id": 5,
+        "name": "Julieta",
+        "workouts": {
+            "SEGUNDA": [
+                {
+                    "description": "Flexão",
+                    "repetitions": 3,
+                    "weight": "23.00",
+                    "break_time": 2,
+                    "observations": null,
+                    "time": 3,
+                    "created_at": null
+                },
+                {
+                    "description": "Triceps",
+                    "repetitions": 3,
+                    "weight": "23.00",
+                    "break_time": 2,
+                    "observations": null,
+                    "time": 3,
+                    "created_at": null
+                }
+            ],
+            "DOMINGO": [
+                {
+                    "description": "Flexão",
+                    "repetitions": 3,
+                    "weight": "23.00",
+                    "break_time": 2,
+                    "observations": null,
+                    "time": 3,
+                    "created_at": null
+                }
+            ],
         }
-    ])
+    };
+
+    // Espiona a função workoutsByStudentList do serviço WorkoutsStudentsService
+    vi.spyOn(WorkoutsStudentsService, 'workoutsByStudentList').mockResolvedValue([expectedWorkouts]);
 
     it("Espera-se que a tela seja renderizada", () => {
         const component = mount(WorkoutsStudentsList, {
@@ -72,120 +72,30 @@ describe("Tela Treinos por estudante", () => {
     
 
     it("Deve retornar um objeto com os treinos de um aluno", async () => {
-        // Definicao de objeto esperado
-        const expectedWorkouts = {
-            "student_id": 5,
-            "name": "Henrique Douglas",
-            "workouts": {
-                "SEGUNDA": [
-                    {
-                        "description": "Salto",
-                        "repetitions": 3,
-                        "weight": "23.00",
-                        "break_time": 2,
-                        "observations": null,
-                        "time": 3,
-                        "created_at": null
-                    },
-                    {
-                        "description": "Triceps",
-                        "repetitions": 3,
-                        "weight": "23.00",
-                        "break_time": 2,
-                        "observations": null,
-                        "time": 3,
-                        "created_at": null
-                    }
-                ],
-                "DOMINGO": [
-                    {
-                        "description": "Salto",
-                        "repetitions": 3,
-                        "weight": "23.00",
-                        "break_time": 2,
-                        "observations": null,
-                        "time": 3,
-                        "created_at": null
-                    }
-                ],
-            }
-        };
-
-        // Espia a funcao workoutsByStudentList do servicio WorkoutsStudentsService
-        vi.spyOn(WorkoutsStudentsService, 'workoutsByStudentList').mockResolvedValue([expectedWorkouts]);
-
-        // Llama ao método workoutsByStudentList
+        // Chama o método workoutsByStudentList
         const workouts = await WorkoutsStudentsService.workoutsByStudentList(5);
 
-        // Verifica que a respuesta é o objeto esperado
+        // Verifica se a resposta é o objeto esperado
         expect(workouts).toEqual([expectedWorkouts]);
 
         // Acessa a propriedade `name` do objeto dentro do array
-        expect(workouts[0].name).toContain("Henrique Douglas");
+        expect(workouts[0].name).toContain("Julieta");
         
         // Acessa a descrição do primeiro treino do Domingo
-        expect(workouts[0].workouts.DOMINGO[0].description).toContain("Salto");
+        expect(workouts[0].workouts.DOMINGO[0].description).toContain("Flexão");
     });  
 
-    describe("Tela Treinos por estudante", () => {
-        it("Espera-se que mostre um erro ao obter a resposta com array incompleto", async () => {
-            // Definicao de objeto esperado
-            const expectedWorkouts = {
-                "student_id": 5,
-                "name": "Juliana",
-                "workouts": {
-                    "SEGUNDA": [
-                        {
-                            
-                            "repetitions": 3,
-                            "weight": "23.00",
-                            "break_time": 2,
-                            "observations": null,
-                            "time": 3,
-                            "created_at": null
-                        },
-                        {
-                            "description": "Triceps",
-                            "repetitions": 3,
-                            "weight": "23.00",
-                            "break_time": 2,
-                            "observations": null,
-                            "time": 3,
-                            "created_at": null
-                        }
-                    ],
-                    "DOMINGO": [
-                        {
-                            "description": "Flexão",
-                            "repetitions": 3,
-                            "weight": "23.00",
-                            "break_time": 2,
-                            "observations": null,
-                            "time": 3,
-                            "created_at": null
-                        }
-                    ],
-                }
-            };
-    
-            // Espia a funcao workoutsByStudentList do servicio WorkoutsStudentsService
-            vi.spyOn(WorkoutsStudentsService, 'workoutsByStudentList').mockResolvedValue([expectedWorkouts]);
-    
-            // Llama ao método workoutsByStudentList
-            const workouts = await WorkoutsStudentsService.workoutsByStudentList(5);
-    
-            // Verifica que a respuesta não é a esperada
-            expect(workouts).not.toEqual([]);
-    
-            // A propriedade `name` do objeto dentro do array não é correta
-            expect(workouts[0].name).not.toContain("Monica");
-            
-            // A descrição do primeiro treino do Domingo é incorreto
-            expect(workouts[0].workouts.DOMINGO[0].description).not.toContain("Tríceps");
-        });   
-    })
-})
+    it("Espera-se que mostre um erro ao obter a resposta com array incompleto", async () => {
+        // Chama o método workoutsByStudentList
+        const workouts = await WorkoutsStudentsService.workoutsByStudentList(5);
 
+        // Verifica se a resposta não é a esperada
+        expect(workouts).not.toEqual([]);
 
-
-
+        // A propriedade `name` do objeto dentro do array não é correta
+        expect(workouts[0].name).not.toContain("Monica");
+        
+        // A descrição do primeiro treino do Domingo é incorreta
+        expect(workouts[0].workouts.DOMINGO[0].description).not.toContain("Tríceps");
+    });   
+});
