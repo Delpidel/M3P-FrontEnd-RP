@@ -5,6 +5,7 @@ import Login from '../views/Login/Login.vue'
 import NewUser from '../views/Users/NewUser.vue'
 import WorkoutsStudentsList from '../views/WorkoutsStudentsList.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
+import ListUser from '../views/User/ListUser.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,7 +25,7 @@ const router = createRouter({
     {
       path: '/users',
       name: 'Listagem de usuários',
-      component: Exemplo
+      component: ListUser
     },
     {
       path: '/users/new',
