@@ -93,6 +93,9 @@ describe("Tela de listagem de usuários", () => {
             }
         })
 
+        // Supressão de erro no console
+        console.error = () => {}
+
         await flushPromises()
 
         expect(component.text()).toContain("Houve um erro ao carregar as informações dos usuários")
