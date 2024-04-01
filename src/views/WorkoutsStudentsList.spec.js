@@ -126,6 +126,64 @@ describe("Tela Treinos por estudante", () => {
         // Acessa a descrição do primeiro treino do Domingo
         expect(workouts[0].workouts.DOMINGO[0].description).toContain("Salto");
     });  
+
+    describe("Tela Treinos por estudante", () => {
+        it("Espera-se que mostre um erro ao obter a resposta com array incompleto", async () => {
+            // Definicao de objeto esperado
+            const expectedWorkouts = {
+                "student_id": 5,
+                "name": "Juliana",
+                "workouts": {
+                    "SEGUNDA": [
+                        {
+                            
+                            "repetitions": 3,
+                            "weight": "23.00",
+                            "break_time": 2,
+                            "observations": null,
+                            "time": 3,
+                            "created_at": null
+                        },
+                        {
+                            "description": "Triceps",
+                            "repetitions": 3,
+                            "weight": "23.00",
+                            "break_time": 2,
+                            "observations": null,
+                            "time": 3,
+                            "created_at": null
+                        }
+                    ],
+                    "DOMINGO": [
+                        {
+                            "description": "Flexão",
+                            "repetitions": 3,
+                            "weight": "23.00",
+                            "break_time": 2,
+                            "observations": null,
+                            "time": 3,
+                            "created_at": null
+                        }
+                    ],
+                }
+            };
+    
+            // Espia a funcao workoutsByStudentList do servicio WorkoutsStudentsService
+            vi.spyOn(WorkoutsStudentsService, 'workoutsByStudentList').mockResolvedValue([expectedWorkouts]);
+    
+            // Llama ao método workoutsByStudentList
+            const workouts = await WorkoutsStudentsService.workoutsByStudentList(5);
+    
+            // Verifica que a respuesta não é a esperada
+            expect(workouts).not.toEqual([]);
+    
+            // A propriedade `name` do objeto dentro do array não é correta
+            expect(workouts[0].name).not.toContain("Monica");
+            
+            // A descrição do primeiro treino do Domingo é incorreto
+            expect(workouts[0].workouts.DOMINGO[0].description).not.toContain("Tríceps");
+        });   
+    })
 })
 
 
