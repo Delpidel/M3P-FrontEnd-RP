@@ -55,7 +55,7 @@ describe('Testa a tela de cadastro de usuário', () => {
   })
 
   it('Espera-se que ao submeter o formulário, o usuário seja cadastrado', () => {
-    const createPet = vi
+    const createUser = vi
       .spyOn(UserService, 'createUser')
       .mockResolvedValue({})
       .mockRejectedValueOnce({ response: { data: { message: 'Erro' } } })
@@ -88,11 +88,11 @@ describe('Testa a tela de cadastro de usuário', () => {
       }
     }
 
-    expect(createPet).toHaveBeenCalledWith(form, config)
+    expect(createUser).toHaveBeenCalledWith(form, config)
   })
 
   it('Espera-se que ao submeter o formulário com foto, o usuário seja cadastrado', () => {
-    const createPet = vi
+    const createUser = vi
       .spyOn(UserService, 'createUser')
       .mockResolvedValue({})
       .mockRejectedValueOnce({ response: { data: { message: 'Erro' } } })
@@ -131,6 +131,6 @@ describe('Testa a tela de cadastro de usuário', () => {
       }
     }
 
-    expect(createPet).toHaveBeenCalledWith(form, config)
+    expect(createUser).toHaveBeenCalledWith(form, config)
   })
 })
