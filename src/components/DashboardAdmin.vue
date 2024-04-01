@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <div class="container">
-      <v-row class="px-14">
+      <v-row >
         <v-col cols="12" md="10" offset-md="1">
           <v-card class="title-card elevation-10" flat @click="atualizarFraseAleatoria">
             <v-card-text class="d-flex flex-column align-center">
@@ -15,12 +15,12 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row justify="center" class="px-16">
-        <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
+      <v-row justify="center">
+        <v-col cols="12" md="5" :class="mdAndDown ? 'my-2' : 'my-0'">
           <v-card class="user-card elevation-10" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../../assets/instructor/dashboard/left-card-img-woman.png"
+                src="../assets/left-card-img-woman.png"
                 alt="Imagem de uma mulher praticando levantamento de peso na barra."
                 class="card-image"
               />
@@ -50,24 +50,24 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
+        <v-col cols="12" md="5" :class="mdAndDown ? 'my-2' : 'my-0'">
           <v-card class="user-card elevation-10" style="cursor: pointer">
             <img
-              src="../../assets/instructor/dashboard/right-card-img-man.png"
+              src="../assets/right-card-img-man.png"
               alt="Imagem de um homem praticando levantamento de peso na barra."
               class="card-image"
             />
             <div class="text-center">
               <v-card-title>Usuários Totais</v-card-title>
               <v-card-text class="text-h3 font-weight-bold">{{ totalUsers }}</v-card-text>
-              <v-list class="user-card">
+              <span class="text-h3 font-weight-bold" v-if="!showUsers"></span>
+              <v-list class="user-card" v-else>
                 <v-list-item v-for="(count, profile) in profiles" :key="profile">
                   <v-list-item-content>
                     <v-list-item-title>{{ profile }}: {{ count }}</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-              </v-list>
-              <v-btn
+                <v-btn
                 @click="navigateToCreateUser"
                 append-icon="mdi-account-circle"
                 size="large"
@@ -78,6 +78,19 @@
               >
                 Cadastrar Usuário
               </v-btn>
+              </v-list>
+              <v-btn
+                  @click="toggleUsers"
+                  append-icon="mdi-account-circle"
+                  size="large"
+                  variant="elevated"
+                  color="grey-darken-4 text-amber"
+                  class="font-weight-bold my-6"
+                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+                >
+                  Visualizar
+                </v-btn>
+
             </div>
           </v-card>
         </v-col>
@@ -96,7 +109,8 @@ export default {
       registeredExercises: 0,
       profiles: {},
       exercises: [],
-      showExercises: false
+      showExercises: false,
+      showUsers: false
     }
   },
   created() {
@@ -114,7 +128,11 @@ export default {
       }
     },
     toggleExercises() {
+      // this.$router.push('/exercises)
       this.showExercises = !this.showExercises
+    },
+    toggleUsers() {
+      this.showUsers = !this.showUsers
     },
     navigateToCreateUser() {
       this.$router.push('/users/new')
@@ -160,6 +178,9 @@ export default {
   }
   .v-btn {
     padding: 8px 12px;
+  }
+  .v-row{
+    padding: 0px;
   }
 }
 </style>
