@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Dashboard from '../views/Dashbord.vue'
-import Login from '../views/Login.vue'
+import Dashboard from '../views/Dashboard/Dashbord.vue'
+import Login from '../views/Login/Login.vue'
+import NewUser from '../views/Users/NewUser.vue'
+import WorkoutsStudentsList from '../views/WorkoutsStudentsList.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
 import ListUser from '../views/User/ListUser.vue'
 
@@ -28,7 +30,7 @@ const router = createRouter({
     {
       path: '/users/new',
       name: 'Novo usuário',
-      component: Exemplo
+      component: NewUser
     },
 
     //perfil recepcionista
@@ -70,8 +72,8 @@ const router = createRouter({
     },
     {
       path: '/student/workouts',
-      name: 'Treinos do aluno',
-      component: Exemplo
+      name: 'WorkoutsStudentsList',
+      component: WorkoutsStudentsList
     }
   ]
 })
