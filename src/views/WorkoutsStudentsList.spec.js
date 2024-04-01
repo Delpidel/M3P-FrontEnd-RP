@@ -1,9 +1,9 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 
-import { createVuetify } from 'vuetify'; // Obrigatório
-import * as components from 'vuetify/components'; // Obrigatório
-import * as directives from 'vuetify/directives'; // Obrigatório
+import { createVuetify } from 'vuetify'; 
+import * as components from 'vuetify/components'; 
+import * as directives from 'vuetify/directives'; 
 import WorkoutsStudentsList from './WorkoutsStudentsList.vue';
 import WorkoutsStudentsService from '@/services/WorkoutsStudentsService';
 
@@ -12,7 +12,7 @@ const vuetify = createVuetify({ // Obrigatório
     directives,
 });
 
-global.ResizeObserver = require('resize-observer-polyfill'); // Obrigatório
+global.ResizeObserver = require('resize-observer-polyfill'); 
 
 
 
