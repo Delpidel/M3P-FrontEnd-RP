@@ -133,7 +133,7 @@ describe("Testa página de avaliação", () => {
             routes: [
                 { path: '/avaliacao/step1' },
                 { path: '/avaliacao/step2' },
-                { path: '/avaliacao/step3' }
+                { path: '/avaliacao/step3' } 
             ]
         })
         const component = mount(AvaliationStep02, {
@@ -141,9 +141,43 @@ describe("Testa página de avaliação", () => {
                 plugins: [router]
             }
         })
-        const backButton = component.find('.btn-next')
-        await backButton.trigger('click')
+        component.vm.imageLinks = [
+            'blob:1',
+            'blob:2',
+            'blob:3',
+            'blob:4'
+        ]
+        
+        const nextButton = component.find('.btn-next')
+        await nextButton.trigger('click')
         await router.isReady()
         expect(router.currentRoute.value.path).toBe('/avaliacao/step3')
+    })
+    it("Espera-se que ao clicar no botão próximo sem todas as fotos adicionadas, o snackbar seja exibido", async () => {
+        const history = createMemoryHistory()
+        const router = createRouter({
+            history,
+            routes: [
+                { path: '/avaliacao/step1' },
+                { path: '/avaliacao/step2' },
+                { path: '/avaliacao/step3' } 
+            ]
+        })
+        const component = mount(AvaliationStep02, {
+            global: {
+                plugins: [router]
+            }
+        })
+        
+        component.vm.imageLinks = [
+            'blob:1',
+            'blob:2',
+            'blob:3'
+        ]
+        
+        const nextButton = component.find('.btn-next')
+        await nextButton.trigger('click')
+        await router.isReady()
+        expect(component.find('.custom-snackbar').exists()).toBe(true)
     })
 }) 

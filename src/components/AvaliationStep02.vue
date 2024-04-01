@@ -70,7 +70,7 @@ export default {
       hoverIndex: -1,
       allPhotosAdded: false,
       showAlert: false,
-      alertMessage: 'Por favor, adicione todas as fotos antes de prosseguir para a próxima etapa!'
+      alertMessage: 'Adicione todas as fotos antes de prosseguir para a próxima etapa!'
     }
   },
   methods: {
