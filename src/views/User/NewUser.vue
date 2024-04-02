@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="d-flex align-center" :style="smAndDown ? 'justify-content:center;' : ''">
-      <h1 class="py-4 py-md-12 font-weight-medium">Cadastrar Usuário</h1>
+      <h1 class="py-4 py-md-12 font-weight-medium">
+        {{ userId ? 'Editar Usuário' : 'Cadastrar Usuário' }}
+      </h1>
       <v-icon size="x-large" class="pl-10" color="amber">mdi-account-outline</v-icon>
     </div>
 
@@ -81,14 +83,18 @@
               type="submit"
               variant="elevated"
               color="grey-darken-4 text-amber"
-              class="font-weight-bold"
+              :class="{
+                'font-weight-bold': true,
+                'px-sm-2 px-md-11 mr-1 mr-md-4': userId
+              }"
               :ripple="false"
               size="large"
               v-if="!loading"
               data-test="submit-button"
             >
-              Cadastrar
+              {{ userId ? 'Editar' : 'Cadastrar' }}
             </v-btn>
+
             <v-btn
               type="submit"
               variant="elevated"
@@ -98,7 +104,7 @@
               size="large"
               v-if="loading"
             >
-              Cadastrando
+              {{ userId ? 'Editando' : 'Cadastrando' }}
               <svg
                 version="1.1"
                 id="loader-1"
@@ -181,7 +187,9 @@ export default {
       errorMessage: '',
       duration: 3000,
 
-      errors: {}
+      errors: {},
+
+      userId: this.$route.params.id
     }
   },
 
