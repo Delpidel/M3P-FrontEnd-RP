@@ -1,27 +1,82 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
+import Dashboard from '../views/Dashboard/Dashbord.vue'
+import Login from '../views/Login/Login.vue'
+import NewUser from '../views/Users/NewUser.vue'
+import ListUser from '../views/User/ListUser.vue'
 import StudentMealPlans from '@/views/StudentMealPlans.vue'
+import WorkoutsStudentsList from '../views/WorkoutsStudentsList.vue'
+
+import Exemplo from '../views/PaginaExemplo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'login',
+      name: 'Login',
       component: Login
     },
     {
-      path: '/home',
-      name: 'home',
-      component: Home
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard
+    },
+
+    //perfil usuário
+    {
+      path: '/users',
+      name: 'Listagem de usuários',
+      component: ListUser
     },
     {
-      path: '/students/meal_plans',
-      name: 'studentMealPlans',
+      path: '/users/new',
+      name: 'Novo usuário',
+      component: NewUser
+    },
+
+    //perfil recepcionista
+    {
+      path: '/students',
+      name: 'Listagem de estudantes',
+      component: Exemplo
+    },
+    {
+      path: '/students/new',
+      name: 'Novo Estudante',
+      component: Exemplo
+    },
+
+    //perfil instrutor
+    {
+      path: '/exercises',
+      name: 'Exercícios',
+      component: Exemplo
+    },
+    {
+      path: '/instructor/students',
+      name: 'Listagem de estudantes',
+      component: Exemplo
+    },
+
+    //perfil nutricionista
+    {
+      path: '/active/students',
+      name: 'Listagem de estudantes ativos',
+      component: Exemplo
+    },
+
+    //perfil aluno
+    {
+      path: '/student/meal-plans',
+      name: 'Planos de refeições do aluno',
       component: StudentMealPlans
     },
+    {
+      path: '/student/workouts',
+      name: 'WorkoutsStudentsList',
+      component: WorkoutsStudentsList
+    }
   ]
 })
 
