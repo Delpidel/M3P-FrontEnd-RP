@@ -35,6 +35,7 @@
                   :error-messages="errors.profile"
                   variant="outlined"
                   data-test="profile-select"
+                  :disabled="userId ? true : false"
                 ></v-select>
               </v-col>
 
@@ -85,7 +86,7 @@
               color="grey-darken-4 text-amber"
               :class="{
                 'font-weight-bold': true,
-                'px-sm-2 px-md-11 mr-1 mr-md-4': userId
+                'px-sm-2 px-md-11': userId
               }"
               :ripple="false"
               size="large"
@@ -174,11 +175,7 @@ export default {
     return {
       photo: null,
       profile: null,
-      profileUsers: [
-        { value: '2', title: 'Recepcionista' },
-        { value: '3', title: 'Instrutor' },
-        { value: '4', title: 'Nutricionista' }
-      ],
+      profileUsers: [],
       name: '',
       email: '',
 
@@ -193,6 +190,43 @@ export default {
     }
   },
 
+  created() {
+    if (!this.userId) {
+      this.profileUsers = [
+        { value: '2', title: 'Recepcionista' },
+        { value: '3', title: 'Instrutor' },
+        { value: '4', title: 'Nutricionista' }
+      ]
+    } else {
+      this.profileUsers = [
+        { value: '1', title: 'Administrador' },
+        { value: '2', title: 'Recepcionista' },
+        { value: '3', title: 'Instrutor' },
+        { value: '4', title: 'Nutricionista' },
+        { value: '5', title: 'Aluno' }
+      ]
+    }
+  },
+
+  mounted() {
+    if (this.userId) {
+      UserService.getOneUser(this.userId)
+        .then((response) => {
+          this.name = response.name
+          this.email = response.email
+          this.profile = response.profile_id.toString()
+
+          if (response.file) {
+            console.log(response.file.url)
+            this.photo = response.file.url
+          }
+        })
+        .catch((error) => {
+          this.errorMessage = error.response.data.message
+          this.snackbarError = true
+        })
+    }
+  },
   methods: {
     validateSync() {
       this.errors = {}
