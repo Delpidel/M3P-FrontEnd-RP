@@ -16,6 +16,7 @@
       type="submit"
       variant="elevated"
        size="large" 
+       data-test="add-workout-button"
        @click="newWorkout">
         Novo Treino
       </v-btn>
@@ -56,7 +57,7 @@
                   <v-btn @click="updateWorkout">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
-                  <v-btn @click="deleteWorkout(workout.id)">
+                  <v-btn data-test="delete-button" @click="deleteWorkout(workout.id)">
                     <v-icon>mdi-delete</v-icon>
                   </v-btn>
                 </td>
@@ -118,15 +119,14 @@ export default {
           this.workoutsList = [];
         }
       } catch (error) {
-        console.error('Erro ao carregar treinos:', error);
-        alert('Não foi possível acessar a lista de exercícios.');
+        alert('Não foi possível acessar a lista de Treinos.');
       }
     },
     newWorkout() {
-      this.$router.push('/newWorkout/:id')
+      this.$router.push(`/newWorkout/${this.$route.params.id}`);
     },
     updateWorkout() {
-      this.$router.push('/newWorkout/:id')
+      this.$router.push('/')
     },
     deleteWorkout(workoutId) {
   DeleteWorkoutService.DeleteWorkout(workoutId)
