@@ -64,7 +64,7 @@
               >
                 <v-btn
                   v-if="user.is_active"
-                  :to="`/edituser/${user.id}`"
+                  :to="`/users/${user.id}/edit`"
                   variant="elevated"
                   color="grey-darken-4 text-amber"
                   class="font-weight-bold px-1 px-sm-2 px-md-10 mr-sm-1 mr-md-4"
