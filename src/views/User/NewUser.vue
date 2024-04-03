@@ -199,32 +199,42 @@ export default {
   },
 
   created() {
-    if (!this.userId) {
-      this.profileUsers = [
-        { value: '2', title: 'Recepcionista' },
-        { value: '3', title: 'Instrutor' },
-        { value: '4', title: 'Nutricionista' }
-      ]
-    } else {
-      this.profileUsers = [
-        { value: '1', title: 'Administrador' },
-        { value: '2', title: 'Recepcionista' },
-        { value: '3', title: 'Instrutor' },
-        { value: '4', title: 'Nutricionista' },
-        { value: '5', title: 'Aluno' }
-      ]
-    }
+    this.initializeProfileOptions()
   },
 
   mounted() {
     if (this.userId) {
+      this.loadUserData()
+    }
+  },
+
+  methods: {
+    initializeProfileOptions() {
+      if (!this.userId) {
+        this.profileUsers = [
+          { value: '2', title: 'Recepcionista' },
+          { value: '3', title: 'Instrutor' },
+          { value: '4', title: 'Nutricionista' }
+        ]
+      } else {
+        this.profileUsers = [
+          { value: '1', title: 'Administrador' },
+          { value: '2', title: 'Recepcionista' },
+          { value: '3', title: 'Instrutor' },
+          { value: '4', title: 'Nutricionista' },
+          { value: '5', title: 'Aluno' }
+        ]
+      }
+    },
+
+    loadUserData() {
       UserService.getOneUser(this.userId, config)
         .then((response) => {
           this.name = response.name
           this.email = response.email
           this.profile = response.profile_id.toString()
 
-          if (response.file) {
+          if (response.file !== null) {
             this.photo = response.file.url
             this.$refs.image.setImageFromURL(response.file.url)
           }
@@ -233,10 +243,8 @@ export default {
           this.errorMessage = error
           this.snackbarError = true
         })
-    }
-  },
+    },
 
-  methods: {
     validateSync() {
       this.errors = {}
       try {
