@@ -1,12 +1,13 @@
 <template>
-  <v-container>
+  <div class="container ma-6">
     <div class="d-flex justify-space-between">
-      <h1 class="py-12">Listagem de estudantes</h1>
-      <v-btn type="submit" variant="elevated" color="grey-darken-4" text="amber"
-        >Novo estudante</v-btn
-      >
+      <div class="d-flex align-center">
+        <v-icon color="#ffc107">mdi-school</v-icon>
+        <h1 class="ml-2 mb-0">Lista de estudantes</h1>
+      </div>
+      <v-btn color="#ffc107" variant="flat" @click="redirectToNewStudent">Novo estudante</v-btn>
     </div>
-    <form @submit.prevent="handleSearch">
+    <form>
       <v-row>
         <v-col cols="12" class="my-2">
           <v-text-field
@@ -19,31 +20,37 @@
         </v-col>
       </v-row>
     </form>
-    <v-data-table v-if="students.length > 0" :items="filteredStudents" item-key="id">
-      <template v-slot:headers="props">
+    <v-table>
+      <thead class="header-table">
         <tr>
-          <th>Nome</th>
-          <th>Cpf</th>
-          <th>Email</th>
-          <th>Contato</th>
-          <th>Ações</th>
+          <th class="font-weight-bold">NOME</th>
+          <th class="font-weight-bold">CPF</th>
+          <th class="font-weight-bold">EMAIL</th>
+          <th></th>
         </tr>
-      </template>
-      <template v-slot:items="props">
-        <tr :key="props.item.id">
-          <td>{{ props.item.name }}</td>
-          <td>{{ props.item.cpf }}</td>
-          <td>{{ props.item.email }}</td>
-          <td>{{ props.item.contact }}</td>
-          <td>
-            <v-btn @click="editStudent(props.item)" color="primary">Editar</v-btn>
-            <v-btn @click="deactivateStudent(props.item)" color="error">Desativar</v-btn>
+      </thead>
+      <tbody>
+        <tr v-for="student in filteredStudents" :key="student.id">
+          <td>{{ student.name }}</td>
+          <td>{{ student.cpf }}</td>
+          <td>{{ student.email }}</td>
+          <td class="pa-2">
+            <div class="d-flex justify-space-around">
+              <v-btn variant="elevated" color="amber text-dark-grey-4" @click="editStudent(student)"
+                >Editar</v-btn
+              >
+              <v-btn
+                variant="elevated"
+                color="amber text-dark-grey-4"
+                @click="desactivateStudent(student)"
+                >Desativar</v-btn
+              >
+            </div>
           </td>
         </tr>
-      </template>
-    </v-data-table>
-    <p v-else>Nenhum estudante encontrado</p>
-  </v-container>
+      </tbody>
+    </v-table>
+  </div>
 </template>
 
 <script>
@@ -51,18 +58,16 @@ import StudentService from '../../services/StudentService'
 export default {
   data() {
     return {
-      text: '',
+      searchText: '',
       students: []
     }
   },
 
   computed: {
     filteredStudents() {
-      // Verifica se searchText está definido
       if (!this.searchText) {
         return this.students
       }
-      // Filtra os estudantes com base no searchText
       return this.students.filter(
         (student) =>
           student.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
@@ -73,26 +78,26 @@ export default {
   },
 
   methods: {
+    redirectToNewStudent() {
+      this.$router.push('/students/new')
+    },
+
     handleSearch() {
-      StudentService.getAllStudents(this.text)
+      StudentService.getAllStudents(this.searchText)
         .then((data) => {
           this.students = data.map((item) => ({
+            id: item.id,
             name: item.name,
             cpf: item.cpf,
-            email: item.email,
-            contact: item.contact
+            email: item.email
           }))
         })
         .catch(() => alert('Houve um erro ao retornar os estudantes'))
     },
 
-    editStudent(student) {
-      // Lógica para editar o estudante
-    },
-    desactivateStudent(student) {
-      // Lógica para desativar o estudante
-    }
-    // ... (seus métodos existentes) ...
+    editStudent(student) {},
+
+    desactivateStudent(student) {}
   },
 
   mounted() {
@@ -100,3 +105,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.header-table {
+  background: #ffc107;
+  color: #212121;
+}
+
+tbody tr:nth-child(2n) {
+  background: #f2f0f0;
+}
+</style>
