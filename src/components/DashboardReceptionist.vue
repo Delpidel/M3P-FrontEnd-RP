@@ -3,7 +3,7 @@
     <div class="container">
       <v-row>
         <v-col cols="12" md="10" offset-md="1">
-          <v-card class="title-card elevation-10" flat @click="atualizarFraseAleatoria">
+          <v-card class="title-card elevation-10" flat>
             <v-card-text class="d-flex flex-column align-center">
               <div class="d-flex align-center justify-center">
                 <v-icon class="mr-3" size="36">mdi-weight-lifter</v-icon>
