@@ -4,7 +4,7 @@ import Dashboard from '../views/Dashboard/Dashbord.vue'
 import Login from '../views/Login/Login.vue'
 import NewUser from '../views/Users/NewUser.vue'
 import ListUser from '../views/User/ListUser.vue'
-import StudentMealPlans from '@/views/StudentMealPlans.vue'
+import StudentMealPlans from '@/views/Student/StudentMealPlans.vue'
 import WorkoutsStudentsList from '../views/WorkoutsStudentsList.vue'
 
 import Exemplo from '../views/PaginaExemplo.vue'
