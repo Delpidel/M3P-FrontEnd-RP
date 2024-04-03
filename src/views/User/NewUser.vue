@@ -223,6 +223,7 @@ export default {
           this.name = response.name
           this.email = response.email
           this.profile = response.profile_id.toString()
+          this.photo = response.file.url
 
           if (response.file) {
             this.$refs.image.setImageFromURL(response.file.url)
@@ -271,7 +272,7 @@ export default {
       loading.value = true
 
       if (this.userId) {
-        formData.append('photo', this.photo)
+        if (typeof this.photo !== 'string') formData.append('photo', this.photo)
 
         UserService.updateUser(this.userId, formData, config)
           .then(() => {
