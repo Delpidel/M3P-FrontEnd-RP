@@ -223,9 +223,9 @@ export default {
           this.name = response.name
           this.email = response.email
           this.profile = response.profile_id.toString()
-          this.photo = response.file.url
 
           if (response.file) {
+            this.photo = response.file.url
             this.$refs.image.setImageFromURL(response.file.url)
           }
         })
