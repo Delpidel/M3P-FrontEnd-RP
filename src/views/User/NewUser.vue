@@ -8,7 +8,7 @@
     </div>
 
     <div class="cardImage pa-10 mt-10" :class="{ disabled: loading }">
-      <v-form ref="form" @submit.prevent="createNewUser">
+      <v-form ref="form" @submit.prevent="handleSubmit">
         <v-row>
           <v-col cols="12" sm="5" md="4">
             <div :style="smAndDown ? 'display:flex; justify-content:center;' : ''">
@@ -260,7 +260,7 @@ export default {
       return true
     },
 
-    createNewUser() {
+    handleSubmit() {
       if (this.validateSync() === false) return
 
       const formData = new FormData()
