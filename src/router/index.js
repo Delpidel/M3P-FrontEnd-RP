@@ -44,7 +44,7 @@ const router = createRouter({
     },
 
     {
-      path: '/student/documents',
+      path: '/student/documents/:id',
       name: 'student-documents',
       component: StudentDocuments
     },

@@ -14,7 +14,7 @@
                 ></v-img>
               </v-col>
               <v-col cols="auto">
-                <h2>Documentos de {{ student.name }}</h2>
+                <h2>Documentos {{ studentName ? 'de ' + studentName : '' }}</h2>
               </v-col>
             </v-row>
             <hr />
@@ -27,6 +27,7 @@
 
               <v-col cols="6">
                 <v-file-input
+                  ref="fileInput"
                   v-model="selectedFile"
                   label="Selecione o arquivo"
                   outlined
@@ -36,6 +37,7 @@
 
               <v-col cols="12" class="text-center">
                 <v-btn
+                  :loading="isLoading"
                   type="submit"
                   variant="elevated"
                   color="amber"
@@ -54,54 +56,77 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
       description: '',
       selectedFile: null,
-      student: ''
+      studentId: null,
+      isLoading: false,
+      success: false,
+      showError: false,
+      studentName: ''
     }
   },
-  created() {
-    this.fetchStudentName(this.$route.params.id)
-  },
   methods: {
-    fetchStudentName(studentId) {
-      fetch(`http://localhost:8000/api/students/${studentId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          this.student = data.name
-        })
-        .catch((error) => {
-          console.error('Erro ao recuperar o nome do aluno:', error)
-        })
-    },
-    sendDocument() {
-      if (!this.selectedFile) {
-        alert('Por favor, selecione um arquivo.')
+    async sendDocument() {
+      if (!this.selectedFile || !this.description || !this.studentId) {
+        alert('Por favor, preencha todos os campos.')
         return
       }
 
-      let formData = new FormData()
-      formData.append('file', this.selectedFile)
+      const formData = new FormData()
       formData.append('title', this.description)
+      formData.append('document', this.selectedFile)
 
-      fetch(`http://localhost:8000/api/students/${this.$route.params.id}/documents`, {
-        method: 'POST',
-        body: formData
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.error) {
-            throw new Error(data.error)
-          }
-          alert('Documento enviado com sucesso!')
-        })
-        .catch((error) => {
-          console.error('Erro:', error.message)
-          alert('Ocorreu um erro ao enviar o documento')
-        })
+      this.isLoading = true
+
+      try {
+        const response = await axios.post(
+          `http://localhost:8000/api/students/${this.studentId}/documents`,
+          formData
+        )
+
+        if (response.status === 200) {
+          this.success = true
+          this.description = ''
+          this.$refs.fileInput.reset()
+        } else {
+          this.showError = true
+        }
+      } catch (error) {
+        console.error('Erro ao enviar documento:', error)
+        this.showError = true
+      } finally {
+        this.isLoading = false
+      }
+    },
+    async fetchStudentId() {
+      try {
+        const studentId = parseInt(this.$route.params.id)
+        if (isNaN(studentId)) {
+          throw new Error('ID do estudante inválido.')
+        }
+        this.studentId = studentId
+
+        const studentResponse = await axios.get(`http://localhost:8000/api/students/${studentId}`)
+        if (studentResponse.status === 200) {
+          const studentData = studentResponse.data
+          this.studentName = studentData.name
+          // Aqui você pode atribuir outros dados do aluno conforme necessário
+        } else {
+          throw new Error('Erro ao obter os dados do aluno da API.')
+        }
+      } catch (error) {
+        console.error('Erro ao obter o ID do estudante:', error)
+        alert('Erro ao obter os dados do aluno. Por favor, tente novamente mais tarde.')
+      }
     }
+  },
+  created() {
+    this.fetchStudentId()
   }
 }
 </script>
