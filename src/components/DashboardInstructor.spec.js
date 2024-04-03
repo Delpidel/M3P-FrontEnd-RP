@@ -26,7 +26,7 @@ beforeEach(() => {
 });
 
 describe('DashboardInstructor', () => {
-  it('deve montar o componente', () => {
+  it('Deve montar o componente com sucesso.', () => {
     const wrapper = mount(DashboardInstructor, {
       global: {
         plugins: [vuetify],
@@ -41,7 +41,56 @@ describe('DashboardInstructor', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('deve renderizar textos estáticos corretamente', () => {
+  it('Deve exibir o nome do usuário vindo do localStorage na mensagem de boas-vindas.', async () => {
+    mockLocalStorage.getItem.mockImplementation((key) => {
+      if (key === '@name') return 'Usuário Teste';
+      return null;
+    });
+  
+    const wrapper = mount(DashboardInstructor, {
+      global: {
+        plugins: [vuetify],
+        mocks: {
+          $router: {
+            push: vi.fn(),
+          },
+        },
+      },
+    });
+  
+    await flushPromises();
+  
+    const userNameText = wrapper.find('[data-test="user-name"]').text();
+    expect(userNameText).toContain('Usuário Teste');
+  });
+
+  it('Deve atualizar a frase aleatória quando o cartão do título é clicado.', async () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+  
+    const wrapper = mount(DashboardInstructor, {
+      global: {
+        plugins: [vuetify],
+        mocks: {
+          $router: {
+            push: vi.fn(),
+          },
+        },
+      },
+    });
+  
+    await wrapper.vm.$nextTick();
+  
+    await wrapper.find('.title-card').trigger('click');
+    
+    await wrapper.vm.$nextTick();
+  
+    const phraseText = wrapper.find('[data-test="random-phrase"]').text();
+    expect(phraseText).toBe(wrapper.vm.frases[0]);
+  });
+  
+  
+
+  it('Deve renderizar os textos estáticos corretamente para os cards de alunos e exercícios.', () => {
     const wrapper = mount(DashboardInstructor, {
       global: {
         plugins: [vuetify],
@@ -61,7 +110,7 @@ describe('DashboardInstructor', () => {
     expect(exercisesTextContent).toContain('CADASTRADOS');
   });
 
-  it('deve atualizar o número de alunos e exercícios cadastrados após chamada da API', async () => {
+  it('Deve atualizar o número de alunos e exercícios cadastrados corretamente após a chamada da API.', async () => {
     const wrapper = mount(DashboardInstructor, {
       global: {
         plugins: [vuetify],
@@ -81,7 +130,7 @@ describe('DashboardInstructor', () => {
     expect(registeredExercisesText).toContain('10');
   });
 
-  it('deve redirecionar para a página correta ao clicar nos botões ADICIONAR', async () => {
+  it('Deve redirecionar para a página correta ao clicar nos botões "ADICIONAR"', async () => {
     const $router = {
       push: vi.fn(),
     };
@@ -101,7 +150,7 @@ describe('DashboardInstructor', () => {
     expect($router.push).toHaveBeenCalledWith('/exercises');
   });
 
-  it('deve redirecionar para a página correta ao clicar nos respectivos cards', async () => {
+  it('Deve redirecionar para a página correta ao clicar nos cards respectivos de alunos e exercícios.', async () => {
     const $router = {
       push: vi.fn(),
     };

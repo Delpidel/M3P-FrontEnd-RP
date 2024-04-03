@@ -7,11 +7,11 @@
             <v-card-text class="d-flex flex-column align-center">
               <div class="d-flex align-center justify-center">
                 <v-icon class="mr-3" size="36">mdi-weight-lifter</v-icon>
-                <h1 class="font-weight-bold" :style="smAndDown ? 'text-align: center;' : ''">
+                <h1 class="font-weight-bold" data-test="user-name" :style="smAndDown ? 'text-align: center;' : ''">
                   Olá, {{ userName }}!
                 </h1>
               </div>
-              <h3 class="mt-3 font-weight-medium" :style="smAndDown ? 'text-align: center;' : ''">
+              <h3 class="mt-3 font-weight-medium" data-test="random-phrase" :style="smAndDown ? 'text-align: center;' : ''">
                 {{ currentPhrase }}
               </h3>
             </v-card-text>
