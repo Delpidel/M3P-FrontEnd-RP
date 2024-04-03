@@ -2,8 +2,8 @@
   <div class="container ma-6">
     <div class="d-flex justify-space-between">
       <div class="d-flex align-center">
-        <v-icon color="#ffc107">mdi-school</v-icon>
         <h1 class="ml-2 mb-0">Lista de estudantes</h1>
+        <v-icon class="ml-2" color="#ffc107">mdi-school</v-icon>
       </div>
       <v-btn color="#ffc107" variant="flat" @click="redirectToNewStudent">Novo estudante</v-btn>
     </div>
