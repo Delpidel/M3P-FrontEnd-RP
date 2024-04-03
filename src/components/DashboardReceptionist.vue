@@ -3,7 +3,7 @@
     <div class="container">
       <v-row>
         <v-col cols="12" md="10" offset-md="1">
-          <v-card class="title-card elevation-10" flat>
+          <v-card class="title-card elevation-10" flat @click="atualizarFraseAleatoria">
             <v-card-text class="d-flex flex-column align-center">
               <div class="d-flex align-center justify-center">
                 <v-icon class="mr-3" size="36">mdi-weight-lifter</v-icon>
@@ -16,26 +16,60 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-col cols="12" md="10" :class="mdAndDown ? 'my-2' : 'my-0'">
+        <v-col cols="12" md="5" :class="mdAndDown ? 'my-2' : 'my-0'">
           <v-card class="user-card elevation-10" style="cursor: pointer">
-            <div class="text-center">
+            <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/right-card-img-man.png"
-                alt="Imagem de um homem praticando levantamento de peso na barra."
+                src="../assets/left-card-img-woman.png"
+                alt="Imagem de uma mulher praticando levantamento de peso na barra."
                 class="card-image"
               />
-              <v-card-title>Usuários Totais</v-card-title>
-              <v-card-text class="text-h3 font-weight-bold">{{ totalUsers }}</v-card-text>
+              <div class="text-center">
+                <v-card-title>Estudantes Cadastrados</v-card-title>
+                <v-card-text class="text-h3 font-weight-bold">{{ registeredStudents }}</v-card-text>
+                <v-btn
+                  @click="navigateToCreateStudent"
+                  append-icon="mdi-dumbbell"
+                  size="large"
+                  variant="elevated"
+                  color="grey-darken-4 text-amber"
+                  class="font-weight-bold my-6"
+                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+                >
+                  Cadastrar
+                </v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="12" md="5" :class="mdAndDown ? 'my-2' : 'my-0'">
+          <v-card class="user-card elevation-10" style="cursor: pointer">
+            <img
+              src="../assets/right-card-img-man.png"
+              alt="Imagem de um homem praticando levantamento de peso na barra."
+              class="card-image"
+            />
+            <div class="text-center">
+              <v-card-title>Estudantes Cadastrados</v-card-title>
+              <v-card-text class="text-h3 font-weight-bold">{{ registeredStudents }}</v-card-text>
+              <span class="text-h3 font-weight-bold" v-if="!showStudents"></span>
+              <v-list class="user-card" v-else>
+                <v-list-item v-for="student in students" :key="student.id">
+                  <v-list-item-content>
+                    <v-list-item-title>{{ student.name }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
               <v-btn
-                @click="navigateToCreateStudent"
-                append-icon="mdi-account-circle"
-                size="large"
-                variant="elevated"
-                color="grey-darken-4 text-amber"
-                class="font-weight-bold my-6"
-                :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
-              >
-                Cadastrar Usuário
+                  @click="toggleStudents"
+                  append-icon="mdi-account-circle"
+                  size="large"
+                  variant="elevated"
+                  color="grey-darken-4 text-amber"
+                  class="font-weight-bold my-6"
+                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+                >
+                Visualizar
               </v-btn>
             </div>
           </v-card>
@@ -52,20 +86,40 @@ export default {
   data() {
     return {
       profileName: localStorage.getItem('@name'),
+      students: [],
+      showStudents: false
+    }
+  },  
+  created() {
+    this.fetchStudentsData()
+  },
+  computed: {
+    registeredStudents() {
+      return this.students.length
     }
   },
   methods: {
+    async fetchStudentsData() {
+      try {
+        const { students } = await AuthenticationService.fetchStudentsData()
+        this.students = students
+      } catch (error) {
+        console.error('Erro ao buscar dados do painel de administração:', error)
+      }
+    },
     navigateToCreateStudent() {
       this.$router.push('/students/new')
-    }
-  },
-  computed: {
-    totalUsers() {
-      return "1"
+    },
+    toggleStudents() {
+      this.showStudents = !this.showStudents
+    },
+    atualizarFraseAleatoria() {
+      // Implemente a lógica para atualizar a frase aleatória
     }
   }
 }
 </script>
+
 
 <style scoped>
 .container {

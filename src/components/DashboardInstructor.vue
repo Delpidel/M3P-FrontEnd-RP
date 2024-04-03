@@ -24,7 +24,7 @@
           <v-card class="user-card elevation-10" @click="gotoStudents" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../../assets/instructor/dashboard/left-card-img-woman.png"
+                src="../assets/left-card-img-woman.png"
                 alt="Imagem de uma mulher praticando levantamento de peso na barra."
                 class="card-image"
               />
@@ -53,7 +53,7 @@
           <v-card class="user-card elevation-10" @click="gotoExercises" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../../assets/instructor/dashboard/right-card-img-man.png"
+                src="../assets/right-card-img-man.png"
                 alt="Imagem de um homem praticando levantamento de peso na barra."
                 class="card-image"
               />

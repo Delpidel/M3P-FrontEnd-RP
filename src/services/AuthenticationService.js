@@ -22,6 +22,11 @@ class AuthenticationService {
             return response.data.data;
     }
 
+    async fetchStudentsData(){
+        const response = await api.get('students');
+        return response.data;
+}
+
     async logout(){
         const response = await api.post('logout')
         return response.data
