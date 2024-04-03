@@ -194,7 +194,7 @@ export default {
 
       errors: {},
 
-      userId: this.$route.params.id
+      userId: this.$route?.params?.id
     }
   },
 
