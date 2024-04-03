@@ -5,7 +5,9 @@
         <h1 class="ml-2 mb-0">Lista de estudantes</h1>
         <v-icon class="ml-2" color="#ffc107">mdi-school</v-icon>
       </div>
-      <v-btn color="#ffc107" variant="flat" @click="redirectToNewStudent">Novo estudante</v-btn>
+      <v-btn variant="elevated" color="amber darken-4" dark @click="redirectToNewStudent">
+        <span class="text-black font-weight-bold">Cadastro de estudante</span>
+      </v-btn>
     </div>
     <form>
       <v-row>
@@ -26,6 +28,7 @@
           <th class="font-weight-bold">NOME</th>
           <th class="font-weight-bold">CPF</th>
           <th class="font-weight-bold">EMAIL</th>
+          <th class="font-weight-bold"></th>
           <th></th>
         </tr>
       </thead>
@@ -35,19 +38,18 @@
           <td>{{ student.cpf }}</td>
           <td>{{ student.email }}</td>
           <td class="pa-2">
-            <div class="d-flex justify-space-around">
+            <div class="d-flex align-center justify-space-around">
+              <v-btn variant="elevated" color="black" dark @click="handleEditStudent(student.id)">
+                <span class="text-amber">Editar</span>
+              </v-btn>
               <v-btn
                 variant="elevated"
-                color="amber text-dark-grey-4"
-                @click="handleEditStudent(student.id)"
-                >Editar</v-btn
-              >
-              <v-btn
-                variant="elevated"
-                color="amber text-dark-grey-4"
+                color="amber darken-4"
+                dark
                 @click="handleDeleteStudent(student.id)"
-                >Desativar</v-btn
               >
+                <span class="text-black font-weight-bold">Desativar</span>
+              </v-btn>
             </div>
           </td>
         </tr>
@@ -98,7 +100,9 @@ export default {
         .catch(() => alert('Houve um erro ao retornar os estudantes'))
     },
 
-    handleEditStudent(studentId) {},
+    handleEditStudent(studentId) {
+      this.$router.push(`/api/students/${studentId}`)
+    },
 
     handleDeleteStudent(studentId) {
       StudentService.deleteOneStudent(studentId)
