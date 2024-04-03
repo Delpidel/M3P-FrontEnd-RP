@@ -1,10 +1,13 @@
 <template>
   <div class="container">
+    <v-snackbar v-model="success" color="#212121" location="top center" timeout="5000"  class="blink-snackbar">
+    Treino excluído com sucesso!
+  </v-snackbar>
     <v-card color="#ffc107">
       <v-card-title class="d-flex align-center justify-space-between">
         <div class="d-flex align-center">
           <v-icon class="mr-2">mdi mdi-account-supervisor</v-icon>
-          <h1 class="py-12">Treinos {{ studentName }}</h1>
+          <h1 class="py-14">Treinos {{ studentName }}</h1>
         </div>
         <img src="@/assets/logo.svg" alt="Logo" style="height: 80px;">
       </v-card-title>
@@ -91,7 +94,8 @@ export default {
         { label: 'Sexta-feira', value: 'sexta', icon: 'mdi-arm-flex' },
         { label: 'Sábado', value: 'sabado', icon: 'mdi-arm-flex' },
         { label: 'Domingo', value: 'domingo', icon: 'mdi-arm-flex' }
-      ]
+      ],
+      success: false
     };
   },
   mounted() {
@@ -131,7 +135,8 @@ export default {
     deleteWorkout(workoutId) {
   DeleteWorkoutService.DeleteWorkout(workoutId)
     .then(() => {
-      alert("Treino excluído com sucesso!");
+      this.success = true
+
       this.loadWorkout();
     })
     .catch(() => {
@@ -148,5 +153,16 @@ export default {
   font-weight: bold;
   font-size: 1.1rem;
 }
+.blink-snackbar {
+  animation: blink 1s infinite alternate; 
+}
 
+@keyframes blink {
+  0% {
+    opacity: 0; 
+  }
+  100% {
+    opacity: 1; 
+  }
+}
 </style>
