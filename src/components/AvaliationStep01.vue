@@ -5,7 +5,7 @@
         <!-- Calendário -->
         <v-col cols="12" md="4">
           <v-col>
-            <h3>Nome do aluno aqui {{ student_id }}</h3>
+            <h3>Olá {{ studentName.name }}</h3>
             <v-date-picker v-model="date" color="yellow" mode="dateTime" :timezone="timezone" is24hr  ></v-date-picker>
           </v-col>         
         </v-col>
@@ -49,6 +49,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      studentName: '',
       student_id: '1',
       date: null,
       timezone: '',
@@ -61,13 +62,12 @@ export default {
       measures: '',
     }
   },
-  // DESCOMENTAR ESTE TRECHO APOS A IMPLEMENTAÇÃO DA LISTA DE ESTUDANTES.
-  /*mounted(){    
+  mounted(){    
     this.student_id = this.$route.params.student_id;
 
     //recuperar nome do aluno no qual esta sendo cadastrado a avaliação
     this.findStudentName();
-  },*/
+  },
 
   methods: {
     selectDate(date) {
@@ -80,7 +80,8 @@ export default {
         // Obtem dados do aluno
         const response = await axios.get(`http://127.0.0.1:8000/api/students/${this.student_id}`);
         // Atualize o estado do componente com o nome do aluno
-        this.studentName = response.data.name; 
+        this.studentName = response.data; 
+        console.log(this.studentName)
       } catch (error) {
         console.error('Erro ao buscar nome do estudante:', error);
       }
