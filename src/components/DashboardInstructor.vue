@@ -21,7 +21,7 @@
 
       <v-row justify="center" class="px-16">
         <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
-          <v-card class="user-card elevation-10" @click="gotoStudents" style="cursor: pointer">
+          <v-card class="user-card elevation-10" @click="gotoStudents" data-test="students-card" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
                 src="../assets/instructor/dashboard/left-card-img-woman.png"
@@ -30,7 +30,7 @@
               />
               <div class="text-center">
                 <div class="text-h5 font-weight-bold">ALUNOS<br />CADASTRADOS</div>
-                <div class="text-h3 font-weight-bold">{{ registeredStudents }}</div>
+                <div class="text-h3 font-weight-bold" data-test="registeredStudents">{{ registeredStudents }}</div>
                 <v-btn
                   @click.stop="gotoStudents"
                   append-icon="mdi-account-circle"
@@ -41,6 +41,7 @@
                   :class="
                     smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'
                   "
+                  data-test="add-students-button"
                 >
                   ADICIONAR
                 </v-btn>
@@ -50,7 +51,7 @@
         </v-col>
 
         <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
-          <v-card class="user-card elevation-10" @click="gotoExercises" style="cursor: pointer">
+          <v-card class="user-card elevation-10" @click="gotoExercises" data-test="exercises-card" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
                 src="../assets/instructor/dashboard/right-card-img-man.png"
@@ -59,7 +60,7 @@
               />
               <div class="text-center">
                 <div class="text-h5 font-weight-bold">EXERCÍCIOS<br />CADASTRADOS</div>
-                <div class="text-h3 font-weight-bold">{{ registeredExercises }}</div>
+                <div class="text-h3 font-weight-bold" data-test="registeredExercises">{{ registeredExercises }}</div>
                 <v-btn
                   @click.stop="gotoExercises"
                   append-icon="mdi-dumbbell"
@@ -70,6 +71,7 @@
                   :class="
                     smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'
                   "
+                  data-test="add-exercises-button"
                 >
                   ADICIONAR
                 </v-btn>
