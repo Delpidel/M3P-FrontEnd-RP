@@ -36,13 +36,16 @@
           <td>{{ student.email }}</td>
           <td class="pa-2">
             <div class="d-flex justify-space-around">
-              <v-btn variant="elevated" color="amber text-dark-grey-4" @click="editStudent(student)"
+              <v-btn
+                variant="elevated"
+                color="amber text-dark-grey-4"
+                @click="handleEditStudent(student.id)"
                 >Editar</v-btn
               >
               <v-btn
                 variant="elevated"
                 color="amber text-dark-grey-4"
-                @click="desactivateStudent(student)"
+                @click="handleDeleteStudent(student.id)"
                 >Desativar</v-btn
               >
             </div>
@@ -95,9 +98,9 @@ export default {
         .catch(() => alert('Houve um erro ao retornar os estudantes'))
     },
 
-    editStudent(student) {},
+    handleEditStudent(studentId) {},
 
-    desactivateStudent(student) {}
+    handleDeleteStudent(studentId) {}
   },
 
   mounted() {
