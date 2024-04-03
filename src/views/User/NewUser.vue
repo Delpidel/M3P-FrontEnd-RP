@@ -140,7 +140,7 @@
       </v-form>
 
       <v-snackbar v-model="snackbarSuccess" :timeout="duration" color="success" location="top">
-        {{ userId ? ' Usuário edita com sucesso!' : 'Usuário cadastrado com sucesso!' }}
+        {{ userId ? ' Usuário editado com sucesso!' : 'Usuário cadastrado com sucesso!' }}
       </v-snackbar>
       <v-snackbar v-model="snackbarError" :timeout="duration" color="red-darken-2" location="top">
         {{ errorMessage }}
@@ -267,11 +267,12 @@ export default {
       formData.append('name', this.name)
       formData.append('email', this.email)
       formData.append('profile_id', this.profile)
-      if (this.photo) formData.append('photo', this.photo)
 
       loading.value = true
 
       if (this.userId) {
+        formData.append('photo', this.photo)
+
         UserService.updateUser(this.userId, formData, config)
           .then(() => {
             this.snackbarSuccess = true
@@ -284,6 +285,8 @@ export default {
           })
         return
       } else {
+        if (this.photo) formData.append('photo', this.photo)
+
         UserService.createUser(formData, config)
           .then(() => {
             this.snackbarSuccess = true
