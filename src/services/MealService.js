@@ -22,6 +22,11 @@ class MealService {
         return response.data;
     }
 
+    async createMealPlan(data) {
+        const response = await api.post('/meal_plans', data);
+        return response.data;
+    }
+
     async updateMeal(mealId, data) {
         const response = await api.put(`/update_meal/${mealId}`, data);
         return response.data;

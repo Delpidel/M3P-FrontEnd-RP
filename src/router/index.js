@@ -82,12 +82,6 @@ const router = createRouter({
       path: '/student/workouts',
       name: 'Treinos do aluno',
       component: Exemplo
-    },
-    {
-      path: '/home',
-      name: 'home',
-      component: Home
-
     }
   ]
 })
