@@ -9,13 +9,12 @@
         </v-card>
 
         <v-row class="ma-1 py-4">
-            <h2>{{ student.name }}</h2>
+            <!---Nome do estudante aqui-->
+            <h2>Olá {{student.name}}</h2>
         </v-row>
-
         <v-row class="ma-1">
             <v-col cols="12" md="3">
-                <v-text-field v-model="EvaluationDate" label="Data da Avaliação" id="EvaluationDate"
-                    type="date">
+                <v-text-field v-model="EvaluationDate" label="Data da Avaliação" id="EvaluationDate" type="date">
                 </v-text-field>
             </v-col>
             <v-col cols="12" md="9">
@@ -32,8 +31,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Vai ter V-for com relação a data</td>
+                    <tr v-for="evaluation in sortedEvaluations" :key="evaluation.id">
+                        <td>{{ evaluation.date }}</td>
                         <td>
                             <v-btn class="ma-1" size="small" color="amber">Exportar</v-btn>
                             <v-btn class="ma-1" size="small" color="amber">Enviar Avaliação</v-btn>
@@ -51,51 +50,50 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            student: {},
+            student_id: '',
+            student: '',
             students: [],
-            evaluation: {},
+            evaluation: '',
             evaluations: [],
+            sortedEvaluations:''            
         }
     },
 
     mounted() {
+        
         this.student_id = this.$route.params.student_id;
-        this.avaliations = this.$route.params.studentAvaliation;
-        console.log(this.student_id)
-        console.log(this.avaliations)
-    },
+        this.fetchAvaliations()
+        this.fetchStudent()
+     },
+   
 
-    methods: {
-        ShowStudent() {
-            axios ({
-             url: 'http://127.0.0.1:8000/api/students',
-             method: 'GET',
+    methods: {    
+        
+        fetchStudent(){
+            axios.get(`http://127.0.0.1:8000/api/students/${this.student_id}`)
+            .then( response => {
+                this.student = response.data 
             })
-            .then((response) => {
-                this.students = response.data
-                console.log(response.data.student_id)
-            })
-            .catch(() => {
-                console.log("Falha na requisição")
-            })
+            .catch(error => {
+                console.error('Erro ao buscar as avaliações', error);
+            });
         },
 
-        // ShowAvaliationDate(){
-        //     axios ({
-        //      url:'http://127.0.0.1:8000/api/avaliations',
-        //      method: 'GET',
-        //     })
-        //     .then((response) => {
-        //         this.students = response.data
-        //         console.log(response.data)
-        //     })
-        //     .catch(() => {
-        //         console.log("Falha na requisição")
-        //     })
-        // },
-        
-        SearchEvaluationDate() {
+        fetchAvaliations() {
 
+            axios.get(`http://localhost:8000/api/students/avaliations/${this.student_id}`)
+                .then(response => {
+                    this.evaluations = response.data;
+                    console.log(this.evaluations)
+
+                    this.sortEvaluations();
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar as avaliações', error);
+                });
+        },
+        sortEvaluations() {
+            this.sortedEvaluations = [...this.evaluations].sort((a, b) => new Date(b.date) - new Date(a.date));
         }
 
     }

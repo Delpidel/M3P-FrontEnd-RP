@@ -24,13 +24,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="student in students" :key="id">
+                    <tr v-for="student in students" :key="student.id">
                         <td>{{ student.name }}</td>
                         <td>
-                            <v-btn class="ma-1" size="small" color="amber" @click="ShowAvaliation(student_id)">Ver
+                            <v-btn class="ma-1" size="small" color="amber" @click="ShowAvaliation(student.id)">Ver
                                 Avaliações</v-btn>
                             <v-btn class="ma-1" size="small" color="amber">Cadastrar Avaliação</v-btn>
-                            <v-btn class="ma-1" size="small" color="amber" @click="StudentWorkout(student_id)">Ver
+                            <v-btn class="ma-1" size="small" color="amber" @click="StudentWorkout(student.id)">Ver
                                 Treino</v-btn>
                             <v-btn class="ma-1" size="small" color="amber">Enviar Treino</v-btn>
                         </td>
@@ -49,6 +49,7 @@ export default {
         return {
             student: {},
             students: [],
+            
         }
     },
 
@@ -58,60 +59,56 @@ export default {
 
     methods: {
         ShowAvaliation(student_id) {
-            const response = axios.get('http://127.0.0.1:8000/api/students/avaliations')
+           
+            axios.get(`http://127.0.0.1:8000/api/students/avaliations/${student_id}`)
                 .then(response => {
-                    const studentAvaliation = response.data.filter(avaliation => avaliation.student_id === student_id)
-                    // const avaliations = response.data;
-                    console.log(studentAvaliation)
-                    console.log(response.data)
+                    const studentData = response.data;
+                    console.log(studentData)
+                    // redirecionar para a página de avaliações com a resposta
                     this.$router.push({
-                        path: '/students/avaliations',
-                        params: {student_id, studentAvaliation}
+                        path: `/students/avaliations/${student_id}`,                      
+                    });
+                    
                 })
-        })
 
-    },
-    // NewStudentAvaliation(student_id){
-    //     this.$router.push({
-    //     path: '/students/avaliations',
-    //     query: { id: student_id }
-    // }) 
-    // },
+        },
+        // NewStudentAvaliation(student_id){
+        //     this.$router.push({
+        //     path: '/students/avaliations',
+        //     query: { id: student_id }
+        // }) 
+        // },
 
-    StudentWorkout(student_id) {
-        this.$router.push({
-            path: '/student/workouts',
-            query: { id: student_id }
-        })
-    },
+        StudentWorkout() {
+            
+        },
 
-    // NewStudentAvaliation(student_id){
-    //     this.$router.push({
-    //     path: '/students/avaliations',
-    //     query: { id: student_id }
-    // }) 
-    // },
+        // NewStudentAvaliation(student_id){
+        //     this.$router.push({
+        //     path: '/students/avaliations',
+        //     query: { id: student_id }
+        // }) 
+        // },
 
-    ShowStudent() {
-        axios({
-            url: 'http://127.0.0.1:8000/api/students',
-            method: 'GET',
-        })
-            .then((response) => {
-                this.students = response.data
-                console.log(response.data)
+        ShowStudent() {
+            axios({
+                url: 'http://127.0.0.1:8000/api/students',
+                method: 'GET',
             })
-            .catch(() => {
-                console.log("Falha na requisição")
-            })
-    },
+                .then((response) => {
+                    this.students = response.data                  
+                })
+                .catch(() => {
+                    console.log("Falha na requisição")
+                })
+        },
 
-    SearchStudent() {
-        this.students = response.data.students
-        this.studentsfilter = this.students.filter((item) => item.name === student.name)
+        SearchStudent() {
+            /*this.students = response.data.students
+            this.studentsfilter = this.students.filter((item) => item.name === student.name)*/
+        }
+
     }
-
-}
 }
 
 </script>

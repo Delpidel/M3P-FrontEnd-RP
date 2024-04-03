@@ -66,7 +66,7 @@ const router = createRouter({
       component: ListaEstudantesAtivos
     },
     {
-      path: '/students/avaliations',
+      path: '/students/avaliations/:student_id',
       name: 'Avaliacoes',
       component: ListaAvaliacoes
     },
