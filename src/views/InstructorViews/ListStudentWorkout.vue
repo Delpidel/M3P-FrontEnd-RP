@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <v-snackbar v-model="success" color="#212121" location="top center" timeout="5000"  class="blink-snackbar">
+    <v-snackbar v-model="success"
+     color="#212121" 
+     location="top center" 
+     timeout="5000"  
+     class="blink-snackbar">
     Treino excluído com sucesso!
   </v-snackbar>
     <v-card color="#ffc107">
@@ -46,6 +50,7 @@
                 <th class="head-descriptions">Repetições</th>
                 <th class="head-descriptions">Pausa (s)</th>
                 <th class="head-descriptions">Tempo</th>
+                <th class="head-descriptions">Observações</th>
                 <th class="head-descriptions">Ações</th>
               </tr>
             </thead>
@@ -56,8 +61,9 @@
                 <td>{{ workout.repetitions }}</td>
                 <td>{{ workout.break_time }}</td>
                 <td>{{ workout.time }}</td>
+                <td>{{ workout.observations}}</td>
                 <td>
-                  <v-btn @click="updateWorkout">
+                  <v-btn @click="updateWorkout(workout.id)">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
                   <v-btn data-test="delete-button" @click="deleteWorkout(workout.id)">
@@ -95,7 +101,8 @@ export default {
         { label: 'Sábado', value: 'sabado', icon: 'mdi-arm-flex' },
         { label: 'Domingo', value: 'domingo', icon: 'mdi-arm-flex' }
       ],
-      success: false
+      success: false,
+      workoutId:''
     };
   },
   mounted() {
@@ -129,8 +136,10 @@ export default {
     newWorkout() {
       this.$router.push(`/newWorkout/${this.$route.params.id}`);
     },
-    updateWorkout() {
-      this.$router.push('/')
+    updateWorkout(workoutId) {
+
+      this.workoutId = workoutId;
+      this.$router.push(`/updateWorkout/${this.$route.params.id}/${workoutId}`);
     },
     deleteWorkout(workoutId) {
   DeleteWorkoutService.DeleteWorkout(workoutId)
