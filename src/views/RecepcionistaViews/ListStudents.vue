@@ -100,7 +100,14 @@ export default {
 
     handleEditStudent(studentId) {},
 
-    handleDeleteStudent(studentId) {}
+    handleDeleteStudent(studentId) {
+      StudentService.deleteOneStudent(studentId)
+        .then(() => {
+          this.students = this.students.filter((item) => item.id !== studentId)
+          alert('Desativado com sucesso')
+        })
+        .catch(() => alert('Erro ao desativar estudante'))
+    }
   },
 
   mounted() {
