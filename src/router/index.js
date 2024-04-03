@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Exercises from '../views/exercise/ExercisesPage.vue'
 
 import Exemplo from '../views/PaginaExemplo.vue'
+import ExercisesList from '../views/Exercises/ExercisesList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,8 +48,9 @@ const router = createRouter({
     //perfil instrutor
     {
       path: '/exercises',
+
       name: 'Exercises',
-      component: Exercises      
+      component: ExercisesList  
     },
     {
       path: '/instructor/students',
