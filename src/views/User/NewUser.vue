@@ -140,7 +140,7 @@
       </v-form>
 
       <v-snackbar v-model="snackbarSuccess" :timeout="duration" color="success" location="top">
-        Usuário cadastrado com sucesso!
+        {{ userId ? ' Usuário edita com sucesso!' : 'Usuário cadastrado com sucesso!' }}
       </v-snackbar>
       <v-snackbar v-model="snackbarError" :timeout="duration" color="red-darken-2" location="top">
         {{ errorMessage }}
@@ -165,6 +165,14 @@ import { schemaCreateUser } from '@/validations/User/userCreate.validations'
 import { ref } from 'vue'
 
 const loading = ref(false)
+
+const token = localStorage.getItem('@token')
+const config = {
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'multipart/form-data'
+  }
+}
 
 export default {
   components: {
@@ -210,7 +218,7 @@ export default {
 
   mounted() {
     if (this.userId) {
-      UserService.getOneUser(this.userId)
+      UserService.getOneUser(this.userId, config)
         .then((response) => {
           this.name = response.name
           this.email = response.email
@@ -226,6 +234,7 @@ export default {
         })
     }
   },
+
   methods: {
     validateSync() {
       this.errors = {}
@@ -260,27 +269,34 @@ export default {
       formData.append('profile_id', this.profile)
       if (this.photo) formData.append('photo', this.photo)
 
-      const token = localStorage.getItem('@token')
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-
       loading.value = true
-      UserService.createUser(formData, config)
-        .then(() => {
-          this.snackbarSuccess = true
-          loading.value = false
-          this.$refs.image.removeImage()
-          this.$refs.form.reset()
-        })
-        .catch((error) => {
-          this.errorMessage = error.response.data.message
-          this.snackbarError = true
-          loading.value = false
-        })
+
+      if (this.userId) {
+        UserService.updateUser(this.userId, formData, config)
+          .then(() => {
+            this.snackbarSuccess = true
+            loading.value = false
+          })
+          .catch((error) => {
+            this.errorMessage = error.response.data.message
+            this.snackbarError = true
+            loading.value = false
+          })
+        return
+      } else {
+        UserService.createUser(formData, config)
+          .then(() => {
+            this.snackbarSuccess = true
+            loading.value = false
+            this.$refs.image.removeImage()
+            this.$refs.form.reset()
+          })
+          .catch((error) => {
+            this.errorMessage = error.response.data.message
+            this.snackbarError = true
+            loading.value = false
+          })
+      }
     },
 
     updatePhoto(imageData) {
