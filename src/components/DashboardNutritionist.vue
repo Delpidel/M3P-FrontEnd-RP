@@ -24,18 +24,26 @@
                 alt="Imagem de um homem praticando levantamento de peso na barra."
                 class="card-image"
               />
-              <v-card-title>Usuários Totais</v-card-title>
-              <v-card-text class="text-h3 font-weight-bold">{{ totalUsers }}</v-card-text>
+              <v-card-title>Estudantes Cadastrados</v-card-title>
+              <v-card-text class="text-h3 font-weight-bold">{{ registeredStudents }}</v-card-text>
+              <span class="text-h3 font-weight-bold" v-if="!showStudents"></span>
+              <v-list class="user-card" v-else>
+                <v-list-item v-for="student in students" :key="student.id">
+                  <v-list-item-content>
+                    <v-list-item-title>{{ student.name }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
               <v-btn
-                @click="navigateToCreateStudent"
-                append-icon="mdi-account-circle"
-                size="large"
-                variant="elevated"
-                color="grey-darken-4 text-amber"
-                class="font-weight-bold my-6"
-                :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
-              >
-                Cadastrar Usuário
+                  @click="toggleStudents"
+                  append-icon="mdi-account-circle"
+                  size="large"
+                  variant="elevated"
+                  color="grey-darken-4 text-amber"
+                  class="font-weight-bold my-6"
+                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+                >
+                Visualizar
               </v-btn>
             </div>
           </v-card>
@@ -52,16 +60,32 @@ export default {
   data() {
     return {
       profileName: localStorage.getItem('@name'),
+      students: [],
+      showStudents: false
+    }
+  },  
+  created() {
+    this.fetchStudentsData()
+  },
+  computed: {
+    registeredStudents() {
+      return this.students.length
     }
   },
   methods: {
+    async fetchStudentsData() {
+      try {
+        const { students } = await AuthenticationService.fetchStudentsData()
+        this.students = students
+      } catch (error) {
+        console.error('Erro ao buscar dados do painel de administração:', error)
+      }
+    },
     navigateToCreateStudent() {
       this.$router.push('/students/new')
-    }
-  },
-  computed: {
-    totalUsers() {
-      return "1"
+    },
+    toggleStudents() {
+      this.showStudents = !this.showStudents
     }
   }
 }

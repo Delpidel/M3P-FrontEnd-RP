@@ -112,15 +112,10 @@ export default {
     },
     toggleStudents() {
       this.showStudents = !this.showStudents
-    },
-    atualizarFraseAleatoria() {
-      // Implemente a lógica para atualizar a frase aleatória
     }
   }
 }
 </script>
-
-
 <style scoped>
 .container {
   width: 100%;
