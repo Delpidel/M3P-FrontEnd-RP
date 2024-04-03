@@ -217,12 +217,11 @@ export default {
           this.profile = response.profile_id.toString()
 
           if (response.file) {
-            console.log(response.file.url)
-            this.photo = response.file.url
+            this.$refs.image.setImageFromURL(response.file.url)
           }
         })
         .catch((error) => {
-          this.errorMessage = error.response.data.message
+          this.errorMessage = error
           this.snackbarError = true
         })
     }

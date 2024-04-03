@@ -28,6 +28,7 @@
 
 <script>
 import accountImage from '@/assets/account-image.jpg'
+import axios from 'axios'
 
 export default {
   props: {
@@ -45,6 +46,17 @@ export default {
   methods: {
     selectImage() {
       this.$refs.fileInput.click()
+    },
+    setImageFromURL(file) {
+      let that = this
+      axios.get(file, { responseType: 'blob', crossdomain: true }).then((response) => {
+        var reader = new window.FileReader()
+        reader.readAsDataURL(response.data)
+        reader.onload = function () {
+          that.previewImage = reader.result
+          that.$emit('update:selectedImage', file)
+        }
+      })
     },
     pickFile(event) {
       const file = event.target.files[0]
