@@ -38,4 +38,64 @@ describe('Tela de Dashboard', () => {
     expect(dashboardAdminComponent.exists()).toBe(true);
   });
 
+  it('Espera-se que o DashboardInstructor seja renderizado quando o perfil for Instrutor', async () => {
+    localStorage.setItem('@profile', 'INSTRUTOR');
+  
+    const component = mount(Dashboard, {
+      global: {
+        plugins: [vuetify]
+      }
+    });
+  
+    await component.vm.$nextTick();
+
+    const dashboardAdminComponent = component.findComponent({ name: 'DashboardInstructor' });
+    expect(dashboardAdminComponent.exists()).toBe(true);
+  });
+
+  it('Espera-se que o DashboardNutritionist seja renderizado quando o perfil for Nutricionista', async () => {
+    localStorage.setItem('@profile', 'NUTRICIONISTA');
+  
+    const component = mount(Dashboard, {
+      global: {
+        plugins: [vuetify]
+      }
+    });
+  
+    await component.vm.$nextTick();
+
+    const dashboardAdminComponent = component.findComponent({ name: 'DashboardNutritionist' });
+    expect(dashboardAdminComponent.exists()).toBe(true);
+  });
+
+  it('Espera-se que o DashboardReceptionist seja renderizado quando o perfil for Recepcionista', async () => {
+    localStorage.setItem('@profile', 'RECEPCIONISTA');
+  
+    const component = mount(Dashboard, {
+      global: {
+        plugins: [vuetify]
+      }
+    });
+  
+    await component.vm.$nextTick();
+
+    const dashboardAdminComponent = component.findComponent({ name: 'DashboardReceptionist' });
+    expect(dashboardAdminComponent.exists()).toBe(true);
+  });
+
+  it('Espera-se que o DashboardStudent seja renderizado quando o perfil for Estudante', async () => {
+    localStorage.setItem('@profile', 'ALUNO');
+  
+    const component = mount(Dashboard, {
+      global: {
+        plugins: [vuetify]
+      }
+    });
+  
+    await component.vm.$nextTick();
+
+    const dashboardAdminComponent = component.findComponent({ name: 'DashboardStudent' });
+    expect(dashboardAdminComponent.exists()).toBe(true);
+  });
+
 })
