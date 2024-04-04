@@ -45,6 +45,14 @@
               </v-btn>
               <v-btn
                 variant="elevated"
+                color="grey-darken-1"
+                dark
+                @click="handleDocumentsStudent(student.id)"
+              >
+                <span class="text-white font-weight-bold"> Documentos </span>
+              </v-btn>
+              <v-btn
+                variant="elevated"
                 color="amber darken-4"
                 dark
                 @click="handleDeleteStudent(student.id)"
@@ -87,9 +95,8 @@ export default {
     redirectToNewStudent() {
       this.$router.push('/students/new')
     },
-    
+
     handleSearch() {
-      console.log("resultado", this.searchText)
       StudentService.getAllStudents(this.searchText)
         .then((data) => {
           this.students = data.map((item) => ({
@@ -103,7 +110,11 @@ export default {
     },
 
     handleEditStudent(studentId) {
-      this.$router.push(`/api/students/${studentId}`)
+      this.$router.push(`/students/${studentId}`)
+    },
+
+    handleDocumentsStudent(studentId) {
+      this.$router.push(`/students/${studentId}/documents`)
     },
 
     handleDeleteStudent(studentId) {
