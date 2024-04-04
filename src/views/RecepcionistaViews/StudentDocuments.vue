@@ -14,7 +14,8 @@
                 ></v-img>
               </v-col>
               <v-col cols="auto">
-                <h2>Documentos {{ studentName ? 'de ' + studentName : '' }}</h2>
+                <h2 v-if="studentName">Documentos de {{ studentName }}</h2>
+                <h2 v-else>Documentos</h2>
               </v-col>
             </v-row>
             <hr />
@@ -48,6 +49,19 @@
                 >
               </v-col>
             </v-row>
+
+            <v-row>
+              <v-col cols="12">
+                <h3 class="mt-4">Documentos Cadastrados</h3>
+                <v-list>
+                  <v-list-item v-for="(document, index) in documents" :key="index">
+                    <v-list-item-content>
+                      <v-list-item-title>{{ document.title }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-col>
+            </v-row>
           </v-card>
         </v-col>
       </v-row>
@@ -67,12 +81,13 @@ export default {
       isLoading: false,
       success: false,
       showError: false,
-      studentName: ''
+      studentName: '',
+      documents: []
     }
   },
   methods: {
     async sendDocument() {
-      if (!this.selectedFile || !this.description || !this.studentId) {
+      if (!this.selectedFile || !this.description) {
         alert('Por favor, preencha todos os campos.')
         return
       }
@@ -93,6 +108,8 @@ export default {
           this.success = true
           this.description = ''
           this.$refs.fileInput.reset()
+          this.fetchDocuments()
+          alert('Documento enviado com sucesso!')
         } else {
           this.showError = true
         }
@@ -103,30 +120,25 @@ export default {
         this.isLoading = false
       }
     },
-    async fetchStudentId() {
+    async fetchDocuments() {
       try {
-        const studentId = parseInt(this.$route.params.id)
-        if (isNaN(studentId)) {
-          throw new Error('ID do estudante inválido.')
-        }
-        this.studentId = studentId
-
-        const studentResponse = await axios.get(`http://localhost:8000/api/students/${studentId}`)
-        if (studentResponse.status === 200) {
-          const studentData = studentResponse.data
-          this.studentName = studentData.name
-          // Aqui você pode atribuir outros dados do aluno conforme necessário
+        const response = await axios.get(
+          `http://localhost:8000/api/students/${this.studentId}/documents`
+        )
+        if (response.status === 200) {
+          this.documents = response.data
         } else {
-          throw new Error('Erro ao obter os dados do aluno da API.')
+          throw new Error('Erro ao obter documentos do estudante')
         }
       } catch (error) {
-        console.error('Erro ao obter o ID do estudante:', error)
-        alert('Erro ao obter os dados do aluno. Por favor, tente novamente mais tarde.')
+        console.error('Erro ao obter documentos do estudante:', error)
+        alert('Erro ao obter documentos do estudante')
       }
     }
   },
-  created() {
-    this.fetchStudentId()
+  async created() {
+    await this.fetchStudentId()
+    await this.fetchDocuments()
   }
 }
 </script>
