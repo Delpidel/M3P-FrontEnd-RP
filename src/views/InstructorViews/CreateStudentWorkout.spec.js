@@ -17,6 +17,7 @@ import CreateStudentWorkout from '../InstructorViews/CreateStudentWorkout.vue'
 import GetExercises from '../../services/InstructorServices/GetExercises'
 import CreateWorkoutService from '../../services/InstructorServices/CreateWorkoutService'
 import { daysOfWeek } from '../../constants/Instructor/daysOfWeek'
+import { getCurrentDay } from '../../utils/Instructor/getCurrentDay'
 
 describe('Tela de cadastro de treino', () => {
   vi.spyOn(GetExercises, 'getAllUserExercises').mockResolvedValue([
@@ -33,15 +34,6 @@ describe('Tela de cadastro de treino', () => {
       description: 'Exercício 3'
     }
   ])
-  const daysOfWeekMock = [
-    { title: 'Segunda-feira', value: 'SEGUNDA' },
-    { title: 'Terça-feira', value: 'TERÇA' },
-    { title: 'Quarta-feira', value: 'QUARTA' },
-    { title: 'Quinta-feira', value: 'QUINTA' },
-    { title: 'Sexta-feira', value: 'SEXTA' },
-    { title: 'Sábado', value: 'SÁBADO' },
-    { title: 'Domingo', value: 'DOMINGO' }
-  ]
 
   it('Espera-se que a tela seja renderizada', async () => {
     const component = mount(CreateStudentWorkout, {
@@ -74,9 +66,12 @@ describe('Tela de cadastro de treino', () => {
     component.getComponent(concatId('weight-input')).setValue(20.0)
     component.getComponent(concatId('break-input')).setValue(30)
 
-    // Mock do dayOfWeek
-    const selectedDay = daysOfWeekMock[0].value // Por exemplo, assumindo que 'SEGUNDA' é o valor do primeiro item do array daysOfWeekMock
-    component.getComponent(concatId('day-input')).setValue(selectedDay)
+    // Obter o dia da semana atual e encontrar seu nome completo usando getCurrentDay
+    const currentDayValue = new Date().getDay() // Obtém o valor numérico do dia da semana atual
+    const currentDayName = getCurrentDay(currentDayValue)
+
+    // Mock do dayOfWeek com o dia da semana atual
+    component.getComponent(concatId('day-input')).setValue(currentDayName)
 
     component.getComponent(concatId('observations-input')).setValue('Observações do treino')
 
@@ -84,7 +79,7 @@ describe('Tela de cadastro de treino', () => {
 
     await flushPromises()
 
-    expect(spyCreateWorkout).toHaveBeenCalled({})
+    expect(spyCreateWorkout).toBeCalled()
   })
 
   it('Espera-se que mostre um erro ao enviar o formulário sem preencher todos os campos', async () => {
@@ -102,6 +97,23 @@ describe('Tela de cadastro de treino', () => {
 
     await flushPromises()
 
-    expect(component.text()).toContain('Erro ao validar os dados.')
+    expect(component.text()).toContain('O número de repetições deve ser um número')
+    expect(component.text()).toContain('A carga deve ser um número')
+  })
+})
+
+describe('Função getCurrentDay', () => {
+  it('Deve retornar "SEGUNDA" para o valor 1', () => {
+    expect(getCurrentDay(1)).toBe('SEGUNDA')
+  })
+})
+
+describe('Teste da constante daysOfWeek', () => {
+  it('Deve retornar "Segunda-feira" para o valor "SEGUNDA"', () => {
+    const expectedTitle = 'Segunda-feira'
+    const dayOfWeekObject = daysOfWeek.find((day) => day.value === 'SEGUNDA')
+    const actualTitle = dayOfWeekObject.title
+
+    expect(actualTitle).toBe(expectedTitle)
   })
 })

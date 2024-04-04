@@ -99,7 +99,7 @@
                     >
                       Cadastrar
                     </v-btn>
-                    <router-link to="/listagem-treinos/{{id}}/lista-treino">
+                    <router-link to="/instructor/{{id}}/list-workouts">
                       <v-btn class="ml-auto" type="submit" variant="elevated" size="large">
                         Voltar
                       </v-btn>
@@ -174,7 +174,7 @@ export default {
     handleSubmit() {
       try {
         const body = {
-          student_id: this.$route.params.id,
+          student_id: this.$route?.params?.id,
           exercise_id: this.exercisesSelected,
           repetitions: this.repetitionOfExercise,
           weight: this.exerciseLoad,
@@ -204,6 +204,7 @@ export default {
             }
           })
       } catch (error) {
+        console.log(error)
         if (error instanceof yup.ValidationError) {
           this.errors = captureErrorYup(error)
           this.snackbarError = true
