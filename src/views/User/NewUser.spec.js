@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { mount, flushPromises } from '@vue/test-utils'
-import { createRouter, createWebHistory } from 'vue-router'
+import { mount, flushPromises, config } from '@vue/test-utils'
+import { createRouter, createWebHistory, stringifyQuery } from 'vue-router'
 
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -148,5 +148,192 @@ describe('Testa a tela de cadastro de usuário', () => {
     }
 
     expect(createUser).toHaveBeenCalledWith(form, config)
+  })
+})
+
+describe('Testa a tela de edição de usuário', () => {
+  it('Espera-se que o usuário seja carregado ao acessar a rota de edição', async () => {
+    const userId = '123'
+    const user = {
+      id: userId,
+      name: 'Usuario Teste',
+      email: 'test@test.com',
+      profile_id: 2
+    }
+
+    const config = {
+      headers: {
+        Authorization: 'Bearer null',
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+
+    const getUser = vi
+      .spyOn(UserService, 'getOneUser')
+      .mockResolvedValue({ response: user })
+      .mockRejectedValueOnce({ response: { data: { message: 'Erro' } } })
+
+    const component = mount(NewUser, {
+      global: {
+        plugins: [vuetify, router]
+      },
+      data() {
+        return {
+          userId: userId
+        }
+      }
+    })
+
+    await component.vm.$nextTick()
+
+    expect(getUser).toHaveBeenCalledWith(userId, config)
+  })
+
+  it('Espera-se que o formulário seja renderizado com os dados do usuário', async () => {
+    const userId = '123'
+    const user = {
+      id: userId,
+      name: 'Usuario Teste',
+      email: 'test@test.com',
+      profile: '2'
+    }
+
+    const config = {
+      headers: {
+        Authorization: 'Bearer null',
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+
+    const getUser = vi
+      .spyOn(UserService, 'getOneUser')
+      .mockResolvedValue({ response: user })
+      .mockRejectedValueOnce({ response: { data: { message: 'Erro' } } })
+
+    const component = mount(NewUser, {
+      global: {
+        plugins: [vuetify, router]
+      },
+      data() {
+        return {
+          userId: userId,
+          user: user,
+          name: user.name,
+          email: user.email,
+          profile: user.profile
+        }
+      }
+    })
+
+    await component.vm.$nextTick()
+
+    expect(getUser).toHaveBeenCalledWith(userId, config)
+
+    await component.vm.$nextTick()
+
+    expect(component.getComponent(concatId('name-input')).find('input').element.value).toBe(
+      user.name
+    )
+    expect(component.getComponent(concatId('email-input')).find('input').element.value).toBe(
+      user.email
+    )
+    expect(component.getComponent(concatId('profile-select')).find('input').element.value).toBe(
+      user.profile
+    )
+  })
+
+  it('Espera-se que ao submeter o formulário, o usuário seja atualizado', async () => {
+    const userId = '123'
+
+    const updateUser = vi
+      .spyOn(UserService, 'updateUser')
+      .mockResolvedValue({})
+      .mockRejectedValueOnce({ response: { data: { message: 'Erro' } } })
+
+    const component = mount(NewUser, {
+      global: {
+        plugins: [vuetify, router]
+      },
+      data() {
+        return {
+          userId: userId
+        }
+      }
+    })
+
+    const profile = '2'
+    const name = 'Usuario Teste'
+    const email = 'testnovo@test.com'
+    const photo = 'string'
+
+    await component.vm.$nextTick()
+
+    component.getComponent(concatId('profile-select')).setValue(profile)
+    component.getComponent(concatId('name-input')).setValue(name)
+    component.getComponent(concatId('email-input')).setValue(email)
+    component.getComponent(ImageUploadPreview).vm.$emit('update:selectedImage', photo)
+
+    await component.find(concatId('submit-button')).trigger('submit')
+
+    let form = new FormData()
+    form.append('name', name)
+    form.append('email', email)
+    form.append('profile_id', profile)
+
+    let config = {
+      headers: {
+        Authorization: 'Bearer null',
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+
+    expect(updateUser).toHaveBeenCalledWith(userId, form, config)
+  })
+
+  it('Espera-se que ao submeter o formulário com foto, o usuário seja atualizado', async () => {
+    const userId = '123'
+
+    const updateUser = vi
+      .spyOn(UserService, 'updateUser')
+      .mockResolvedValue({})
+      .mockRejectedValueOnce({ response: { data: { message: 'Erro' } } })
+
+    const component = mount(NewUser, {
+      global: {
+        plugins: [vuetify, router]
+      },
+      data() {
+        return {
+          userId: userId
+        }
+      }
+    })
+
+    const profile = '2'
+    const name = 'Usuario Teste'
+    const email = 'testnovo@test.com'
+
+    await component.vm.$nextTick()
+
+    component.getComponent(concatId('profile-select')).setValue(profile)
+    component.getComponent(concatId('name-input')).setValue(name)
+    component.getComponent(concatId('email-input')).setValue(email)
+
+    await component.find(concatId('submit-button')).trigger('submit')
+
+    let form = new FormData()
+    form.append('name', name)
+    form.append('email', email)
+    form.append('profile_id', profile)
+    form.append('photo', null)
+
+    let config = {
+      headers: {
+        Authorization: 'Bearer null',
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+
+    expect(updateUser).toHaveBeenCalledWith(userId, form, config)
   })
 })
