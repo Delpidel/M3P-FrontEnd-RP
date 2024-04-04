@@ -1,43 +1,38 @@
-import { describe, it, expect, vi } from "vitest";
-import ListMeals from './ListMeals.vue'
-import { flushPromises, mount } from "@vue/test-utils";
 
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-import MealService from "@/services/MealService";
-import { concatId } from "@/utils/tests/getComponent";
+import { flushPromises, mount } from '@vue/test-utils'
+import { describe, expect, it, vi } from 'vitest'
 
-const vuetify = createVuetify({
+/* Configuração do vuetify */
+import { createVuetify } from 'vuetify' // obrigatório
+import * as components from 'vuetify/components' // obrigatório
+import * as directives from 'vuetify/directives' // obrigatório
+
+const vuetify = createVuetify({ // obrigatório
     components,
     directives,
 })
 
-global.ResizeObserver = require('resize-observer-polyfill')
+global.ResizeObserver = require('resize-observer-polyfill') // obrigatório
 
-describe("Tela lista de refeições", () => {
+import Meal from './Meal.vue'
+import MealService from '@/services/MealService'
 
-    vi.spyOn(MealService, 'GetMealStudent')
-        .mockResolvedValue([
-            {
-                "id": 1,
-                "meal_plan_id": 10,
-                "title": "Jantar",
-                "description": "Sopa de Legumes",
-                "hour": "18:00:00",
-                "day": "SEGUNDA",
-                "student_id": 3,
-                "student": {
-                    "id": 3,
-                    "name": "guilherme",
-                }
-            }
-            
-        ])
+describe("Tela cadastro de refeições", () => {
+
+    vi.spyOn(MealService, 'getMealPlans').mockResolvedValue([
+        {
+            id: 1,
+            description: 'emagrecer'
+        },
+        {
+            id: 2,
+            description: 'hipertrofia'
+        }
+    ])
 
     it("Espera-se que a tela seja renderizada", () => {
 
-        const component = mount(ListMeals, {
+        const component = mount(Meal, {
             global: {
                 plugins: [vuetify]
             }
@@ -46,16 +41,33 @@ describe("Tela lista de refeições", () => {
         expect(component).toBeTruthy()
     })
 
-    it("Espera que exiba a quantidade de linhas na tabela corretamente", async () => {
-        const component = mount(ListMeals, {
+    it("Espera-se que os dados do formulário sejam enviados", async () => {
+
+        const spyCreateMeal = vi.spyOn(MealService, 'CreateMeal').mockResolvedValue({})
+
+        const component = mount(Meal, {
             global: {
                 plugins: [vuetify]
-            }
+            },
+            data() {
+                return {
+                    tab: 'one'
+                }
+            } 
         })
 
         await flushPromises()
 
-        expect(component.findAll(concatId("row-table"))).toHaveLength(3)
+        component.getComponent("[data-test='input-plan']").setValue("1")
+        component.getComponent("[data-test='input-hour']").setValue("12:00:00")
+        component.getComponent("[data-test='input-title']").setValue("almoço")
+        component.getComponent("[data-test='input-description']").setValue("baião")
+
+        component.getComponent("[data-test='submit-button']").trigger("submit")
+
+        expect(spyCreateMeal).toBeCalled()
+        
     })
 
+   
 })

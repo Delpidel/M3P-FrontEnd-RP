@@ -22,23 +22,23 @@
 
                             <v-autocomplete v-model="idPlanoAlimentacao" :items="planoAlimentacao"
                                 item-title="description" item-value="id" label="Plano de Alimentação" type="text"
-                                variant="outlined" :error-messages="errors.name">
+                                variant="outlined" :error-messages="errors.name" data-test="input-plan">
                             </v-autocomplete>
 
                             <v-text-field v-model="horario" label="Horário" type="text" variant="outlined"
-                                :error-messages="errors.name">
+                                :error-messages="errors.name" data-test="input-hour">
                             </v-text-field>
                             <v-text-field v-model="titulo" label="Título" type="text" variant="outlined"
-                                :error-messages="errors.name">
+                                :error-messages="errors.name" data-test="input-title">
                             </v-text-field>
                             <v-text-field v-model="descricao" label="Descrição" type="text" variant="outlined"
-                                :error-messages="errors.name">
+                                :error-messages="errors.name" data-test="input-description">
                             </v-text-field>
                         </v-form>
 
                         <div class="actions">
                                 <div>
-                                    <v-btn @click="handleSubmit()" type="submit" variant="elevated" color="grey-darken-4 text-amber">
+                                    <v-btn @click="handleSubmit()" type="submit" variant="elevated" color="grey-darken-4 text-amber" data-test="submit-button">
                                         {{ isEditing ? 'Atualizar' : 'Cadastrar' }}
                                     </v-btn>
                                 </div>
@@ -199,12 +199,11 @@ export default {
             this.buscarDieta();
         },
 
-        // dialog() {
-        //    if(this.dialog == true) {
-        //     this.student_id = this.$route.params.id 
-        //     console.log()
-        //    }  
-        // }
+        dialog() {
+           if(this.dialog == false) {
+            this.buscarDieta();
+           }  
+        }
     },
 
     methods: {
@@ -229,6 +228,7 @@ export default {
                 });
         },
 
+        
         editDieta(meal) {
             this.isEditing = true;
             this.mealId = meal.id;
@@ -308,7 +308,7 @@ export default {
 
 
         buscarDieta() {
-            MealService.getMealStudent(this.$route.params.id)
+            MealService.getMealStudent(this.$route?.params?.id)
                 .then((data) => {
                     this.item = data;
                     this.filtrarDieta();
@@ -328,7 +328,7 @@ export default {
         },
 
         buscarDietaDia() {
-            MealService.getMealStudent(this.$route.params.id)
+            MealService.getMealStudent(this.$route?.params?.id)
                 .then((data) => {
                     this.itemDia = data;
                     this.filtrarDietaDia();
