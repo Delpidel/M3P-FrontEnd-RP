@@ -44,6 +44,14 @@
               </v-btn>
               <v-btn
                 variant="elevated"
+                color="grey-darken-1"
+                dark
+                @click="handleDocumentsStudent(student.id)"
+              >
+                <span class="text-white font-weight-bold"> Documentos </span>
+              </v-btn>
+              <v-btn
+                variant="elevated"
                 color="amber darken-4"
                 dark
                 @click="handleDeleteStudent(student.id)"
@@ -102,6 +110,10 @@ export default {
 
     handleEditStudent(studentId) {
       this.$router.push(`/api/students/${studentId}`)
+    },
+
+    handleDocumentsStudent(studentId) {
+      this.$router.push(`/api/students/${studentId}/documents`)
     },
 
     handleDeleteStudent(studentId) {
