@@ -109,11 +109,11 @@ export default {
     },
 
     handleEditStudent(studentId) {
-      this.$router.push(`/api/students/${studentId}`)
+      this.$router.push(`/students/${studentId}`)
     },
 
     handleDocumentsStudent(studentId) {
-      this.$router.push(`/api/students/${studentId}/documents`)
+      this.$router.push(`/students/${studentId}/documents`)
     },
 
     handleDeleteStudent(studentId) {
