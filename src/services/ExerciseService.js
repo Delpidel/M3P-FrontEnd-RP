@@ -12,8 +12,6 @@ class ExerciseService {
         return response.data
     }
 
-}
-    
     async createExercise(body) {
         
         const response = await api.post('exercises', body, {
