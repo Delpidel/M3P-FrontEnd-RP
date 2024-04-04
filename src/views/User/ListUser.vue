@@ -144,12 +144,6 @@ const { xs, smAndDown, mdAndDown } = useDisplay()
 import UserService from '@/services/UserService'
 
 export default {
-  props: {
-    usersTest: {
-      type: Array,
-      required: true
-    }
-  },
   data() {
     return {
       search: '',
