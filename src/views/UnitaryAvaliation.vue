@@ -1,31 +1,57 @@
 <template>
   <v-container>
+    <!-- Detalhes do Estudante -->
     <v-card>
       <v-card-title>
         <h1>Detalhes do Estudante</h1>
       </v-card-title>
       <v-card-text>
-        <v-row v-if="student">
-          <v-col cols="12">
-            <p><strong>ID:</strong> {{ student.id }}</p>
-          </v-col>
-          <v-col cols="12">
-            <p><strong>Nome:</strong> {{ student.name }}</p>
-          </v-col>
-          <v-col cols="12">
-            <p><strong>Idade:</strong> {{ student.age }}</p>
+        <v-col cols="12">
+          <p><strong>Nome:</strong> {{ student?.name }}</p>
+        </v-col>
+        <v-col cols="12">
+          <p><strong>Altura:</strong> {{ student?.height }} m</p>
+        </v-col>
+        <v-col cols="12">
+          <p><strong>Peso:</strong> {{ student?.weight }} kg</p>
+        </v-col>
+        <v-col cols="12">
+          <p><strong>Idade:</strong> {{ student?.age }}</p>
+        </v-col>
+      </v-card-text>
+    </v-card>
+    
+    <v-card>
+      <v-card-title>
+        <h1>Avaliações</h1>
+      </v-card-title>
+      <v-card-text>
+        <v-col cols="12">
+          <p><strong>Observações para Aluno:</strong> {{ avaliation?.observations_to_student }}</p>
+        </v-col>
+        <v-col cols="12">
+          <p><strong>Observações para Nutricionista:</strong> {{ avaliation?.observations_to_nutritionist }}</p>
+        </v-col>
+        <v-col cols="12">
+          <p><strong>Medidas:</strong></p>
+          <ul>
+            <li v-for="(measure, index) in avaliation?.measures" :key="index">
+              {{ index }}: {{ measure }}
+            </li>
+          </ul>
+        </v-col>
+        <v-row>
+          <v-col v-for="(image, index) in avaliationImages" :key="index" cols="6">
+            <img :src="image" alt="Imagem da Avaliação">
           </v-col>
         </v-row>
-        <v-row v-else-if="loading">
-          <v-col cols="12">
-            <p>Carregando...</p>
+        <v-row>
+          <v-col cols="6">
+            <!-- Select para escolher avaliações -->
+            <v-select v-model="selectedAvaliationId" :items="avaliationOptions" label="Escolha uma avaliação" @input="selectAvaliation"></v-select>
           </v-col>
         </v-row>
-        <v-row v-else>
-          <v-col cols="12">
-            <p>{{ errorMessage }}</p>
-          </v-col>
-        </v-row>
+        
       </v-card-text>
     </v-card>
   </v-container>
@@ -37,33 +63,62 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      student: null,
-      loading: true,
-      errorMessage: ''
+      avaliations: [],
+      selectedAvaliationId: null,
+      avaliation: null // Adicionado uma propriedade para armazenar a avaliação selecionada
     };
   },
-  mounted() {
-    const studentId = this.$route.params.id;
-    axios.get(`/api/avaliations/${studentId}`, {
-      baseURL: 'http://127.0.0.1:8000',
-    })
-    .then(response => {
-      this.student = response.data;
-      this.loading = false; // Indica que o carregamento foi concluído com sucesso
-    })
-    .catch(error => {
-      console.error('Erro ao buscar dados do estudante:', error);
-      this.errorMessage = 'Erro ao buscar dados do estudante. Por favor, tente novamente mais tarde.'; // Define a mensagem de erro
-      this.loading = false; // Indica que o carregamento falhou
-    });
-
-    // Configura um temporizador para exibir a mensagem de erro após 5 segundos
-    setTimeout(() => {
-      if (this.loading) {
-        this.errorMessage = 'Não foi possível obter resposta da API após 5 segundos.';
-        this.loading = false;
+  computed: {
+    avaliationOptions() {
+      const options = [];
+      for (let i = 0; i < this.avaliations.length; i++) {
+        const avaliation = this.avaliations[i];
+        options.push({
+          text: avaliation.id,
+          value: avaliation.id
+        });
       }
-    }, 5000);
+      return options;
+    },
+    avaliationImages() {
+      if (this.selectedAvaliationId && Array.isArray(this.avaliations)) { // Verifica se this.avaliations é um array
+        const selectedAvaliation = this.avaliations.find(avaliation => avaliation.id === this.selectedAvaliationId);
+        if (selectedAvaliation) {
+          // Verificar se há imagens e extrair as URLs
+          const images = ['back', 'front', 'left', 'right'].map(key => selectedAvaliation[key]);
+          return images;
+        }
+      }
+      return [];
+    }
   },
+  methods: {
+    fetchAvaliations(studentId) {
+      axios.get(`/api/avaliations/${studentId}`)
+        .then(response => {
+          this.avaliations = response.data;
+        })
+        .catch(error => {
+          console.error('Erro ao obter avaliações:', error);
+        });
+    },
+    selectAvaliation() {
+      if (this.selectedAvaliationId && Array.isArray(this.avaliations)) { // Verifica se this.avaliations é um array
+        // Encontra a avaliação correspondente ao ID selecionado
+        const selectedAvaliation = this.avaliations.find(avaliation => avaliation.id === this.selectedAvaliationId);
+
+        // Atualiza a propriedade avaliation com a avaliação selecionada
+        this.avaliation = selectedAvaliation;
+      } else {
+        // Caso não haja nenhuma avaliação selecionada, define avaliation como null ou um objeto vazio, dependendo da sua lógica de tratamento
+        this.avaliation = null; // ou this.avaliation = {};
+      }
+    }
+  },
+
+  mounted() {
+    const studentId = this.$route.params.studentId;
+    this.fetchAvaliations(studentId);
+  }
 };
 </script>

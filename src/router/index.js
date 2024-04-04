@@ -18,7 +18,7 @@ const router = createRouter({
       component: Home
     },*/
     {
-      path: '/avaliation',
+      path: '/avaliation/:studentId',
       name: 'avaliation',
       component: Avaliation
     }
