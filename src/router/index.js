@@ -2,10 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Dashboard from '../views/Dashboard/Dashbord.vue'
 import Login from '../views/Login/Login.vue'
-import NewUser from '../views/Users/NewUser.vue'
-import WorkoutsStudentsList from '../views/WorkoutsStudentsList.vue'
-import Exemplo from '../views/PaginaExemplo.vue'
 import ListUser from '../views/User/ListUser.vue'
+import NewUser from '../views/User/NewUser.vue'
+import StudentMealPlans from '@/views/Student/StudentMealPlans.vue'
+import WorkoutsStudentsList from '../views/WorkoutsStudentsList.vue'
+
+import Exemplo from '../views/PaginaExemplo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +34,11 @@ const router = createRouter({
       name: 'Novo usuário',
       component: NewUser
     },
+    {
+      path: '/users/:id/edit',
+      name: 'Editar usuário',
+      component: NewUser
+    },
 
     //perfil recepcionista
     {
@@ -53,7 +60,7 @@ const router = createRouter({
     },
     {
       path: '/instructor/students',
-      name: 'Listagem de estudantes',
+      name: 'Listagem estudantes',
       component: Exemplo
     },
 
@@ -68,7 +75,7 @@ const router = createRouter({
     {
       path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
-      component: Exemplo
+      component: StudentMealPlans
     },
     {
       path: '/student/workouts',
