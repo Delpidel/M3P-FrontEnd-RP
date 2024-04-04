@@ -184,7 +184,7 @@
             </v-col>
           </div>
           <v-col class="d-flex justify-center pt-sm-6 pb-sm-0">
-            <router-link to="">
+            <router-link to="/students">
               <v-btn 
                 variant="elevated" 
                 color="amber text-dark-grey-4"
