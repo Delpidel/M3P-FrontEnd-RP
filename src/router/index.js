@@ -1,7 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Dashboard from '../views/Dashbord.vue'
+import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import Exemplo from '../views/PaginaExemplo.vue'
+
+import AvaliationStep01 from '@/components/AvaliationStep01.vue'
+import AvaliationStep02 from '@/components/AvaliationStep02.vue'
+import AvaliationStep03 from '@/components/AvaliationStep03.vue'
 
 import Meal from '../views/Meal.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
@@ -56,26 +61,48 @@ const router = createRouter({
     {
       path: '/instructor/students',
       name: 'Listagem de estudantes',
-      component: Exemplo
+      component: ActiveStudents
     },
 
     //perfil nutricionista
     {
       path: '/active/students',
       name: 'Listagem de estudantes ativos',
-      component: ActiveStudents
+      component: Exemplo
+    },
+
+    {
+      path: '/avaliation/step1',
+      name: 'AvaliationStep01',
+      component: AvaliationStep01
+    },
+    {
+      path: '/avaliation/step2',
+      name: 'AvaliationStep02',
+      component: AvaliationStep02
+    },
+    {
+      path: '/avaliation/step3',
+      name: 'AvaliationStep03',
+      component: AvaliationStep03
     },
 
     {
       path: '/dietas/:id',
       name: 'Meal',
       component: Meal
+
     },
 
     //perfil aluno
     {
       path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
+      component: Exemplo
+    },
+    {
+      path: '/workouts',
+      name: 'Treinos do aluno',
       component: Exemplo
     },
     {
