@@ -137,7 +137,7 @@ export default {
           { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/instructor/students' }
         ],
         NUTRICIONISTA: [
-          { icon: 'mdi-account-check', text: 'Estudantes Ativos', link: '/students-active' }
+          { icon: 'mdi-account-check', text: 'Estudantes Ativos', link: '/active/students' }
         ],
         ALUNO: [
           { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },

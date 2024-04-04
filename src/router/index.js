@@ -8,6 +8,12 @@ import AvaliationStep01 from '@/components/AvaliationStep01.vue'
 import AvaliationStep02 from '@/components/AvaliationStep02.vue'
 import AvaliationStep03 from '@/components/AvaliationStep03.vue'
 
+import Meal from '../views/Meal.vue'
+import Exemplo from '../views/PaginaExemplo.vue'
+import ActiveStudents from '@/views/ActiveStudents.vue'
+
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -19,7 +25,7 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: Home
+      component: Dashboard
     },
 
     //perfil usuário
@@ -55,9 +61,8 @@ const router = createRouter({
     {
       path: '/instructor/students',
       name: 'Listagem de estudantes',
-      component: Exemplo
+      component: ActiveStudents
     },
-    
 
     //perfil nutricionista
     {
@@ -82,9 +87,16 @@ const router = createRouter({
       component: AvaliationStep03
     },
 
+    {
+      path: '/dietas/:id',
+      name: 'Meal',
+      component: Meal
+
+    },
+
     //perfil aluno
     {
-      path: '/meal-plans',
+      path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
       component: Exemplo
     },
@@ -93,8 +105,11 @@ const router = createRouter({
       name: 'Treinos do aluno',
       component: Exemplo
     },
-
-  
+    {
+      path: '/student/workouts',
+      name: 'Treinos do aluno',
+      component: Exemplo
+    }
   ]
 })
 
