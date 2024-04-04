@@ -1,23 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
-import Dashboard from '../views/Dashbord.vue'
+import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
+import Dashboard from '../views/Dashboard.vue'
 import Login from '../views/Login.vue'
+import Exercises from '../views/exercise/ExercisesPage.vue'
+
 import Exemplo from '../views/PaginaExemplo.vue'
+import ExercisesList from '../views/Exercises/ExercisesList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
+  routes:[
     {
       path: '/',
       name: 'Login',
       component: Login
     },
-    {
+   /* {
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard
     },
-
+*/
     //perfil usuário
     {
       path: '/users',
@@ -45,13 +48,19 @@ const router = createRouter({
     //perfil instrutor
     {
       path: '/exercises',
-      name: 'Exercícios',
-      component: Exemplo
+
+      name: 'Exercises',
+      component: ExercisesList  
     },
     {
       path: '/instructor/students',
-      name: 'Listagem de estudantes',
+      name: 'Listagem de estudantes do instrutor',
       component: Exemplo
+    },
+    {
+      path: '/instructor/:id/list-workouts', 
+      name: 'Listagem de treinos do aluno',
+      component: ListStudentWorkout
     },
 
     //perfil nutricionista
