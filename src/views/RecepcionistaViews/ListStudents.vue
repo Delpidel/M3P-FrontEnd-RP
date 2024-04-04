@@ -17,6 +17,7 @@
             placeholder="Pesquise pelo nome, email ou cpf do estudante"
             variant="outlined"
             v-model="searchText"
+            data-test="input-text"
             @input="handleSearch"
           ></v-text-field>
         </v-col>
@@ -33,6 +34,7 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-for="student in filteredStudents" :key="student.id" data-test="row-table">
         <tr v-for="student in filteredStudents" :key="student.id">
           <td>{{ student.name }}</td>
           <td>{{ student.cpf }}</td>
