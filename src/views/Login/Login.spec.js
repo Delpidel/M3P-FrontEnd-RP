@@ -6,7 +6,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
 import Login from './Login.vue'
-import AuthenticationService from '@/services/AuthenticationService'
+import AuthenticationService from '@/services/Auth/AuthenticationService'
 
 const vuetify = createVuetify({
   components,

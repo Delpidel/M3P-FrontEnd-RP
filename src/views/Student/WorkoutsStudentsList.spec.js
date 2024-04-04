@@ -5,7 +5,7 @@ import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components'; 
 import * as directives from 'vuetify/directives'; 
 import WorkoutsStudentsList from './WorkoutsStudentsList.vue';
-import WorkoutsStudentsService from '@/services/WorkoutsStudentsService';
+import WorkoutsStudentsService from '@/services/Student/WorkoutsStudentsService';
 
 const vuetify = createVuetify({ // Obrigatório
     components,

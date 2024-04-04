@@ -21,7 +21,7 @@
             <v-card-text class="d-flex flex-column justify-end">
             <div class="text-center">
               <img
-                src="../assets/Dashboard/aluno-ativo.svg"
+                src="@/assets/Dashboard/aluno-ativo.svg"
                 alt="Imagem de varias alunas de academa se exercitando."
                 class="card-image"
               />
@@ -72,7 +72,7 @@ const { smAndDown, mdAndDown } = useDisplay()
 </script>
 
 <script>
-import AuthenticationService from '../services/AuthenticationService'
+import AuthenticationService from '@/services/Auth/AuthenticationService'
 
 export default {
   data() {

@@ -81,10 +81,10 @@ const { mdAndDown } = useDisplay()
 </script>
 
 <script>
-import api from '../../services/api'
+import api from '@/services/api'
 import * as yup from 'yup'
-import { captureErrorYup } from '../../utils/captureErrorYup'
-import AuthenticationService from '../../services/AuthenticationService'
+import { captureErrorYup } from '@/utils/captureErrorYup'
+import AuthenticationService from '@/services/Auth/AuthenticationService'
 import router from '@/router'
 
 export default {
@@ -185,3 +185,4 @@ section.left::before {
 }
 
 </style>
+../../services/Auth/AuthenticationService

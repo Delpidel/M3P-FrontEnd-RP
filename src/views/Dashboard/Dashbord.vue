@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import DashboardAdmin from '../../components/DashboardAdmin.vue';
-import DashboardReceptionist from '../../components/DashboardReceptionist.vue';
-import DashboardInstructor from '../../components/DashboardInstructor.vue';
-import DashboardNutritionist from '../../components/DashboardNutritionist.vue';
-import DashboardStudent from '../../components/DashboardStudent.vue';
+import DashboardAdmin from '@/components/Dashboard/DashboardAdmin.vue';
+import DashboardReceptionist from '@/components/Dashboard/DashboardReceptionist.vue';
+import DashboardInstructor from '@/components/Dashboard/DashboardInstructor.vue';
+import DashboardNutritionist from '@/components/Dashboard/DashboardNutritionist.vue';
+import DashboardStudent from '@/components/Dashboard/DashboardStudent.vue';
 
 export default {
   components: {

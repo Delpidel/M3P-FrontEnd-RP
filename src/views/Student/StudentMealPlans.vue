@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import MealPlanService from '@/services/MealPlanService';
+import MealPlanService from '@/services/Student/MealPlanService';
 import moment from 'moment';
 
 export default {
@@ -180,3 +180,4 @@ export default {
     }
 }
 </script>
+@/services/Student/MealPlanService

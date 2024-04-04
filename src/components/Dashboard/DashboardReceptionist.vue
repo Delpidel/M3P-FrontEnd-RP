@@ -20,23 +20,23 @@
           <v-card class="user-card elevation-10" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/Dashboard/dietas.svg"
-                alt="Imagem com pratos de comida que remetem a dietas"
+                src="@/assets/Dashboard/alunas-academia.svg"
+                alt="Imagem de varias alunas de academa se exercitando."
                 class="card-image"
               />
               <div class="text-center">
-                <v-card-title>Minhas Dietas</v-card-title>
-                <v-card-text class="text-h3 font-weight-bold">{{ registeredMealPlans }}</v-card-text>
+                <v-card-title>Estudantes Cadastrados</v-card-title>
+                <v-card-text class="text-h3 font-weight-bold">{{ registeredStudents }}</v-card-text>
                 <v-btn
-                  @click="navigateToMealPlans"
-                  append-icon="mdi-food-apple"
+                  @click="navigateToCreateStudent"
+                  append-icon="mdi-dumbbell"
                   size="large"
                   variant="elevated"
                   color="grey-darken-4 text-amber"
                   class="font-weight-bold my-6"
                   :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
                 >
-                  Visualizar
+                  Cadastrar
                 </v-btn>
               </div>
             </v-card-text>
@@ -46,16 +46,35 @@
           <v-card class="user-card elevation-10" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
             <img
-              src="../assets/Dashboard/treinos.svg"
-              alt="Imagem com um halteres que remetem a treinos"
+              src="@/assets/Dashboard/alunos-academia.svg"
+              alt="Imagem de varios alunos de academa se exercitando."
               class="card-image"
             />
             <div class="text-center">
-              <v-card-title>Meus Treinos</v-card-title>
-              <v-card-text class="text-h3 font-weight-bold">{{ registeredWorkouts }}</v-card-text>
+              <v-card-title>Estudantes Cadastrados</v-card-title>
+              <v-card-text class="text-h3 font-weight-bold">{{ registeredStudents }}</v-card-text>
+              <span class="text-h3 font-weight-bold" v-if="!showStudents"></span>
+              <v-list class="user-card" v-else>
+                <v-list-item v-for="student in students" :key="student.id">
+                  <v-list-item-title>{{ student.name }}</v-list-item-title>
+                </v-list-item>
+                <v-btn
+                  to="/students"
+                  append-icon="mdi-account-circle"
+                  size="large"
+                  variant="elevated"
+                  color="amber text-grey-darken-4"
+                  class="font-weight-bold my-6"
+                  :class="
+                    smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'
+                  "
+                >
+                  Listagem completa
+                </v-btn>
+              </v-list>
               <v-btn
-                @click="navigateToWorkouts"
-                append-icon="mdi-dumbbell"
+                @click="toggleStudents"
+                append-icon="mdi-account-circle"
                 size="large"
                 variant="elevated"
                 color="grey-darken-4 text-amber"
@@ -79,62 +98,42 @@ const { smAndDown, mdAndDown } = useDisplay()
 </script>
 
 <script>
-import MealPlanService from '@/services/MealPlanService'
-import WorkoutsStudentsService from '@/services/WorkoutsStudentsService'
+import AuthenticationService from '@/services/Auth/AuthenticationService'
 
 export default {
   data() {
     return {
       profileName: localStorage.getItem('@name'),
-      workouts: 0,
-      mealPlans: 0
+      students: [],
+      showStudents: false
     }
   },
   created() {
-    this.getPlans()
-    this.getWorkouts()
+    this.fetchStudentsData()
   },
   computed: {
-    registeredMealPlans() {
-      return this.mealPlans
-    },
-    registeredWorkouts() {
-      return this.workouts
+    registeredStudents() {
+      return this.students.length
     }
   },
   methods: {
-    navigateToMealPlans() {
-      this.$router.push('/student/meal-plans')
+    async fetchStudentsData() {
+      try {
+        const students = await AuthenticationService.fetchStudentsData()
+        this.students = students
+      } catch (error) {
+        console.error('Erro ao buscar dados do painel de administração:', error)
+      }
     },
-    navigateToWorkouts() {
-      this.$router.push('/student/workouts')
+    navigateToCreateStudent() {
+      this.$router.push('/students/new')
     },
-
-    getPlans() {
-      MealPlanService.getAllMealPlans()
-        .then((data) => {
-          const totalMealPlans = data.length
-          this.mealPlans = totalMealPlans
-        })
-        .catch(() => (this.snackbar = true))
-    },
-    getWorkouts() {
-      WorkoutsStudentsService.workoutsByStudentList()
-        .then((data) => {
-          const workoutsArray = Object.values(data.workouts)
-          const totalWorkouts = workoutsArray.reduce(
-            (total, exercises) => total + exercises.length,
-            0
-          )
-
-          this.workouts = totalWorkouts
-        })
-        .catch(() => (this.snackbar = true))
+    toggleStudents() {
+      this.showStudents = !this.showStudents
     }
   }
 }
 </script>
-
 <style scoped>
 .container {
   width: 100%;
