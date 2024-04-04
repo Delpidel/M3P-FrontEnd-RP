@@ -9,10 +9,7 @@ export const schemaCreateUser = yup.object().shape({
     .string()
     .required('O campo email é obrigatório.')
     .email('O campo email deve conter um e-mail válido.'),
-  profile: yup
-    .string()
-    .required('O perfil é obrigatório.')
-    .oneOf(['2', '3', '4'], 'Selecione um perfil válido.'),
+  profile: yup.string().required('O perfil é obrigatório.'),
   photo: yup
     .mixed()
     .nullable()

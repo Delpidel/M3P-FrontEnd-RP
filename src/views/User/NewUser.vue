@@ -1,12 +1,14 @@
 <template>
   <div class="container">
     <div class="d-flex align-center" :style="smAndDown ? 'justify-content:center;' : ''">
-      <h1 class="py-4 py-md-12 font-weight-medium">Cadastrar Usuário</h1>
+      <h1 class="py-4 py-md-12 font-weight-medium">
+        {{ userId ? 'Editar Usuário' : 'Cadastrar Usuário' }}
+      </h1>
       <v-icon size="x-large" class="pl-10" color="amber">mdi-account-outline</v-icon>
     </div>
 
     <div class="cardImage pa-10 mt-10" :class="{ disabled: loading }">
-      <v-form ref="form" @submit.prevent="createNewUser">
+      <v-form ref="form" @submit.prevent="handleSubmit">
         <v-row>
           <v-col cols="12" sm="5" md="4">
             <div :style="smAndDown ? 'display:flex; justify-content:center;' : ''">
@@ -33,6 +35,7 @@
                   :error-messages="errors.profile"
                   variant="outlined"
                   data-test="profile-select"
+                  :disabled="userId ? true : false"
                 ></v-select>
               </v-col>
 
@@ -81,14 +84,18 @@
               type="submit"
               variant="elevated"
               color="grey-darken-4 text-amber"
-              class="font-weight-bold"
+              :class="{
+                'font-weight-bold': true,
+                'px-sm-2 px-md-11': userId
+              }"
               :ripple="false"
               size="large"
               v-if="!loading"
               data-test="submit-button"
             >
-              Cadastrar
+              {{ userId ? 'Editar' : 'Cadastrar' }}
             </v-btn>
+
             <v-btn
               type="submit"
               variant="elevated"
@@ -98,7 +105,7 @@
               size="large"
               v-if="loading"
             >
-              Cadastrando
+              {{ userId ? 'Editando' : 'Cadastrando' }}
               <svg
                 version="1.1"
                 id="loader-1"
@@ -133,7 +140,7 @@
       </v-form>
 
       <v-snackbar v-model="snackbarSuccess" :timeout="duration" color="success" location="top">
-        Usuário cadastrado com sucesso!
+        {{ userId ? ' Usuário editado com sucesso!' : 'Usuário cadastrado com sucesso!' }}
       </v-snackbar>
       <v-snackbar v-model="snackbarError" :timeout="duration" color="red-darken-2" location="top">
         {{ errorMessage }}
@@ -159,6 +166,14 @@ import { ref } from 'vue'
 
 const loading = ref(false)
 
+const token = localStorage.getItem('@token')
+const config = {
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'multipart/form-data'
+  }
+}
+
 export default {
   components: {
     ImageUploadPreview
@@ -168,11 +183,7 @@ export default {
     return {
       photo: null,
       profile: null,
-      profileUsers: [
-        { value: '2', title: 'Recepcionista' },
-        { value: '3', title: 'Instrutor' },
-        { value: '4', title: 'Nutricionista' }
-      ],
+      profileUsers: [],
       name: '',
       email: '',
 
@@ -181,11 +192,59 @@ export default {
       errorMessage: '',
       duration: 3000,
 
-      errors: {}
+      errors: {},
+
+      userId: this.$route?.params?.id
+    }
+  },
+
+  created() {
+    this.initializeProfileOptions()
+  },
+
+  mounted() {
+    if (this.userId) {
+      this.loadUserData()
     }
   },
 
   methods: {
+    initializeProfileOptions() {
+      if (!this.userId) {
+        this.profileUsers = [
+          { value: '2', title: 'Recepcionista' },
+          { value: '3', title: 'Instrutor' },
+          { value: '4', title: 'Nutricionista' }
+        ]
+      } else {
+        this.profileUsers = [
+          { value: '1', title: 'Administrador' },
+          { value: '2', title: 'Recepcionista' },
+          { value: '3', title: 'Instrutor' },
+          { value: '4', title: 'Nutricionista' },
+          { value: '5', title: 'Aluno' }
+        ]
+      }
+    },
+
+    loadUserData() {
+      UserService.getOneUser(this.userId, config)
+        .then((response) => {
+          this.name = response.name
+          this.email = response.email
+          this.profile = response.profile_id.toString()
+
+          if (response.file !== null) {
+            this.photo = response.file.url
+            this.$refs.image.setImageFromURL(response.file.url)
+          }
+        })
+        .catch((error) => {
+          this.errorMessage = error
+          this.snackbarError = true
+        })
+    },
+
     validateSync() {
       this.errors = {}
       try {
@@ -210,36 +269,46 @@ export default {
       return true
     },
 
-    createNewUser() {
+    handleSubmit() {
       if (this.validateSync() === false) return
 
       const formData = new FormData()
       formData.append('name', this.name)
       formData.append('email', this.email)
       formData.append('profile_id', this.profile)
-      if (this.photo) formData.append('photo', this.photo)
-
-      const token = localStorage.getItem('@token')
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      }
 
       loading.value = true
-      UserService.createUser(formData, config)
-        .then(() => {
-          this.snackbarSuccess = true
-          loading.value = false
-          this.$refs.image.removeImage()
-          this.$refs.form.reset()
-        })
-        .catch((error) => {
-          this.errorMessage = error.response.data.message
-          this.snackbarError = true
-          loading.value = false
-        })
+
+      if (this.userId) {
+        if (typeof this.photo !== 'string') formData.append('photo', this.photo)
+
+        UserService.updateUser(this.userId, formData, config)
+          .then(() => {
+            this.snackbarSuccess = true
+            loading.value = false
+          })
+          .catch((error) => {
+            this.errorMessage = error.response.data.message
+            this.snackbarError = true
+            loading.value = false
+          })
+        return
+      } else {
+        if (this.photo) formData.append('photo', this.photo)
+
+        UserService.createUser(formData, config)
+          .then(() => {
+            this.snackbarSuccess = true
+            loading.value = false
+            this.$refs.image.removeImage()
+            this.$refs.form.reset()
+          })
+          .catch((error) => {
+            this.errorMessage = error.response.data.message
+            this.snackbarError = true
+            loading.value = false
+          })
+      }
     },
 
     updatePhoto(imageData) {
