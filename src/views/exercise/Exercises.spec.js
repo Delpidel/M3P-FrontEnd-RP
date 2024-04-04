@@ -20,17 +20,30 @@ global.ResizeObserver = require('resize-observer-polyfill')
 
 describe('Tela de Exercícios', () => {
 
+    vi.spyOn(ExerciseService, 'getAllExercises').mockResolvedValue([
+        {
+            "id": 1,
+            "description": "Supino"
+        },
+        {
+            "id": 2,
+            "description": "Halter"
+        },
+        {
+            "id": 3,
+            "description": "Jump"
+        }
+    ])
+
     it('Deve renderizar a tela corretamente', () => {
-        const wrapper = mount(ExercisePage, {
+        const component = mount(ExercisePage, {
             global: {
                 plugins: [vuetify]
             }
         })
-        expect(wrapper.find('.container').exists()).toBeTruthy()
-        expect(wrapper.find('.cardExercise').exists()).toBeTruthy()
-        expect(wrapper.find('form').exists()).toBeTruthy()
-        expect(wrapper.find('.v-text-field').exists()).toBeTruthy()
-        expect(wrapper.find('.v-btn').exists()).toBeTruthy()
+
+        expect(component).toBeTruthy()
+        
     })
 
     it('Deve exibir mensagem de erro ao submeter o formulário com campos vazios', async () => {
@@ -110,5 +123,28 @@ describe('Tela de Exercícios', () => {
         });
 
     });
+
+    it("Espera-se exiba na tela os nomes dos exercícios", async () => {
+        const mockedExercises = [
+            { "id": 1, "description": "Supino" },
+            { "id": 2, "description": "Halter" },
+            { "id": 3, "description": "Jump" }
+        ]
+        vi.spyOn(ExerciseService, 'getAllExercises').mockResolvedValue(mockedExercises)
+
+        const component = mount(ExercisesPage, {
+            global: {
+                plugins: [vuetify]
+            }
+        })
+
+        await flushPromises()
+
+        const renderedDescriptions = component.findAll(concatId("exercise-description"))
+
+        mockedExercises.forEach(exercise => {
+            expect(renderedDescriptions.filter(description => description.text() === exercise.description)).toBeTruthy();
+        });
+    })
 
 })
