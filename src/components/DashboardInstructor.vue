@@ -37,8 +37,8 @@
           >
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/instructor/dashboard/left-card-img-woman.png"
-                alt="Imagem de uma mulher praticando levantamento de peso na barra."
+                src="../assets/Dashboard/alunos-academia.svg"
+                alt="Imagem de 4 alunos fazendo exercícios na academia."
                 class="card-image"
               />
               <div class="text-center">
@@ -74,8 +74,8 @@
           >
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/instructor/dashboard/right-card-img-man.png"
-                alt="Imagem de um homem praticando levantamento de peso na barra."
+                src="../assets/Dashboard/equipamentos-exercicios.svg"
+                alt="Imagem de varios equipamentos de academia um ao lado do outro."
                 class="card-image"
               />
               <div class="text-center">
