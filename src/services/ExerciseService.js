@@ -11,8 +11,6 @@ class ExerciseService {
         const response = await api.get(`/exercises?page=${page}`)
         return response.data
     }
-
-}
     
     async createExercise(body) {
         
