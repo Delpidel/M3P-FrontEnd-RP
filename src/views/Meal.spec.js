@@ -41,9 +41,11 @@ describe("Tela cadastro de refeições", () => {
         expect(component).toBeTruthy()
     })
 
+ 
+
     it("Espera-se que os dados do formulário sejam enviados", async () => {
 
-        const spyCreateMeal = vi.spyOn(MealService, 'CreateMeal').mockResolvedValue({})
+        const spyCreateMeal = vi.spyOn(MealService, 'createMeal').mockResolvedValue({})
 
         const component = mount(Meal, {
             global: {
@@ -55,7 +57,6 @@ describe("Tela cadastro de refeições", () => {
                 }
             } 
         })
-
         await flushPromises()
 
         component.getComponent("[data-test='input-plan']").setValue("1")
@@ -65,9 +66,40 @@ describe("Tela cadastro de refeições", () => {
 
         component.getComponent("[data-test='submit-button']").trigger("submit")
 
-        expect(spyCreateMeal).toBeCalled()
+        await flushPromises()
+
+        expect(spyCreateMeal).toBeCalledWith({
+            meal_plan_id: 1,
+            hour: '12:00',
+            title: 'Almoço',
+            description: 'Arroz e feijão',
+            day: 'SEGUNDA'
+        })
         
     })
+
+    it('Espera-se que mostre um erro ao enviar o formulário sem um nome', async () => {
+
+        const component = mount(Meal, {
+            global: {
+                plugins: [vuetify]
+            }
+        })
+
+        await flushPromises()
+
+        component.getComponent("[data-test='input-plan']").setValue("1")
+        component.getComponent("[data-test='input-hour']").setValue("12:00:00")
+        // component.getComponent("[data-test='input-title']").setValue("almoço")
+        component.getComponent("[data-test='input-description']").setValue("baião")
+
+        component.getComponent("[data-test='submit-button']").trigger("submit")
+
+        await flushPromises() 
+
+        expect(component.text()).toContain("A refeição é obrigatória")
+
+     })
 
    
 })
