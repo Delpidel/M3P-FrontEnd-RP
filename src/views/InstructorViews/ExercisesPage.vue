@@ -7,30 +7,20 @@
     </div>
 
     <div class="cardImage">
-      <div 
-      class="cardContent" 
-      :style="smAndDown ? 'flex-direction: column;  padding:8%' : 'flex-direction: row'">
-        
-        <v-form 
-          @submit.prevent="addExercise" 
-          ref="form" class="d-flex"
-          :style="xs ? 'flex-direction: column;' : 'flex-direction: row'">
-            
-            <v-text-field 
-              v-model="description" 
-              label="Digite o nome do exercício" 
-              :error-messages="errors.description"
-              variant="outlined" class="pl-md-2"
-              data-test="input-description">
-            </v-text-field>
+      <div class="cardContent" :style="smAndDown ? 'flex-direction: column;  padding:8%' : 'flex-direction: row'">
 
-            <v-btn 
-              type="submit" variant="elevated" color="grey-darken-4 text-amber"
-              class="font-weight-bold px-md-16 ml-sm-5 ml-md-10 mt-2 mt-md-0" 
-              height="60px" :ripple="false" :style="xs ? 'height: 45px;' : 'height: 60px'"
-              data-test="submit-button">
-              Cadastrar
-            </v-btn>
+        <v-form @submit.prevent="addExercise" ref="form" class="d-flex"
+          :style="xs ? 'flex-direction: column;' : 'flex-direction: row'">
+
+          <v-text-field v-model="description" label="Digite o nome do exercício" :error-messages="errors.description"
+            variant="outlined" class="pl-md-2" data-test="input-description">
+          </v-text-field>
+
+          <v-btn type="submit" variant="elevated" color="grey-darken-4 text-amber"
+            class="font-weight-bold px-md-16 ml-sm-5 ml-md-10 mt-2 mt-md-0" height="60px" :ripple="false"
+            :style="xs ? 'height: 45px;' : 'height: 60px'" data-test="submit-button">
+            Cadastrar
+          </v-btn>
         </v-form>
 
         <v-table class="mt-4 mt-md-10">
@@ -40,25 +30,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="exercise in exercises.data" :key="exercise.id" data-test="exercise-description">
+            <tr v-for="exercise in exercises" :key="exercise.id" data-test="exercise-description">
               <td>{{ exercise.description }}</td>
             </tr>
           </tbody>
         </v-table>
-
-        <v-pagination 
-          v-model="exercises.current_page" 
-          :disabled="loading" 
-          :length="exercises.last_page"
-          @click="() => getExercises()">
-        </v-pagination>
 
         <v-snackbar v-model="snackbarSuccess" :timeout="duration" color="success" location="top">
           Cadastrado com sucesso!
         </v-snackbar>
 
         <v-snackbar v-model="snackbarError" :timeout="duration" color="red-darken-2" location="top">
-          Erro ao cadastrar o exercício!
+          Exercício já foi cadastrado!
         </v-snackbar>
 
         <v-snackbar v-model="snackbarLoadError" :timeout="duration" color="red-darken-2" location="top">
@@ -69,12 +52,10 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { useDisplay } from 'vuetify'
 const { xs, smAndDown, mdAndDown } = useDisplay()
 </script>
-
 <script>
 import * as yup from 'yup'
 import { captureErrorYup } from '../../utils/captureErrorYup'
@@ -95,51 +76,55 @@ export default {
       loading: false
     }
   },
+  watch: {
+    exercises(newValue) {
+      this.exercises = newValue;
+    }
+  },
   mounted() {
     this.getExercises()
   },
   methods: {
-    load(){
+    load() {
       this.loading = true
       setTimeout(() => {
         this.loading = false
-      }, 5000);
+      }, 2000);
     },
     getExercises() {
       this.load();
       ExerciseService.getAllExercises(this.exercises.current_page)
         .then((response) => {
-          this.exercises = response
+          this.exercises = response;
+          this.exercises.sort((a, b) => a.description.localeCompare(b.description));
         })
         .catch((error) => {
-          console.log(error)
-          this.snackbarLoadError = true
-        })
+          console.error('Erro ao carregar os exercícios:', error);
+          this.snackbarLoadError = true;
+        });
     },
     addExercise() {
       try {
         const body = {
           description: this.description
         }
-
         schemaExerciseForm.validateSync(body, { abortEarly: false })
-
         this.errors = {}
 
-        ExerciseService.createExercises(body)
+        ExerciseService.createExercise(body)
           .then(() => {
             this.snackbarSuccess = true
-            this.getExercises()
+            this.description = ''
             this.$refs.form.reset()
+            this.getExercises();
           })
           .catch((error) => {
-            console.log(error)
-            this.snackbarError = true
+            if (error.response.status === 409) {
+              this.snackbarError = true;
+            }
           })
       } catch (error) {
-        console.log(error)
         if (error instanceof yup.ValidationError) {
-          console.log(error)
           this.errors = captureErrorYup(error)
         }
       }
@@ -152,8 +137,7 @@ export default {
 .container {
   width: 100%;
   min-height: 100%;
-}
-
+} 
 .cardImage {
   border-radius: 2rem;
   background-image: url(bg_pags.jpg);
