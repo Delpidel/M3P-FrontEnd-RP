@@ -53,13 +53,14 @@
             <v-row>
               <v-col cols="12">
                 <h3 class="mt-4">Documentos Cadastrados</h3>
-                <v-list>
+                <v-list v-if="documents.length > 0">
                   <v-list-item v-for="(document, index) in documents" :key="index">
                     <v-list-item-content>
                       <v-list-item-title>{{ document.title }}</v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list>
+                <span v-else>Nenhum documento cadastrado</span>
               </v-col>
             </v-row>
           </v-card>
@@ -70,77 +71,77 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
 
 export default {
   data() {
     return {
       description: '',
       selectedFile: null,
-      studentId: null,
       isLoading: false,
       success: false,
       showError: false,
       studentName: '',
-      documents: []
-    }
+      documents: [],
+      studentId: null
+    };
   },
   methods: {
     async sendDocument() {
       if (!this.selectedFile || !this.description) {
-        alert('Por favor, preencha todos os campos.')
-        return
+        alert('Por favor, preencha todos os campos.');
+        return;
       }
 
-      const formData = new FormData()
-      formData.append('title', this.description)
-      formData.append('document', this.selectedFile)
+      const formData = new FormData();
+      formData.append('title', this.description);
+      formData.append('document', this.selectedFile);
 
-      this.isLoading = true
+      this.isLoading = true;
 
       try {
         const response = await axios.post(
           `http://localhost:8000/api/students/${this.studentId}/documents`,
           formData
-        )
+        );
 
         if (response.status === 200) {
-          this.success = true
-          this.description = ''
-          this.$refs.fileInput.reset()
-          this.fetchDocuments()
-          alert('Documento enviado com sucesso!')
+          this.success = true;
+          this.description = '';
+          this.$refs.fileInput.reset();
+          this.fetchDocuments();
+          alert('Documento enviado com sucesso!');
         } else {
-          this.showError = true
+          this.showError = true;
         }
       } catch (error) {
-        console.error('Erro ao enviar documento:', error)
-        this.showError = true
+        console.error('Erro ao enviar documento:', error);
+        this.showError = true;
       } finally {
-        this.isLoading = false
+        this.isLoading = false;
       }
     },
     async fetchDocuments() {
       try {
         const response = await axios.get(
           `http://localhost:8000/api/students/${this.studentId}/documents`
-        )
+        );
         if (response.status === 200) {
-          this.documents = response.data
+          this.documents = response.data;
         } else {
-          throw new Error('Erro ao obter documentos do estudante')
+          throw new Error('Erro ao obter documentos do estudante');
         }
       } catch (error) {
-        console.error('Erro ao obter documentos do estudante:', error)
-        alert('Erro ao obter documentos do estudante')
+        console.error('Erro ao obter documentos do estudante:', error);
+        alert('Erro ao obter documentos do estudante');
       }
     }
   },
   async created() {
-    await this.fetchStudentId()
-    await this.fetchDocuments()
+    this.studentId = this.$route.params.id;
+    await this.fetchDocuments();
   }
-}
+};
 </script>
 
 <style scoped>
