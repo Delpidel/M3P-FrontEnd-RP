@@ -22,8 +22,8 @@ class UserService {
   }
 
   async updateStatusUserDelete(userId, body) {
-      const response = await api.put(`users/${userId}`, body)
-      return response
+    const response = await api.put(`users/${userId}`, body)
+    return response
   }
 }
 

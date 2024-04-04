@@ -1,9 +1,9 @@
 <template>
   <v-container fluid>
     <div class="container">
-      <v-row >
+      <v-row>
         <v-col cols="12" md="10" offset-md="1">
-          <v-card class="title-card elevation-10" flat @click="atualizarFraseAleatoria">
+          <v-card class="title-card elevation-10" flat>
             <v-card-text class="d-flex flex-column align-center">
               <div class="d-flex align-center justify-center">
                 <v-icon class="mr-3" size="36">mdi-weight-lifter</v-icon>
@@ -20,21 +20,15 @@
           <v-card class="user-card elevation-10" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/Dashboard/equipamentos-exercicios.svg"
-                alt="Imagem com equipamentos que remetem a exercicios"
+                src="@/assets/Dashboard/alunas-academia.svg"
+                alt="Imagem de varias alunas de academa se exercitando."
                 class="card-image"
               />
               <div class="text-center">
-                <v-card-title>Exercícios Registrados</v-card-title>
-                <v-card-text class="text-h3 font-weight-bold">{{ registeredExercises }}</v-card-text>
-                <span class="text-h3 font-weight-bold" v-if="!showExercises"></span>
-                <v-list class="user-card" v-else>
-                  <v-list-item v-for="exercise in exercises" :key="exercise.id">
-                      <v-list-item-title>{{ exercise.description }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
+                <v-card-title>Estudantes Cadastrados</v-card-title>
+                <v-card-text class="text-h3 font-weight-bold">{{ registeredStudents }}</v-card-text>
                 <v-btn
-                  @click="toggleExercises"
+                  @click="navigateToCreateStudent"
                   append-icon="mdi-dumbbell"
                   size="large"
                   variant="elevated"
@@ -42,7 +36,7 @@
                   class="font-weight-bold my-6"
                   :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
                 >
-                  Visualizar
+                  Cadastrar
                 </v-btn>
               </div>
             </v-card-text>
@@ -52,44 +46,34 @@
           <v-card class="user-card elevation-10" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
             <img
-              src="../assets/Dashboard/users.svg"
-              alt="Imagem com 5 personagens fazendo referencia aos 5 perfils do sistema: admin, recepcionista, nutricionista, instrutor e aluno."
+              src="@/assets/Dashboard/alunos-academia.svg"
+              alt="Imagem de varios alunos de academa se exercitando."
               class="card-image"
             />
             <div class="text-center">
-              <v-card-title>Usuários Cadastrados</v-card-title>
-              <v-card-text class="text-h3 font-weight-bold">{{ totalUsers }}</v-card-text>
-              <span class="text-h3 font-weight-bold" v-if="!showUsers"></span>
+              <v-card-title>Estudantes Cadastrados</v-card-title>
+              <v-card-text class="text-h3 font-weight-bold">{{ registeredStudents }}</v-card-text>
+              <span class="text-h3 font-weight-bold" v-if="!showStudents"></span>
               <v-list class="user-card" v-else>
-                <v-list-item v-for="(count, profile) in profiles" :key="profile">
-                    <v-list-item-title>{{ profile }}: {{ count }}</v-list-item-title>
+                <v-list-item v-for="student in students" :key="student.id">
+                  <v-list-item-title>{{ student.name }}</v-list-item-title>
                 </v-list-item>
                 <v-btn
-                  to="/users"
-                  append-icon="mdi-account-circle"
-                  size="large"
-                  variant="elevated"
-                  color="grey-darken-4 text-amber"
-                  class="font-weight-bold my-6 mx-2"
-                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
-                >
-                  Listagem completa
-                </v-btn>
-                
-                <v-btn
-                  @click="navigateToCreateUser"
+                  to="/students"
                   append-icon="mdi-account-circle"
                   size="large"
                   variant="elevated"
                   color="amber text-grey-darken-4"
-                  class="font-weight-bold my-6 mx-2"
-                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+                  class="font-weight-bold my-6"
+                  :class="
+                    smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'
+                  "
                 >
-                  Cadastrar Usuário
+                  Listagem completa
                 </v-btn>
               </v-list>
               <v-btn
-                @click="toggleUsers"
+                @click="toggleStudents"
                 append-icon="mdi-account-circle"
                 size="large"
                 variant="elevated"
@@ -99,7 +83,6 @@
               >
                 Visualizar
               </v-btn>
-
             </div>
           </v-card-text>
           </v-card>
@@ -115,51 +98,42 @@ const { smAndDown, mdAndDown } = useDisplay()
 </script>
 
 <script>
-import AuthenticationService from '../services/AuthenticationService'
+import AuthenticationService from '@/services/Auth/AuthenticationService'
 
 export default {
   data() {
     return {
       profileName: localStorage.getItem('@name'),
-      registeredExercises: 0,
-      profiles: {},
-      exercises: [],
-      showExercises: false,
-      showUsers: false
+      students: [],
+      showStudents: false
     }
   },
   created() {
-    this.fetchDashboardData()
+    this.fetchStudentsData()
+  },
+  computed: {
+    registeredStudents() {
+      return this.students.length
+    }
   },
   methods: {
-    async fetchDashboardData() {
+    async fetchStudentsData() {
       try {
-        const { registered_exercises, profiles, exercises } = await AuthenticationService.fetchDashboardData()
-        this.registeredExercises = registered_exercises
-        this.profiles = profiles
-        this.exercises = exercises
+        const students = await AuthenticationService.fetchStudentsData()
+        this.students = students
       } catch (error) {
         console.error('Erro ao buscar dados do painel de administração:', error)
       }
     },
-    toggleExercises() {
-      this.showExercises = !this.showExercises
+    navigateToCreateStudent() {
+      this.$router.push('/students/new')
     },
-    toggleUsers() {
-      this.showUsers = !this.showUsers
-    },
-    navigateToCreateUser() {
-      this.$router.push('/users/new')
-    }
-  },
-  computed: {
-    totalUsers() {
-      return Object.values(this.profiles).reduce((total, count) => total + count, 0)
+    toggleStudents() {
+      this.showStudents = !this.showStudents
     }
   }
 }
 </script>
-
 <style scoped>
 .container {
   width: 100%;
@@ -185,6 +159,7 @@ export default {
 .card-image {
   max-width: 100%;
   height: auto;
+  margin-bottom: 10px; /* Adiciona um espaço entre a imagem e o texto */
 }
 
 @media (max-width: 768px) {

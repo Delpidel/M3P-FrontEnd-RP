@@ -14,7 +14,7 @@ const vuetify = createVuetify({ // obrigatório
 global.ResizeObserver = require('resize-observer-polyfill') // obrigatório
 
 import StudentMealPlans from './StudentMealPlans.vue'
-import MealPlanService from '@/services/MealPlanService'
+import MealPlanService from '@/services/Student/MealPlanService'
 
 
 

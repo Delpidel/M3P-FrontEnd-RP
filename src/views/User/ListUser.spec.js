@@ -13,7 +13,7 @@ const vuetify = createVuetify({
 global.ResizeObserver = require('resize-observer-polyfill')
 
 import ListUser from './ListUser.vue'
-import UserService from "@/services/UserService";
+import UserService from "@/services/User/UserService";
 import { concatId } from "@/utils/tests/getComponent";
 
 describe("Tela de listagem de usuários", () => {
