@@ -141,7 +141,7 @@ const { xs, smAndDown, mdAndDown } = useDisplay()
 </script>
 
 <script>
-import UserService from '@/services/UserService'
+import UserService from '@/services/User/UserService'
 
 export default {
   data() {
