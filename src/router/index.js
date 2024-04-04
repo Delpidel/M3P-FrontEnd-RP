@@ -1,7 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Dashboard from '../views/Dashbord.vue'
-import Login from '../views/Login.vue'
+import Dashboard from '../views/Dashboard/Dashbord.vue'
+import Login from '../views/Login/Login.vue'
+import ListUser from '../views/User/ListUser.vue'
+import NewUser from '../views/User/NewUser.vue'
+import StudentMealPlans from '@/views/Student/StudentMealPlans.vue'
+import WorkoutsStudentsList from '@/views/Student/WorkoutsStudentsList.vue'
+
 import Exemplo from '../views/PaginaExemplo.vue'
 
 const router = createRouter({
@@ -22,12 +27,17 @@ const router = createRouter({
     {
       path: '/users',
       name: 'Listagem de usuários',
-      component: Exemplo
+      component: ListUser
     },
     {
       path: '/users/new',
       name: 'Novo usuário',
-      component: Exemplo
+      component: NewUser
+    },
+    {
+      path: '/users/:id/edit',
+      name: 'Editar usuário',
+      component: NewUser
     },
 
     //perfil recepcionista
@@ -50,7 +60,7 @@ const router = createRouter({
     },
     {
       path: '/instructor/students',
-      name: 'Listagem de estudantes',
+      name: 'Listagem estudantes',
       component: Exemplo
     },
 
@@ -65,12 +75,12 @@ const router = createRouter({
     {
       path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
-      component: Exemplo
+      component: StudentMealPlans
     },
     {
       path: '/student/workouts',
-      name: 'Treinos do aluno',
-      component: Exemplo
+      name: 'WorkoutsStudentsList',
+      component: WorkoutsStudentsList
     }
   ]
 })
