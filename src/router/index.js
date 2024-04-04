@@ -2,9 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Dashboard from '../views/Dashboard/Dashbord.vue'
 import Login from '../views/Login/Login.vue'
-import NewUser from '../views/User/NewUser.vue'
 import ListUser from '../views/User/ListUser.vue'
+import NewUser from '../views/User/NewUser.vue'
+import StudentMealPlans from '@/views/Student/StudentMealPlans.vue'
 import WorkoutsStudentsList from '../views/WorkoutsStudentsList.vue'
+
 import Exemplo from '../views/PaginaExemplo.vue'
 
 const router = createRouter({
@@ -58,7 +60,7 @@ const router = createRouter({
     },
     {
       path: '/instructor/students',
-      name: 'Listagem de estudantes',
+      name: 'Listagem estudantes',
       component: Exemplo
     },
 
@@ -73,7 +75,7 @@ const router = createRouter({
     {
       path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
-      component: Exemplo
+      component: StudentMealPlans
     },
     {
       path: '/student/workouts',
