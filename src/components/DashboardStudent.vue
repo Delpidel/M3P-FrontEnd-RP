@@ -79,8 +79,8 @@ const { smAndDown, mdAndDown } = useDisplay()
 </script>
 
 <script>
-import MealPlanService from '@/services/MealPlanService'
-import WorkoutsStudentsService from '@/services/WorkoutsStudentsService'
+import MealPlanService from '@/services/Student/MealPlanService'
+import WorkoutsStudentsService from '@/services/Student/WorkoutsStudentsService'
 
 export default {
   data() {
@@ -175,3 +175,4 @@ export default {
   }
 }
 </style>
+@/services/Student/WorkoutsStudentsService@/services/Student/MealPlanService

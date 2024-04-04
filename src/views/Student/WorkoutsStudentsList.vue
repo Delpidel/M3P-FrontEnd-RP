@@ -2,7 +2,7 @@
   <div class="container">
     <v-card v-if="!formattedWorkouts.workouts || Object.keys(formattedWorkouts.workouts).length === 0" color="#424242" width="100%" class="px-6 py-6 mt-10 custom-card" elevation="10">     
       <v-card-text class="text-center">
-        <img src="@/assets/memsagemtreinos.jpg" alt="Memsagem treinos" width="300px"> <br>
+        <img src="@/assets/StudentWorkouts/memsagemtreinos.jpg" alt="Memsagem treinos" width="300px"> <br>
         <h2 class="white-text">Prezado/a estudante {{ formattedWorkouts.name }}, ainda não há treinos agendados para você!</h2>
       </v-card-text>
     </v-card>
@@ -26,7 +26,7 @@
         </v-table>
         <template v-else>
           
-          <p class="orange-text">Não há sessões de treinamento agendadas para hoje! <img src="@/assets/memsagemtreinos1.jpg" alt="Memsagem treinos" width="50px"></p>
+          <p class="orange-text">Não há sessões de treinamento agendadas para hoje! <img src="@/assets/StudentWorkouts/memsagemtreinos1.jpg" alt="Memsagem treinos" width="50px"></p>
         </template>        
       </v-card>
       <br>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import WorkoutsStudentsService from '../services/WorkoutsStudentsService'
+import WorkoutsStudentsService from '@/services/Student/WorkoutsStudentsService'
 
 export default {
   data() {
@@ -97,6 +97,7 @@ export default {
       try {
         const data = await WorkoutsStudentsService.workoutsByStudentList(studentId);
         this.formattedWorkouts = data;
+        console.log('Workouts:', this.formattedWorkouts);
       } catch (error) {
         console.error('Error fetching workouts:', error);
         alert('Hubo un error');
@@ -138,3 +139,4 @@ export default {
 }
 
 </style>
+@/services/Student/WorkoutsStudentsService

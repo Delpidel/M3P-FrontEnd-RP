@@ -5,7 +5,7 @@ import Login from '../views/Login/Login.vue'
 import ListUser from '../views/User/ListUser.vue'
 import NewUser from '../views/User/NewUser.vue'
 import StudentMealPlans from '@/views/Student/StudentMealPlans.vue'
-import WorkoutsStudentsList from '../views/WorkoutsStudentsList.vue'
+import WorkoutsStudentsList from '@/views/Student/WorkoutsStudentsList.vue'
 
 import Exemplo from '../views/PaginaExemplo.vue'
 
