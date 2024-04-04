@@ -1,14 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
-import Dashboard from '../views/Dashboard.vue'
+//import Dashboard from '../views/Dashboard.vue' 
 import Login from '../views/Login.vue'
-import Exercises from '../views/exercise/ExercisesPage.vue'
-
 import Exemplo from '../views/PaginaExemplo.vue'
-
 import CreateStudentWorkout from '@/views/InstructorViews/CreateStudentWorkout.vue'
-
-import ExercisesList from '../views/Exercises/ExercisesList.vue'
 
 
 const router = createRouter({
@@ -52,9 +47,8 @@ const router = createRouter({
     //perfil instrutor
     {
       path: '/exercises',
-
-      name: 'Exercises',
-      component: ExercisesList  
+      name: 'Exercícios',
+      component: Exemplo
     },
     {
       path: '/instructor/students',
@@ -66,6 +60,16 @@ const router = createRouter({
       name: 'CreateWorkout',
       component: CreateStudentWorkout
 
+    },
+    {
+      path: '/instructor/:id/list-workouts', 
+      name: 'Listagem de treinos do aluno',
+      component: ListStudentWorkout
+    },
+    {
+      path: '/updateWorkout/:studentId/:workoutId',
+      name: 'UpdateWorkout',
+      component: CreateStudentWorkout
     },
 
     //perfil nutricionista
