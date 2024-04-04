@@ -7,11 +7,19 @@
             <v-card-text class="d-flex flex-column align-center">
               <div class="d-flex align-center justify-center">
                 <v-icon class="mr-3" size="36">mdi-weight-lifter</v-icon>
-                <h1 class="font-weight-bold" data-test="user-name" :style="smAndDown ? 'text-align: center;' : ''">
+                <h1
+                  class="font-weight-bold"
+                  data-test="user-name"
+                  :style="smAndDown ? 'text-align: center;' : ''"
+                >
                   Olá, {{ userName }}!
                 </h1>
               </div>
-              <h3 class="mt-3 font-weight-medium" data-test="random-phrase" :style="smAndDown ? 'text-align: center;' : ''">
+              <h3
+                class="mt-3 font-weight-medium"
+                data-test="random-phrase"
+                :style="smAndDown ? 'text-align: center;' : ''"
+              >
                 {{ currentPhrase }}
               </h3>
             </v-card-text>
@@ -21,7 +29,12 @@
 
       <v-row justify="center" class="px-16">
         <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
-          <v-card class="user-card elevation-10" @click="gotoStudents" data-test="students-card" style="cursor: pointer">
+          <v-card
+            class="user-card elevation-10"
+            @click="gotoStudents"
+            data-test="students-card"
+            style="cursor: pointer"
+          >
             <v-card-text class="d-flex flex-column justify-end">
               <img
                 src="../assets/instructor/dashboard/left-card-img-woman.png"
@@ -30,7 +43,9 @@
               />
               <div class="text-center">
                 <div class="text-h5 font-weight-bold">ALUNOS<br />CADASTRADOS</div>
-                <div class="text-h3 font-weight-bold" data-test="registeredStudents">{{ registeredStudents }}</div>
+                <div class="text-h3 font-weight-bold" data-test="registeredStudents">
+                  {{ registeredStudents }}
+                </div>
                 <v-btn
                   @click.stop="gotoStudents"
                   append-icon="mdi-account-circle"
@@ -51,7 +66,12 @@
         </v-col>
 
         <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
-          <v-card class="user-card elevation-10" @click="gotoExercises" data-test="exercises-card" style="cursor: pointer">
+          <v-card
+            class="user-card elevation-10"
+            @click="gotoExercises"
+            data-test="exercises-card"
+            style="cursor: pointer"
+          >
             <v-card-text class="d-flex flex-column justify-end">
               <img
                 src="../assets/instructor/dashboard/right-card-img-man.png"
@@ -60,7 +80,9 @@
               />
               <div class="text-center">
                 <div class="text-h5 font-weight-bold">EXERCÍCIOS<br />CADASTRADOS</div>
-                <div class="text-h3 font-weight-bold" data-test="registeredExercises">{{ registeredExercises }}</div>
+                <div class="text-h3 font-weight-bold" data-test="registeredExercises">
+                  {{ registeredExercises }}
+                </div>
                 <v-btn
                   @click.stop="gotoExercises"
                   append-icon="mdi-dumbbell"
@@ -85,15 +107,15 @@
 </template>
 
 <script>
-import { useDisplay } from 'vuetify';
-import api from '@/services/api';
+import { useDisplay } from 'vuetify'
+import api from '@/services/api'
 
 export default {
   name: 'DashboardComponent',
   setup() {
-    const { smAndDown, mdAndDown } = useDisplay();
+    const { smAndDown, mdAndDown } = useDisplay()
 
-    return { smAndDown, mdAndDown };
+    return { smAndDown, mdAndDown }
   },
   data() {
     return {
@@ -109,39 +131,36 @@ export default {
         'Transforme potencial em realização. Ajude-os a alcançar novas alturas!',
         'Cada aluno é uma história de sucesso esperando para acontecer.',
         'Eduque com paixão. Inspire a próxima geração.',
-        'O caminho para o sucesso é através do aprendizado. Guie-os em cada passo.',
-      ],
-    };
+        'O caminho para o sucesso é através do aprendizado. Guie-os em cada passo.'
+      ]
+    }
   },
   methods: {
     updateRandomPhrase() {
-      this.currentPhrase = this.frases[Math.floor(Math.random() * this.frases.length)];
+      this.currentPhrase = this.frases[Math.floor(Math.random() * this.frases.length)]
     },
     async fetchDashboardData() {
-    try {
-        const response = await api.get('/dashboard/instrutor'); 
-        this.registeredStudents = response.data.registered_students;
-        this.registeredExercises = response.data.registered_exercises;
-    } catch (error) {
-        console.error('Erro ao buscar dados do dashboard:', error);
-    }
-},
+      try {
+        const response = await api.get('/dashboard/instrutor')
+        this.registeredStudents = response.data.registered_students
+        this.registeredExercises = response.data.registered_exercises
+      } catch (error) {
+        console.error('Erro ao buscar dados do dashboard:', error)
+      }
+    },
     gotoStudents() {
-      this.$router.push('/instructor/students');
+      this.$router.push('/instructor/students')
     },
     gotoExercises() {
-      this.$router.push('/exercises');
-    },
+      this.$router.push('/exercises')
+    }
   },
   mounted() {
-    this.updateRandomPhrase();
-    this.fetchDashboardData();
-  },
-};
+    this.updateRandomPhrase()
+    this.fetchDashboardData()
+  }
+}
 </script>
-
-
-
 
 <style scoped>
 .container {
@@ -182,10 +201,10 @@ export default {
 
 @media (max-width: 768px) {
   .text-h3 {
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
   }
   .v-btn {
-    padding: 8px 12px; 
+    padding: 8px 12px;
   }
 }
 </style>
