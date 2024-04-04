@@ -20,8 +20,8 @@
           <v-card class="user-card elevation-10" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/left-card-img-woman.png"
-                alt="Imagem de uma mulher praticando levantamento de peso na barra."
+                src="../assets/Dashboard/equipamentos-exercicios.svg"
+                alt="Imagem com equipamentos que remetem a exercicios"
                 class="card-image"
               />
               <div class="text-center">
@@ -30,9 +30,7 @@
                 <span class="text-h3 font-weight-bold" v-if="!showExercises"></span>
                 <v-list class="user-card" v-else>
                   <v-list-item v-for="exercise in exercises" :key="exercise.id">
-                    <v-list-item-content>
                       <v-list-item-title>{{ exercise.description }}</v-list-item-title>
-                    </v-list-item-content>
                   </v-list-item>
                 </v-list>
                 <v-btn
@@ -52,23 +50,46 @@
         </v-col>
         <v-col cols="12" md="5" :class="mdAndDown ? 'my-2' : 'my-0'">
           <v-card class="user-card elevation-10" style="cursor: pointer">
+            <v-card-text class="d-flex flex-column justify-end">
             <img
-              src="../assets/right-card-img-man.png"
-              alt="Imagem de um homem praticando levantamento de peso na barra."
+              src="../assets/Dashboard/users.svg"
+              alt="Imagem com 5 personagens fazendo referencia aos 5 perfils do sistema: admin, recepcionista, nutricionista, instrutor e aluno."
               class="card-image"
             />
             <div class="text-center">
-              <v-card-title>Usuários Totais</v-card-title>
+              <v-card-title>Usuários Cadastrados</v-card-title>
               <v-card-text class="text-h3 font-weight-bold">{{ totalUsers }}</v-card-text>
               <span class="text-h3 font-weight-bold" v-if="!showUsers"></span>
               <v-list class="user-card" v-else>
                 <v-list-item v-for="(count, profile) in profiles" :key="profile">
-                  <v-list-item-content>
                     <v-list-item-title>{{ profile }}: {{ count }}</v-list-item-title>
-                  </v-list-item-content>
                 </v-list-item>
                 <v-btn
-                @click="navigateToCreateUser"
+                  to="/users"
+                  append-icon="mdi-account-circle"
+                  size="large"
+                  variant="elevated"
+                  color="grey-darken-4 text-amber"
+                  class="font-weight-bold my-6 mx-2"
+                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+                >
+                  Listagem completa
+                </v-btn>
+                
+                <v-btn
+                  @click="navigateToCreateUser"
+                  append-icon="mdi-account-circle"
+                  size="large"
+                  variant="elevated"
+                  color="amber text-grey-darken-4"
+                  class="font-weight-bold my-6 mx-2"
+                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+                >
+                  Cadastrar Usuário
+                </v-btn>
+              </v-list>
+              <v-btn
+                @click="toggleUsers"
                 append-icon="mdi-account-circle"
                 size="large"
                 variant="elevated"
@@ -76,28 +97,22 @@
                 class="font-weight-bold my-6"
                 :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
               >
-                Cadastrar Usuário
+                Visualizar
               </v-btn>
-              </v-list>
-              <v-btn
-                  @click="toggleUsers"
-                  append-icon="mdi-account-circle"
-                  size="large"
-                  variant="elevated"
-                  color="grey-darken-4 text-amber"
-                  class="font-weight-bold my-6"
-                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
-                >
-                  Visualizar
-                </v-btn>
 
             </div>
+          </v-card-text>
           </v-card>
         </v-col>
       </v-row>
     </div>
   </v-container>
 </template>
+
+<script setup>
+import { useDisplay } from 'vuetify'
+const { smAndDown, mdAndDown } = useDisplay()
+</script>
 
 <script>
 import AuthenticationService from '../services/AuthenticationService'
@@ -149,6 +164,7 @@ export default {
 .container {
   width: 100%;
   height: 100%;
+  padding-bottom: 0% !important;
 }
 
 .title-card,

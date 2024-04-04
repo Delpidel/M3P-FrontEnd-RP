@@ -20,8 +20,8 @@
           <v-card class="user-card elevation-10" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/left-card-img-woman.png"
-                alt="Imagem de uma mulher praticando levantamento de peso na barra."
+                src="../assets/Dashboard/alunas-academia.svg"
+                alt="Imagem de varias alunas de academa se exercitando."
                 class="card-image"
               />
               <div class="text-center">
@@ -44,9 +44,10 @@
         </v-col>
         <v-col cols="12" md="5" :class="mdAndDown ? 'my-2' : 'my-0'">
           <v-card class="user-card elevation-10" style="cursor: pointer">
+            <v-card-text class="d-flex flex-column justify-end">
             <img
-              src="../assets/right-card-img-man.png"
-              alt="Imagem de um homem praticando levantamento de peso na barra."
+              src="../assets/Dashboard/alunos-academia.svg"
+              alt="Imagem de varios alunos de academa se exercitando."
               class="card-image"
             />
             <div class="text-center">
@@ -55,29 +56,46 @@
               <span class="text-h3 font-weight-bold" v-if="!showStudents"></span>
               <v-list class="user-card" v-else>
                 <v-list-item v-for="student in students" :key="student.id">
-                  <v-list-item-content>
-                    <v-list-item-title>{{ student.name }}</v-list-item-title>
-                  </v-list-item-content>
+                  <v-list-item-title>{{ student.name }}</v-list-item-title>
                 </v-list-item>
-              </v-list>
-              <v-btn
-                  @click="toggleStudents"
+                <v-btn
+                  to="/students"
                   append-icon="mdi-account-circle"
                   size="large"
                   variant="elevated"
-                  color="grey-darken-4 text-amber"
+                  color="amber text-grey-darken-4"
                   class="font-weight-bold my-6"
-                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+                  :class="
+                    smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'
+                  "
                 >
+                  Listagem completa
+                </v-btn>
+              </v-list>
+              <v-btn
+                @click="toggleStudents"
+                append-icon="mdi-account-circle"
+                size="large"
+                variant="elevated"
+                color="grey-darken-4 text-amber"
+                class="font-weight-bold my-6"
+                :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+              >
                 Visualizar
               </v-btn>
             </div>
+          </v-card-text>
           </v-card>
         </v-col>
       </v-row>
     </div>
   </v-container>
 </template>
+
+<script setup>
+import { useDisplay } from 'vuetify'
+const { smAndDown, mdAndDown } = useDisplay()
+</script>
 
 <script>
 import AuthenticationService from '../services/AuthenticationService'
@@ -89,7 +107,7 @@ export default {
       students: [],
       showStudents: false
     }
-  },  
+  },
   created() {
     this.fetchStudentsData()
   },
@@ -101,7 +119,7 @@ export default {
   methods: {
     async fetchStudentsData() {
       try {
-        const { students } = await AuthenticationService.fetchStudentsData()
+        const students = await AuthenticationService.fetchStudentsData()
         this.students = students
       } catch (error) {
         console.error('Erro ao buscar dados do painel de administração:', error)
@@ -120,6 +138,7 @@ export default {
 .container {
   width: 100%;
   height: 100%;
+  padding-bottom: 0% !important;
 }
 
 .title-card,

@@ -20,8 +20,8 @@
           <v-card class="user-card elevation-10" style="cursor: pointer">
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/left-card-img-woman.png"
-                alt="Imagem de uma mulher praticando levantamento de peso na barra."
+                src="../assets/Dashboard/dietas.svg"
+                alt="Imagem com pratos de comida que remetem a dietas"
                 class="card-image"
               />
               <div class="text-center">
@@ -44,26 +44,28 @@
         </v-col>
         <v-col cols="12" md="5" :class="mdAndDown ? 'my-2' : 'my-0'">
           <v-card class="user-card elevation-10" style="cursor: pointer">
+            <v-card-text class="d-flex flex-column justify-end">
             <img
-              src="../assets/right-card-img-man.png"
-              alt="Imagem de um homem praticando levantamento de peso na barra."
+              src="../assets/Dashboard/treinos.svg"
+              alt="Imagem com um halteres que remetem a treinos"
               class="card-image"
             />
             <div class="text-center">
               <v-card-title>Meus Treinos</v-card-title>
               <v-card-text class="text-h3 font-weight-bold">{{ registeredWorkouts }}</v-card-text>
               <v-btn
-                  @click="navigateToWorkouts"
-                  append-icon="mdi-dumbbell"
-                  size="large"
-                  variant="elevated"
-                  color="grey-darken-4 text-amber"
-                  class="font-weight-bold my-6"
-                  :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
-                >
+                @click="navigateToWorkouts"
+                append-icon="mdi-dumbbell"
+                size="large"
+                variant="elevated"
+                color="grey-darken-4 text-amber"
+                class="font-weight-bold my-6"
+                :class="smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'"
+              >
                 Visualizar
               </v-btn>
             </div>
+          </v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -71,42 +73,63 @@
   </v-container>
 </template>
 
+<script setup>
+import { useDisplay } from 'vuetify'
+const { smAndDown, mdAndDown } = useDisplay()
+</script>
+
 <script>
-import AuthenticationService from '../services/AuthenticationService'
+import MealPlanService from '@/services/MealPlanService'
+import WorkoutsStudentsService from '@/services/WorkoutsStudentsService'
 
 export default {
   data() {
     return {
       profileName: localStorage.getItem('@name'),
-      workouts: [],
-      mealPlans: []
+      workouts: 0,
+      mealPlans: 0
     }
-  },  
+  },
   created() {
-    // this.fetchStudentsData()
+    this.getPlans()
+    this.getWorkouts()
   },
   computed: {
     registeredMealPlans() {
-      return this.mealPlans.length
+      return this.mealPlans
     },
     registeredWorkouts() {
-      return this.workouts.length
+      return this.workouts
     }
   },
   methods: {
-    // async fetchStudentsData() {
-    //   try {
-    //     const { students } = await AuthenticationService.fetchStudentsData()
-    //     this.students = students
-    //   } catch (error) {
-    //     console.error('Erro ao buscar dados do painel de administração:', error)
-    //   }
-    // },
     navigateToMealPlans() {
-      this.$router.push('/students/{id}/meal-plans')
+      this.$router.push('/student/meal-plans')
     },
     navigateToWorkouts() {
-      this.$router.push('/students/{id}/workouts')
+      this.$router.push('/student/workouts')
+    },
+
+    getPlans() {
+      MealPlanService.getAllMealPlans()
+        .then((data) => {
+          const totalMealPlans = data.length
+          this.mealPlans = totalMealPlans
+        })
+        .catch(() => (this.snackbar = true))
+    },
+    getWorkouts() {
+      WorkoutsStudentsService.workoutsByStudentList()
+        .then((data) => {
+          const workoutsArray = Object.values(data.workouts)
+          const totalWorkouts = workoutsArray.reduce(
+            (total, exercises) => total + exercises.length,
+            0
+          )
+
+          this.workouts = totalWorkouts
+        })
+        .catch(() => (this.snackbar = true))
     }
   }
 }
@@ -116,6 +139,7 @@ export default {
 .container {
   width: 100%;
   height: 100%;
+  padding-bottom: 0% !important;
 }
 
 .title-card,

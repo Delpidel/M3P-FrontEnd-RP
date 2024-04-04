@@ -18,21 +18,33 @@
       <v-row justify="center">
         <v-col cols="12" md="10" :class="mdAndDown ? 'my-2' : 'my-0'">
           <v-card class="user-card elevation-10" style="cursor: pointer">
+            <v-card-text class="d-flex flex-column justify-end">
             <div class="text-center">
               <img
-                src="../assets/right-card-img-man.png"
-                alt="Imagem de um homem praticando levantamento de peso na barra."
+                src="../assets/Dashboard/aluno-ativo.svg"
+                alt="Imagem de varias alunas de academa se exercitando."
                 class="card-image"
               />
               <v-card-title>Estudantes Cadastrados</v-card-title>
               <v-card-text class="text-h3 font-weight-bold">{{ registeredStudents }}</v-card-text>
               <span class="text-h3 font-weight-bold" v-if="!showStudents"></span>
               <v-list class="user-card" v-else>
-                <v-list-item v-for="student in students" :key="student.id">
-                  <v-list-item-content>
+                <v-list-item v-for="student in students" :key="student.id"> 
                     <v-list-item-title>{{ student.name }}</v-list-item-title>
-                  </v-list-item-content>
                 </v-list-item>
+                <v-btn
+                  to="/students-active"
+                  append-icon="mdi-account-circle"
+                  size="large"
+                  variant="elevated"
+                  color="amber text-grey-darken-4"
+                  class="font-weight-bold my-6"
+                  :class="
+                    smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'
+                  "
+                >
+                  Listagem completa
+                </v-btn>
               </v-list>
               <v-btn
                   @click="toggleStudents"
@@ -46,12 +58,18 @@
                 Visualizar
               </v-btn>
             </div>
+          </v-card-text>
           </v-card>
         </v-col>
       </v-row>
     </div>
   </v-container>
 </template>
+
+<script setup>
+import { useDisplay } from 'vuetify'
+const { smAndDown, mdAndDown } = useDisplay()
+</script>
 
 <script>
 import AuthenticationService from '../services/AuthenticationService'
@@ -75,7 +93,7 @@ export default {
   methods: {
     async fetchStudentsData() {
       try {
-        const { students } = await AuthenticationService.fetchStudentsData()
+        const students = await AuthenticationService.fetchStudentsData()
         this.students = students
       } catch (error) {
         console.error('Erro ao buscar dados do painel de administração:', error)
@@ -95,6 +113,7 @@ export default {
 .container {
   width: 100%;
   height: 100%;
+  padding-bottom: 0% !important;
 }
 
 .title-card,
@@ -113,7 +132,7 @@ export default {
 }
 
 .card-image {
-  max-width: 100%;
+  max-width: 49%;
   height: auto;
   margin-bottom: 10px; /* Adiciona um espaço entre a imagem e o texto */
 }
