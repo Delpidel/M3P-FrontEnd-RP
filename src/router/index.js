@@ -4,6 +4,7 @@ import Dashboard from '../views/Dashbord.vue'
 import Login from '../views/Login.vue'
 import StudentRegistration from '../views/RecepcionistaViews/StudentRegistration.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
+import ListStudents from '../views/RecepcionistaViews/ListStudents.vue'
 
 
 const router = createRouter({
@@ -35,8 +36,8 @@ const router = createRouter({
     //perfil recepcionista
     {
       path: '/students',
-      name: 'Listagem de estudantes',
-      component: Exemplo
+      name: 'ListStudents',
+      component: ListStudents
     },
     {
       path: '/students/new',
