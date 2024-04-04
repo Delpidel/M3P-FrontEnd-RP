@@ -85,8 +85,8 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { useDisplay } from 'vuetify';
+import api from '@/services/api';
 
 export default {
   name: 'DashboardComponent',
@@ -118,19 +118,14 @@ export default {
       this.currentPhrase = this.frases[Math.floor(Math.random() * this.frases.length)];
     },
     async fetchDashboardData() {
-      const token = localStorage.getItem('@token'); 
-      try {
-        const response = await axios.get('http://localhost:8000/api/dashboard/instrutor', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+    try {
+        const response = await api.get('/dashboard/instrutor'); 
         this.registeredStudents = response.data.registered_students;
         this.registeredExercises = response.data.registered_exercises;
-      } catch (error) {
+    } catch (error) {
         console.error('Erro ao buscar dados do dashboard:', error);
-      }
-    },
+    }
+},
     gotoStudents() {
       this.$router.push('/instructor/students');
     },
