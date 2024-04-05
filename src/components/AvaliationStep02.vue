@@ -50,7 +50,7 @@
               >Voltar</v-btn
             >
             <v-btn
-              color="grey-darken-4 text-amber"
+              color="amber text-grey-darken-4"
               @click="nextStep"
               class="btn-next font-weight-bold"
               size="large"
@@ -145,11 +145,11 @@ export default {
       if (!this.allPhotosAdded) {
         this.showAlert = true
       } else {
-        this.$router.push('/avaliacao/step3')
+        this.$router.push('/avaliation/step3')
       }
     },
     goToStep1() {
-      this.$router.push('/avaliacao/step1')
+      this.$router.push('/avaliation/step1')
     }
   }
 }
@@ -193,7 +193,6 @@ export default {
 
 .main-container {
   height: 60%;
-  border-radius: 2rem;
 }
 
 .image-container {
@@ -202,10 +201,17 @@ export default {
   position: relative;
   cursor: pointer;
   overflow: hidden;
-  border-radius: 2rem;
   width: 220px;
   height: 220px;
+  border-radius: 1.5rem;
+  border-color: rgb(255, 212, 80);
+  background: rgb(255, 212, 80);
   background: linear-gradient(160deg, rgba(255, 212, 80, 1) 0%, rgba(222, 167, 0, 1) 100%);
+  box-shadow:
+    12px 16px 28px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
+    0px 2px 2px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),
+    0px 2px 4px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.12)),
+    inset 1px 1px 0px 0px var(--v-shadow-key-penumbra-opacity, rgba(255, 255, 255, 0.8));
 }
 
 .image-container img {
@@ -247,6 +253,7 @@ export default {
 .btn-back,
 .btn-next {
   margin-bottom: 10px;
+  border-radius: 1rem;
 }
 
 .custom-snackbar {
