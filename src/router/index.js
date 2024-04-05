@@ -1,15 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Home from '../views/Home.vue'
+import Dashboard from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import PaginaExemplo from '../views/PaginaExemplo.vue'
 import AvaliationStep01 from '@/components/AvaliationStep01.vue'
 import AvaliationStep02 from '@/components/AvaliationStep02.vue'
 import AvaliationStep03 from '@/components/AvaliationStep03.vue'
 
-import AvaliationStep01 from '@/components/AvaliationStep01.vue'
-import AvaliationStep02 from '@/components/AvaliationStep02.vue'
-import AvaliationStep03 from '@/components/AvaliationStep03.vue'
 
 import Meal from '../views/Meal.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
@@ -31,49 +28,6 @@ const router = createRouter({
       component: Dashboard
     },
 
-    //perfil usuário
-    {
-      path: '/users',
-      name: 'Listagem de usuários',
-      component: PaginaExemplo
-    },
-    {
-      path: '/users/new',
-      name: 'Novo usuário',
-      component: PaginaExemplo
-    },
-
-    //perfil recepcionista
-    {
-      path: '/students',
-      name: 'Listagem de estudantes',
-      component: PaginaExemplo
-    },
-    {
-      path: '/students/new',
-      name: 'Novo Estudante',
-      component: PaginaExemplo
-    },
-
-    //perfil instrutor
-    {
-      path: '/exercises',
-      name: 'Exercícios',
-      component: PaginaExemplo
-    },
-    {
-      path: '/instructor/students',
-      name: 'Listagem de estudantes',
-      component: ActiveStudents
-    },
-
-    //perfil nutricionista
-    {
-      path: '/active/students',
-      name: 'Listagem de estudantes ativos',
-      component: PaginaExemplo
-    },
-
     {
       path: '/avaliation/step1',
       name: 'AvaliationStep01',
@@ -89,7 +43,48 @@ const router = createRouter({
       name: 'AvaliationStep03',
       component: AvaliationStep03
     },
+    //perfil usuário
+    {
+      path: '/users',
+      name: 'Listagem de usuários',
+      component: Exemplo
+    },
+    {
+      path: '/users/new',
+      name: 'Novo usuário',
+      component: Exemplo
+    },
 
+    //perfil recepcionista
+    {
+      path: '/students',
+      name: 'Listagem de estudantes',
+      component: Exemplo
+    },
+    {
+      path: '/students/new',
+      name: 'Novo Estudante',
+      component: Exemplo
+    },
+
+    //perfil instrutor
+    {
+      path: '/exercises',
+      name: 'Exercícios',
+      component: Exemplo
+    },
+    {
+      path: '/instructor/students',
+      name: 'Listagem de estudantes',
+      component: Exemplo
+    },
+
+    //perfil nutricionista
+    {
+      path: '/active/students',
+      name: 'Listagem de estudantes ativos',
+      component: ActiveStudents
+    },
     {
       path: '/dietas/:id',
       name: 'Meal',
@@ -111,7 +106,7 @@ const router = createRouter({
     {
       path: '/student/workouts',
       name: 'Treinos do aluno',
-      component: PaginaExemplo
+      component: Exemplo
     },
     {
       path: '/avaliacao/step1',

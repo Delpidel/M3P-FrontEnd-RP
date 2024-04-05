@@ -1,7 +1,5 @@
 <template>
-    <v-layout>
-
-        <AvaliationStep01/>        
+    <v-layout>    
         <AvaliationStep01/>  
         <AvaliationStep02/>  
         <AvaliationStep03/>      
