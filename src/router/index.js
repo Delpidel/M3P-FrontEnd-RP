@@ -9,22 +9,24 @@ import WorkoutsStudentsList from '@/views/Student/WorkoutsStudentsList.vue'
 import StudentRegistration from '../views/RecepcionistaViews/StudentRegistration.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
 import ListStudents from '../views/RecepcionistaViews/ListStudents.vue'
+import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
 
+import Exercises from '../views/InstructorViews/ExercisesPage.vue'
+import CreateStudentWorkout from '@/views/InstructorViews/CreateStudentWorkout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
+  routes:[
     {
       path: '/',
       name: 'Login',
       component: Login
     },
-    {
+   {
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard
     },
-
     //perfil usuário
     {
       path: '/users',
@@ -57,13 +59,30 @@ const router = createRouter({
     //perfil instrutor
     {
       path: '/exercises',
-      name: 'Exercícios',
-      component: Exemplo
+   
+      name: 'Exercises',
+      component: Exercises
     },
     {
       path: '/instructor/students',
-      name: 'Listagem estudantes',
+      name: 'Listagem de estudantes do instrutor',
       component: Exemplo
+    },
+    {
+      path: '/newWorkout/:id',
+      name: 'CreateWorkout',
+      component: CreateStudentWorkout
+
+    },
+    {
+      path: '/instructor/:id/list-workouts', 
+      name: 'Listagem de treinos do aluno',
+      component: ListStudentWorkout
+    },
+    {
+      path: '/updateWorkout/:studentId/:workoutId',
+      name: 'UpdateWorkout',
+      component: CreateStudentWorkout
     },
 
     //perfil nutricionista

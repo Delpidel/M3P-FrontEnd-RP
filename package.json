@@ -33,6 +33,7 @@
     "@vitest/coverage-v8": "^1.2.2",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/test-utils": "^2.4.4",
+    "axios-mock-adapter": "^1.22.0",
     "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
     "jsdom": "^23.0.1",
