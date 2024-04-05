@@ -77,10 +77,10 @@ export default {
         name: null,
         workouts: {}
       },
-      today: ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'],
+      today: ['DOMINGO', 'SEGUNDA', 'TERCA', 'QUARTA', 'QUINTA', 'SEXTA', 'SABADO'],
 
       tab: 'option-1', 
-      days: ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO', 'DOMINGO'],
+      days: ['SEGUNDA', 'TERCA', 'QUARTA', 'QUINTA', 'SEXTA', 'SABADO', 'DOMINGO'],
       icons: ['mdi-run', 'mdi-dumbbell', 'mdi-gymnastics', 'mdi-bike', 'mdi-arm-flex', 'mdi-jump-rope', 'mdi-weight-lifter']
     }
   },
