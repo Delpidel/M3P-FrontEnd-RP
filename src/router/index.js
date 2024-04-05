@@ -2,8 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
 //import Dashboard from '../views/Dashboard.vue' 
 import Login from '../views/Login.vue'
+import Exercises from '../views/InstructorViews/ExercisesPage.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
 import CreateStudentWorkout from '@/views/InstructorViews/CreateStudentWorkout.vue'
+
+// import ExercisesList from '../views/Exercises/ExercisesList.vue'
 
 
 const router = createRouter({
@@ -47,8 +50,9 @@ const router = createRouter({
     //perfil instrutor
     {
       path: '/exercises',
-      name: 'Exercícios',
-      component: Exemplo
+   
+      name: 'Exercises',
+      component: Exercises
     },
     {
       path: '/instructor/students',
