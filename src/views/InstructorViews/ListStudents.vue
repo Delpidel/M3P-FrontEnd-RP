@@ -35,16 +35,8 @@
           <td>{{ student.email }}</td>
           <td class="pa-2">
             <div class="d-flex align-center justify-space-around">
-              <v-btn variant="elevated" color="black" dark @click="handleEditStudent(student.id)">
-                <span class="text-amber">Editar</span>
-              </v-btn>
-              <v-btn
-                variant="elevated"
-                color="amber darken-4"
-                dark
-                @click="handleDeleteStudent(student.id)"
-              >
-                <span class="text-black font-weight-bold">Desativar</span>
+              <v-btn variant="elevated" color="black" dark @click="listStudentWorkout(student.id)">
+                <span class="text-amber">Ver Treinos</span>
               </v-btn>
             </div>
           </td>
@@ -92,18 +84,9 @@ export default {
         .catch(() => alert('Houve um erro ao retornar os estudantes'))
     },
 
-    handleEditStudent(studentId) {
-      this.$router.push(`/students/${studentId}`)
+    listStudentWorkout(studentId) {
+      this.$router.push(`/instructor/${studentId}/list-workouts`)
     },
-
-    handleDeleteStudent(studentId) {
-      StudentService.deleteOneStudent(studentId)
-        .then(() => {
-          this.students = this.students.filter((item) => item.id !== studentId)
-          alert('Desativado com sucesso')
-        })
-        .catch(() => alert('Erro ao desativar estudante'))
-    }
   },
 
   mounted() {
