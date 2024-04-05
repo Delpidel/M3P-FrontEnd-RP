@@ -185,4 +185,3 @@ section.left::before {
 }
 
 </style>
-../../services/Auth/AuthenticationService
