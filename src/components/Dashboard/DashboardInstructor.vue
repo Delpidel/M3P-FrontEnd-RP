@@ -58,7 +58,7 @@
                   "
                   data-test="add-students-button"
                 >
-                  ADICIONAR
+                  VER
                 </v-btn>
               </div>
             </v-card-text>
@@ -95,7 +95,7 @@
                   "
                   data-test="add-exercises-button"
                 >
-                  ADICIONAR
+                  VER
                 </v-btn>
               </div>
             </v-card-text>
@@ -111,7 +111,7 @@ import { useDisplay } from 'vuetify'
 import api from '@/services/api'
 
 export default {
-  name: 'DashboardComponent',
+  name: 'DashboardInstructor',
   setup() {
     const { smAndDown, mdAndDown } = useDisplay()
 
