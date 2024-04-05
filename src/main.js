@@ -2,7 +2,6 @@ import './assets/main.css'
 
 import '@mdi/font/css/materialdesignicons.css'
 
-
 import VCalendar from 'v-calendar';
 import 'v-calendar/style.css';
 
@@ -18,7 +17,7 @@ import * as directives from 'vuetify/directives'
 
 
 const vuetify = createVuetify({
-	components,
+    components,
     directives,
     icons: {
       defaultSet: 'mdi'
