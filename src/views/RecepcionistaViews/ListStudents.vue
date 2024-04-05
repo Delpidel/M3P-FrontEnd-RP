@@ -35,7 +35,6 @@
       </thead>
       <tbody>
         <tr v-for="student in filteredStudents" :key="student.id" data-test="row-table">
-        <tr v-for="student in filteredStudents" :key="student.id">
           <td>{{ student.name }}</td>
           <td>{{ student.cpf }}</td>
           <td>{{ student.email }}</td>
