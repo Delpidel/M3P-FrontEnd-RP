@@ -41,8 +41,6 @@ describe("Tela cadastro de refeições", () => {
         expect(component).toBeTruthy()
     })
 
- 
-
     it("Espera-se que os dados do formulário sejam enviados", async () => {
 
         const spyCreateMeal = vi.spyOn(MealService, 'createMeal').mockResolvedValue({})
@@ -60,25 +58,25 @@ describe("Tela cadastro de refeições", () => {
         await flushPromises()
 
         component.getComponent("[data-test='input-plan']").setValue("1")
-        component.getComponent("[data-test='input-hour']").setValue("12:00:00")
-        component.getComponent("[data-test='input-title']").setValue("almoço")
-        component.getComponent("[data-test='input-description']").setValue("baião")
+        component.getComponent("[data-test='input-hour']").setValue("12:00")
+        component.getComponent("[data-test='input-title']").setValue("Almoço")
+        component.getComponent("[data-test='input-description']").setValue("Arroz e feijão")
 
         component.getComponent("[data-test='submit-button']").trigger("submit")
 
         await flushPromises()
 
         expect(spyCreateMeal).toBeCalledWith({
-            meal_plan_id: 1,
+            meal_plan_id: "1",
             hour: '12:00',
             title: 'Almoço',
             description: 'Arroz e feijão',
-            day: 'SEGUNDA'
+            day: 'QUINTA'
         })
         
     })
 
-    it('Espera-se que mostre um erro ao enviar o formulário sem um nome', async () => {
+    it('Espera-se que mostre um erro ao enviar o formulário sem refeição', async () => {
 
         const component = mount(Meal, {
             global: {
@@ -90,7 +88,7 @@ describe("Tela cadastro de refeições", () => {
 
         component.getComponent("[data-test='input-plan']").setValue("1")
         component.getComponent("[data-test='input-hour']").setValue("12:00:00")
-        // component.getComponent("[data-test='input-title']").setValue("almoço")
+    
         component.getComponent("[data-test='input-description']").setValue("baião")
 
         component.getComponent("[data-test='submit-button']").trigger("submit")
