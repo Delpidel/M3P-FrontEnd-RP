@@ -8,7 +8,7 @@
               <v-card-title class="d-flex align-center justify-space-between">
                 <div class="d-flex align-center">
                   <v-icon class="mr-2">mdi mdi-account-supervisor</v-icon>
-                  <h1 class="py-6">{{ isUpdate ? 'Atualizar' : 'Novo' }} Treino</h1>
+                  <h1 class="py-6">Novo Treino</h1>
                 </div>
                 <img src="@/assets/logo.svg" alt="Logo" style="height: 80px" />
               </v-card-title>
@@ -97,10 +97,10 @@
                       size="large"
                       data-test="submition-input"
                     >
-                      {{ isUpdate ? 'Atualizar' : 'Cadastrar' }}
+                      Cadastrar
                     </v-btn>
-                    <router-link v-if="isUpdate" :to="'/instructor/' + studentId + '/workouts'">
-                      <v-btn class="ml-auto" variant="elevated" size="large">
+                    <router-link to="/instructor/{{id}}/list-workouts">
+                      <v-btn class="ml-auto" type="submit" variant="elevated" size="large">
                         Voltar
                       </v-btn>
                     </router-link>
@@ -141,7 +141,6 @@ import { daysOfWeek } from '../../constants/Instructor/daysOfWeek'
 
 import GetExercises from '../../services/InstructorServices/GetExercises'
 import CreateWorkoutService from '../../services/InstructorServices/CreateWorkoutService'
-import UpdateWorkoutService from '../../services/InstructorServices/UpdateWorkoutService'
 
 export default {
   data() {
@@ -157,88 +156,61 @@ export default {
       snackbarSuccess: false,
       snackbarError: false,
       duration: 3000,
-      errors: {},
-      studentId: null, 
-      workoutId: null,
-      time: 0
+      errors: {}
     }
   },
-  created() {
-    this.loadExercises()
-    this.extractIdsFromRouteParams()
+  components: {},
+  mounted() {
+    GetExercises.getAllUserExercises()
+      .then((response) => {
+        this.exercises = response.data.data
+      })
+      .catch(() => {
+        this.snackbarError = true
+        this.errorMessage = 'Falha ao carregar os exercícios cadastrados.'
+      })
   },
   methods: {
-    loadExercises() {
-      GetExercises.getAllUserExercises()
-        .then((response) => {
-          this.exercises = response.data.data
-        })
-        .catch(() => {
-          this.snackbarError = true
-          this.errorMessage = 'Falha ao carregar os exercícios cadastrados.'
-        })
-    },
-    extractIdsFromRouteParams() {
-      // Extrai os IDs da rota
-      this.studentId = this.$route.params.id
-      this.workoutId = this.$route.params.workoutId 
-    },
     handleSubmit() {
-  try {
-    const body = {
-      student_id: this.studentId,
-      exercise_id: this.exercisesSelected,
-      repetitions: this.repetitionOfExercise,
-      weight: this.exerciseLoad,
-      break_time: this.breakTime,
-      observations: this.observations,
-      day: this.dayOfWeek,
-      time: this.time
-    }
-
-    const service = this.workoutId ? UpdateWorkoutService.updateWorkout : CreateWorkoutService.createWorkout
-    const id = this.workoutId || null 
-
-    workoutSchema.validateSync(body, { abortEarly: false })
-    this.errors = {}
-
-    service(body, id)
-      .then(() => {
-        this.snackbarSuccess = true
-        this.successMessage = this.workoutId ? 'Treino atualizado com sucesso' : 'Treino cadastrado com sucesso'
-        
-        if (!this.workoutId) {
-          this.exercisesSelected = ''
-          this.repetitionOfExercise = ''
-          this.exerciseLoad = ''
-          this.breakTime = 45
-          this.observations = ''
-          this.dayOfWeek = getCurrentDay(new Date().getDay())
-
-          // Redirecionar para a página de treinos do aluno após cadastrar novo treino
-          this.$router.push(`/instructor/${this.studentId}/workouts`)
+      try {
+        const body = {
+          student_id: this.$route?.params?.id,
+          exercise_id: this.exercisesSelected,
+          repetitions: this.repetitionOfExercise,
+          weight: this.exerciseLoad,
+          break_time: this.breakTime,
+          observations: this.observations,
+          day: this.dayOfWeek
         }
-      })
-      .catch((error) => {
-        if (error && error.response && error.response.data && error.response.data.message) {
+
+        workoutSchema.validateSync(body, { abortEarly: false })
+        this.errors = {}
+        CreateWorkoutService.createWorkout(body)
+          .then(() => {
+            this.snackbarSuccess = true
+            this.successMessage = 'Treino cadastrado com sucesso'
+            //limpa os campos
+            this.exercisesSelected = ''
+            this.repetitionOfExercise = ''
+            this.exerciseLoad = ''
+            this.breakTime = 45
+            this.observations = ''
+            this.dayOfWeek = getCurrentDay(new Date().getDay())
+          })
+          .catch((error) => {
+            if (error) {
+              this.snackbarError = true
+              this.errorMessage = `Erro ao cadastrar treino: ${error.response.data.message}`
+            }
+          })
+      } catch (error) {
+        console.log(error)
+        if (error instanceof yup.ValidationError) {
+          this.errors = captureErrorYup(error)
           this.snackbarError = true
-          this.errorMessage = `Erro ao ${this.workoutId ? 'atualizar' : 'cadastrar'} treino: ${error.response.data.message}`
-        } else {
-          this.snackbarError = true
-          this.errorMessage = `Erro ao ${this.workoutId ? 'atualizar' : 'cadastrar'} treino.`
+          this.errorMessage = 'Erro ao validar os dados.'
         }
-      })
-  } catch (error) {
-    if (error instanceof yup.ValidationError) {
-      this.errors = captureErrorYup(error)
-      this.snackbarError = true
-      this.errorMessage = 'Erro ao validar os dados.'
-    }
-  }
-}},
-  computed: {
-    isUpdate() {
-      return !!this.workoutId
+      }
     }
   }
 }

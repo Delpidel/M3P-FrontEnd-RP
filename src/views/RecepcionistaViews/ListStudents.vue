@@ -62,6 +62,7 @@
               </v-btn>
             </div>
           </td>
+          </tr>
         </tr>
       </tbody>
     </v-table>
