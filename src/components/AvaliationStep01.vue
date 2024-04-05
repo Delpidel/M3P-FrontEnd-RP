@@ -27,7 +27,9 @@
               <v-textarea v-model="observationsToStudent" label="Observações para o Aluno" color="yellow"></v-textarea>
             </v-col>
             <v-col cols="12">
-              <v-btn color="green" @Click="this.$router.push('/avaliacao/step2')">Proximo ></v-btn>
+
+              <v-btn color="green" @Click="this.$router.push('/avaliation/step2')">Proximo ></v-btn>
+
             </v-col>
           </v-row>
         </v-form>

@@ -1,4 +1,5 @@
 <template>
+
   <div class="container">
     <v-layout>
       <v-container>
@@ -252,3 +253,8 @@ export default {
   margin-left: 20%;
 }
 </style>
+=======
+  
+</template>
+
+
