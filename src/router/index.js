@@ -2,7 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
-import Exemplo from '../views/PaginaExemplo.vue'
+import PaginaExemplo from '../views/PaginaExemplo.vue'
+import AvaliationStep01 from '@/components/AvaliationStep01.vue'
+import AvaliationStep02 from '@/components/AvaliationStep02.vue'
+import AvaliationStep03 from '@/components/AvaliationStep03.vue'
 
 import AvaliationStep01 from '@/components/AvaliationStep01.vue'
 import AvaliationStep02 from '@/components/AvaliationStep02.vue'
@@ -32,31 +35,31 @@ const router = createRouter({
     {
       path: '/users',
       name: 'Listagem de usuários',
-      component: Exemplo
+      component: PaginaExemplo
     },
     {
       path: '/users/new',
       name: 'Novo usuário',
-      component: Exemplo
+      component: PaginaExemplo
     },
 
     //perfil recepcionista
     {
       path: '/students',
       name: 'Listagem de estudantes',
-      component: Exemplo
+      component: PaginaExemplo
     },
     {
       path: '/students/new',
       name: 'Novo Estudante',
-      component: Exemplo
+      component: PaginaExemplo
     },
 
     //perfil instrutor
     {
       path: '/exercises',
       name: 'Exercícios',
-      component: Exemplo
+      component: PaginaExemplo
     },
     {
       path: '/instructor/students',
@@ -68,7 +71,7 @@ const router = createRouter({
     {
       path: '/active/students',
       name: 'Listagem de estudantes ativos',
-      component: Exemplo
+      component: PaginaExemplo
     },
 
     {
@@ -98,7 +101,7 @@ const router = createRouter({
     {
       path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
-      component: Exemplo
+      component: PaginaExemplo
     },
     {
       path: '/workouts',
@@ -108,7 +111,22 @@ const router = createRouter({
     {
       path: '/student/workouts',
       name: 'Treinos do aluno',
-      component: Exemplo
+      component: PaginaExemplo
+    },
+    {
+      path: '/avaliacao/step1',
+      name: 'AvaliationStep01',
+      component: AvaliationStep01
+    },
+    {
+      path: '/avaliacao/step2',
+      name: 'AvaliationStep02',
+      component: AvaliationStep02
+    },
+    {
+      path: '/avaliacao/step3',
+      name: 'AvaliationStep03',
+      component: AvaliationStep03
     }
   ]
 })
