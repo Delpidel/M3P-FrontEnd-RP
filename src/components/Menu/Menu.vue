@@ -128,6 +128,7 @@ export default {
           { icon: 'mdi-account-multiple', text: 'Usuários', link: '/users' }
         ],
         RECEPCIONISTA: [
+        { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
           { icon: 'mdi-account-plus', text: 'Cadastrar Estudante', link: '/students/new' },
           { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/students' }
         ],
@@ -137,6 +138,7 @@ export default {
           { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/instructor/students' }
         ],
         NUTRICIONISTA: [
+        { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
           { icon: 'mdi-account-check', text: 'Estudantes Ativos', link: '/active/students' }
         ],
         ALUNO: [
