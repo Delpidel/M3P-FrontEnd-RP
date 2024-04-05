@@ -20,12 +20,21 @@ global.localStorage = mockLocalStorage
 beforeEach(() => {
   vi.mock('axios', () => ({
     default: {
-      get: vi.fn(() =>
-        Promise.resolve({ data: { registered_students: 5, registered_exercises: 10 } })
-      )
-    }
-  }))
-})
+      create: vi.fn(() => ({
+        get: vi.fn(() => Promise.resolve({ data: { registered_students: 5, registered_exercises: 10 } })),
+        interceptors: {
+          request: {
+            use: vi.fn(),
+          },
+          response: {
+            use: vi.fn(),
+          },
+        },
+      })),
+    },
+  }));
+});
+
 
 describe('DashboardInstructor', () => {
   it('Deve montar o componente com sucesso.', () => {

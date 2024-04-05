@@ -3,16 +3,24 @@
     <div class="container">
       <v-row class="px-14">
         <v-col cols="12" md="10" offset-md="1">
-          <v-card class="title-card elevation-10" flat @click="atualizarFraseAleatoria">
+          <v-card class="title-card elevation-10" flat @click="updateRandomPhrase">
             <v-card-text class="d-flex flex-column align-center">
               <div class="d-flex align-center justify-center">
                 <v-icon class="mr-3" size="36">mdi-weight-lifter</v-icon>
-                <h1 class="font-weight-bold" :style="smAndDown ? 'text-align: center;' : ''">
+                <h1
+                  class="font-weight-bold"
+                  data-test="user-name"
+                  :style="smAndDown ? 'text-align: center;' : ''"
+                >
                   Olá, {{ userName }}!
                 </h1>
               </div>
-              <h3 class="mt-3 font-weight-medium" :style="smAndDown ? 'text-align: center;' : ''">
-                {{ fraseAtual }}
+              <h3
+                class="mt-3 font-weight-medium"
+                data-test="random-phrase"
+                :style="smAndDown ? 'text-align: center;' : ''"
+              >
+                {{ currentPhrase }}
               </h3>
             </v-card-text>
           </v-card>
@@ -21,16 +29,23 @@
 
       <v-row justify="center" class="px-16">
         <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
-          <v-card class="user-card elevation-10" @click="gotoStudents" style="cursor: pointer">
+          <v-card
+            class="user-card elevation-10"
+            @click="gotoStudents"
+            data-test="students-card"
+            style="cursor: pointer"
+          >
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/left-card-img-woman.png"
-                alt="Imagem de uma mulher praticando levantamento de peso na barra."
+                src="../../assets/Dashboard/alunos-academia.svg"
+                alt="Imagem de 4 alunos fazendo exercícios na academia."
                 class="card-image"
               />
               <div class="text-center">
                 <div class="text-h5 font-weight-bold">ALUNOS<br />CADASTRADOS</div>
-                <div class="text-h3 font-weight-bold">{{ registeredStudents }}</div>
+                <div class="text-h3 font-weight-bold" data-test="registeredStudents">
+                  {{ registeredStudents }}
+                </div>
                 <v-btn
                   @click.stop="gotoStudents"
                   append-icon="mdi-account-circle"
@@ -41,8 +56,9 @@
                   :class="
                     smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'
                   "
+                  data-test="add-students-button"
                 >
-                  ADICIONAR
+                  VER
                 </v-btn>
               </div>
             </v-card-text>
@@ -50,16 +66,23 @@
         </v-col>
 
         <v-col cols="12" md="5" class="mx-2" :class="mdAndDown ? 'my-2' : 'my-0'">
-          <v-card class="user-card elevation-10" @click="gotoExercises" style="cursor: pointer">
+          <v-card
+            class="user-card elevation-10"
+            @click="gotoExercises"
+            data-test="exercises-card"
+            style="cursor: pointer"
+          >
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/right-card-img-man.png"
-                alt="Imagem de um homem praticando levantamento de peso na barra."
+                src="../../assets/Dashboard/equipamentos-exercicios.svg"
+                alt="Imagem de varios equipamentos de academia um ao lado do outro."
                 class="card-image"
               />
               <div class="text-center">
                 <div class="text-h5 font-weight-bold">EXERCÍCIOS<br />CADASTRADOS</div>
-                <div class="text-h3 font-weight-bold">{{ registeredExercises }}</div>
+                <div class="text-h3 font-weight-bold" data-test="registeredExercises">
+                  {{ registeredExercises }}
+                </div>
                 <v-btn
                   @click.stop="gotoExercises"
                   append-icon="mdi-dumbbell"
@@ -70,8 +93,9 @@
                   :class="
                     smAndDown ? 'my-custom-small-button-class' : 'my-custom-large-button-class'
                   "
+                  data-test="add-exercises-button"
                 >
-                  ADICIONAR
+                  VER
                 </v-btn>
               </div>
             </v-card-text>
@@ -82,46 +106,59 @@
   </v-container>
 </template>
 
-<script setup>
-import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
-import { useRouter } from 'vue-router'
+<script>
 import { useDisplay } from 'vuetify'
+import api from '@/services/api'
 
-const router = useRouter()
-const registeredStudents = ref(0)
-const registeredExercises = ref(0)
-const userName = ref(localStorage.getItem('@name') || 'Instrutor')
+export default {
+  name: 'DashboardInstructor',
+  setup() {
+    const { smAndDown, mdAndDown } = useDisplay()
 
-const { smAndDown, mdAndDown, lgAndDown } = useDisplay()
-
-const frases = [
-  'Inspire grandeza em seus alunos. Comece agora!',
-  'Faça a diferença para seus alunos. Vamos lá!',
-  'Seja o guia. Inicie a jornada com seu aluno!',
-  'O sucesso de seus alunos começa com você! Vamos começar!',
-  'Transforme potencial em realização. Ajude-os a alcançar novas alturas!',
-  'Cada aluno é uma história de sucesso esperando para acontecer.',
-  'Eduque com paixão. Inspire a próxima geração.',
-  'O caminho para o sucesso é através do aprendizado. Guie-os em cada passo.'
-]
-
-const fraseAtual = ref('')
-
-function atualizarFraseAleatoria() {
-  fraseAtual.value = frases[Math.floor(Math.random() * frases.length)]
-}
-
-onMounted(() => {
-  atualizarFraseAleatoria()
-})
-
-function gotoStudents() {
-  router.push('/instructor/students')
-}
-
-function gotoExercises() {
-  router.push('/exercises')
+    return { smAndDown, mdAndDown }
+  },
+  data() {
+    return {
+      registeredStudents: 0,
+      registeredExercises: 0,
+      userName: localStorage.getItem('@name') || 'Instrutor',
+      currentPhrase: '',
+      frases: [
+        'Inspire grandeza em seus alunos. Comece agora!',
+        'Faça a diferença para seus alunos. Vamos lá!',
+        'Seja o guia. Inicie a jornada com seu aluno!',
+        'O sucesso de seus alunos começa com você! Vamos começar!',
+        'Transforme potencial em realização. Ajude-os a alcançar novas alturas!',
+        'Cada aluno é uma história de sucesso esperando para acontecer.',
+        'Eduque com paixão. Inspire a próxima geração.',
+        'O caminho para o sucesso é através do aprendizado. Guie-os em cada passo.'
+      ]
+    }
+  },
+  methods: {
+    updateRandomPhrase() {
+      this.currentPhrase = this.frases[Math.floor(Math.random() * this.frases.length)]
+    },
+    async fetchDashboardData() {
+      try {
+        const response = await api.get('/dashboard/instrutor')
+        this.registeredStudents = response.data.registered_students
+        this.registeredExercises = response.data.registered_exercises
+      } catch (error) {
+        console.error('Erro ao buscar dados do dashboard:', error)
+      }
+    },
+    gotoStudents() {
+      this.$router.push('/instructor/students')
+    },
+    gotoExercises() {
+      this.$router.push('/exercises')
+    }
+  },
+  mounted() {
+    this.updateRandomPhrase()
+    this.fetchDashboardData()
+  }
 }
 </script>
 

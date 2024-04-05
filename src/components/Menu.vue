@@ -134,7 +134,7 @@ export default {
         INSTRUTOR: [
           { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
           { icon: 'mdi-dumbbell', text: 'Exercícios', link: '/exercises' },
-          { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/instructor/students' }
+          { icon: 'mdi-account-multiple', text: 'Alunos', link: '/instructor/students' }
         ],
         NUTRICIONISTA: [
           { icon: 'mdi-account-check', text: 'Estudantes Ativos', link: '/active/students' }
