@@ -1,13 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Dashboard from '../views/Dashbord.vue'
-import Login from '../views/Login.vue'
-import ListaAvaliacoes from '@/views/ListaAvaliacoes.vue'
-
+import Dashboard from '../views/Dashboard/Dashbord.vue'
+import Login from '../views/Login/Login.vue'
+import ListUser from '../views/User/ListUser.vue'
+import NewUser from '../views/User/NewUser.vue'
+import StudentMealPlans from '@/views/Student/StudentMealPlans.vue'
+import WorkoutsStudentsList from '@/views/Student/WorkoutsStudentsList.vue'
+import StudentRegistration from '../views/RecepcionistaViews/StudentRegistration.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
-import ListaEstudantesAtivos from '@/views/ListaEstudantesAtivos.vue'
+import ListStudents from '../views/RecepcionistaViews/ListStudents.vue'
+import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
 
+import Exercises from '../views/InstructorViews/ExercisesPage.vue'
+import CreateStudentWorkout from '@/views/InstructorViews/CreateStudentWorkout.vue'
 
+import AvaliationStep01 from '@/components/AvaliationStep01.vue'
+import AvaliationStep02 from '@/components/AvaliationStep02.vue'
+import AvaliationStep03 from '@/components/AvaliationStep03.vue'
+
+import Meal from '../views/Meal.vue'
+import ActiveStudents from '@/views/ActiveStudents.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,36 +39,58 @@ const router = createRouter({
     {
       path: '/users',
       name: 'Listagem de usuários',
-      component: Exemplo
+      component: ListUser
     },
     {
       path: '/users/new',
       name: 'Novo usuário',
-      component: Exemplo
+      component: NewUser
+    },
+    {
+      path: '/users/:id/edit',
+      name: 'Editar usuário',
+      component: NewUser
     },
 
     //perfil recepcionista
     {
       path: '/students',
-      name: 'Listagem de estudantes',
-      component: Exemplo
+      name: 'ListStudents',
+      component: ListStudents
     },
     {
       path: '/students/new',
       name: 'Novo Estudante',
-      component: Exemplo
+      component: StudentRegistration
     },
 
     //perfil instrutor
     {
       path: '/exercises',
-      name: 'Exercícios',
-      component: Exemplo
+
+      name: 'Exercises',
+      component: Exercises
     },
     {
       path: '/instructor/students',
-      name: 'Listagem de estudantes',
+      name: 'Listagem de estudantes do instrutor',
       component: Exemplo
+    },
+    {
+      path: '/newWorkout/:id',
+      name: 'CreateWorkout',
+      component: CreateStudentWorkout
+
+    },
+    {
+      path: '/instructor/:id/list-workouts',
+      name: 'Listagem de treinos do aluno',
+      component: ListStudentWorkout
+    },
+    {
+      path: '/updateWorkout/:studentId/:workoutId',
+      name: 'UpdateWorkout',
+      component: CreateStudentWorkout
     },
 
     //perfil nutricionista
@@ -65,16 +99,52 @@ const router = createRouter({
       name: 'Listagem de estudantes ativos',
       component: ListaEstudantesAtivos
     },
+
     {
       path: '/students/avaliations/:student_id',
       name: 'Avaliacoes',
       component: ListaAvaliacoes
+    },
+    {
+      path: '/active/students',
+      name: 'Listagem de estudantes ativos',
+      component: ActiveStudents
+    },
+    {
+      path: '/dietas/:id',
+      name: 'Meal',
+      component: Meal
+    },
+    {
+      path: '/avaliation/step1',
+      name: 'AvaliationStep01',
+      component: AvaliationStep01
+    },
+    {
+      path: '/avaliation/step2',
+      name: 'AvaliationStep02',
+      component: AvaliationStep02
+    },
+    {
+      path: '/avaliation/step3',
+      name: 'AvaliationStep03',
+      component: AvaliationStep03
     },
 
     //perfil aluno
     {
       path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
+      component: StudentMealPlans
+    },
+    {
+      path: '/student/workouts',
+      name: 'WorkoutsStudentsList',
+      component: WorkoutsStudentsList
+    },
+    {
+      path: '/workouts',
+      name: 'Treinos do aluno',
       component: Exemplo
     },
     {
@@ -82,6 +152,7 @@ const router = createRouter({
       name: 'Treinos do aluno',
       component: Exemplo
     },
+
   ]
 })
 
