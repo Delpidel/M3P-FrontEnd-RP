@@ -1,13 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
-//import Dashboard from '../views/Dashboard.vue' 
-import Login from '../views/Login.vue'
-import Exercises from '../views/InstructorViews/ExercisesPage.vue'
+
+import Dashboard from '../views/Dashboard/Dashbord.vue'
+import Login from '../views/Login/Login.vue'
+import ListUser from '../views/User/ListUser.vue'
+import NewUser from '../views/User/NewUser.vue'
+import StudentMealPlans from '@/views/Student/StudentMealPlans.vue'
+import WorkoutsStudentsList from '@/views/Student/WorkoutsStudentsList.vue'
+import StudentRegistration from '../views/RecepcionistaViews/StudentRegistration.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
+import ListStudents from '../views/RecepcionistaViews/ListStudents.vue'
+import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
+
+import Exercises from '../views/InstructorViews/ExercisesPage.vue'
 import CreateStudentWorkout from '@/views/InstructorViews/CreateStudentWorkout.vue'
-
-// import ExercisesList from '../views/Exercises/ExercisesList.vue'
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,34 +22,38 @@ const router = createRouter({
       name: 'Login',
       component: Login
     },
-   /* {
+   {
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard
     },
-*/
     //perfil usuário
     {
       path: '/users',
       name: 'Listagem de usuários',
-      component: Exemplo
+      component: ListUser
     },
     {
       path: '/users/new',
       name: 'Novo usuário',
-      component: Exemplo
+      component: NewUser
+    },
+    {
+      path: '/users/:id/edit',
+      name: 'Editar usuário',
+      component: NewUser
     },
 
     //perfil recepcionista
     {
       path: '/students',
-      name: 'Listagem de estudantes',
-      component: Exemplo
+      name: 'ListStudents',
+      component: ListStudents
     },
     {
       path: '/students/new',
       name: 'Novo Estudante',
-      component: Exemplo
+      component: StudentRegistration
     },
 
     //perfil instrutor
@@ -87,12 +96,12 @@ const router = createRouter({
     {
       path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
-      component: Exemplo
+      component: StudentMealPlans
     },
     {
       path: '/student/workouts',
-      name: 'Treinos do aluno',
-      component: Exemplo
+      name: 'WorkoutsStudentsList',
+      component: WorkoutsStudentsList
     }
   ]
 })
