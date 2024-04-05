@@ -78,6 +78,7 @@ export default {
   },
   watch: {
     exercises(newValue) {
+      // Atualize a tela imediatamente quando a lista de exercícios mudar
       this.exercises = newValue;
     }
   },
@@ -92,17 +93,20 @@ export default {
       }, 2000);
     },
     getExercises() {
-      this.load();
-      ExerciseService.getAllExercises(this.exercises.current_page)
-        .then((response) => {
-          this.exercises = response;
-          this.exercises.sort((a, b) => a.description.localeCompare(b.description));
-        })
-        .catch((error) => {
-          console.error('Erro ao carregar os exercícios:', error);
-          this.snackbarLoadError = true;
-        });
-    },
+  this.load();
+  ExerciseService.getAllExercises(this.exercises.current_page)
+    .then((response) => {
+      this.exercises = response;
+
+      // Ordenar exercícios em ordem alfabética
+      this.exercises.sort((a, b) => a.description.localeCompare(b.description));
+    })
+    .catch((error) => {
+      console.error('Erro ao carregar os exercícios:', error);
+      this.snackbarLoadError = true;
+    });
+}
+,
     addExercise() {
       try {
         const body = {
@@ -113,20 +117,23 @@ export default {
 
         ExerciseService.createExercise(body)
           .then(() => {
+            this.getExercises()
             this.snackbarSuccess = true
             this.description = ''
             this.$refs.form.reset()
-            this.getExercises();
+
+            this.exercises.unshift({ description: body.description });
           })
           .catch((error) => {
-            if (error.response && error.response.status === 409) {
-              this.snackbarError = true;
+            if (error.response && error.response.status === 422) {
+
+              this.snackbarError = true
             } else {
-              console.error('Erro ao cadastrar exercício:', error);
-              this.snackbarLoadError = true;
+
+              console.error('Erro ao cadastrar exercício:', error)
+              this.snackbarLoadError = true
             }
           })
-
       } catch (error) {
         if (error instanceof yup.ValidationError) {
           this.errors = captureErrorYup(error)
@@ -134,6 +141,7 @@ export default {
       }
     }
   }
+
 }
 </script>
 
