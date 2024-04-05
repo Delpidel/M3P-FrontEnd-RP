@@ -37,7 +37,7 @@
           >
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/Dashboard/alunos-academia.svg"
+                src="../../assets/Dashboard/alunos-academia.svg"
                 alt="Imagem de 4 alunos fazendo exercícios na academia."
                 class="card-image"
               />
@@ -58,7 +58,7 @@
                   "
                   data-test="add-students-button"
                 >
-                  ADICIONAR
+                  VER
                 </v-btn>
               </div>
             </v-card-text>
@@ -74,7 +74,7 @@
           >
             <v-card-text class="d-flex flex-column justify-end">
               <img
-                src="../assets/Dashboard/equipamentos-exercicios.svg"
+                src="../../assets/Dashboard/equipamentos-exercicios.svg"
                 alt="Imagem de varios equipamentos de academia um ao lado do outro."
                 class="card-image"
               />
@@ -95,7 +95,7 @@
                   "
                   data-test="add-exercises-button"
                 >
-                  ADICIONAR
+                  VER
                 </v-btn>
               </div>
             </v-card-text>
@@ -111,7 +111,7 @@ import { useDisplay } from 'vuetify'
 import api from '@/services/api'
 
 export default {
-  name: 'DashboardComponent',
+  name: 'DashboardInstructor',
   setup() {
     const { smAndDown, mdAndDown } = useDisplay()
 
