@@ -105,17 +105,17 @@ const router = createRouter({
       component: Meal
     },
     {
-      path: '/avaliation/step1',
+      path: '/avaliation/step1/:id',
       name: 'AvaliationStep01',
       component: AvaliationStep01
     },
     {
-      path: '/avaliation/step2',
+      path: '/avaliation/step2/:id',
       name: 'AvaliationStep02',
       component: AvaliationStep02
     },
     {
-      path: '/avaliation/step3',
+      path: '/avaliation/step3/:id',
       name: 'AvaliationStep03',
       component: AvaliationStep03
     },

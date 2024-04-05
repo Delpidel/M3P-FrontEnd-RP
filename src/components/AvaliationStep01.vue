@@ -1,47 +1,50 @@
 <template>
   <div class="container">
-    <v-container>
+
+    <v-container class="main">
+      <v-form @submit.prevent="submitForm">
+        <v-row>
+          <h2>Aluno - {{ studentName.name }}</h2>
+          <v-divider></v-divider>
+
+          <v-col cols="12" sm="4">
+            <v-text-field id="age" v-model="age" label="Idade" color="yellow-darken-1"></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="4">
+            <v-text-field id="weight" v-model="weight" label="Peso" color="yellow-darken-2"
+              type="number"></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="4">
+            <v-text-field id="height" v-model="height" label="Altura" color="yellow-darken-2"
+              type="number"></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-textarea id="observationsToNutritionist" v-model="observationsToNutritionist"
+              label="Observações para a Nutricionista" color="yellow-darken-2"></v-textarea>
+          </v-col>
+          <v-col cols="12">
+            <v-textarea id="observationsToStudent" v-model="observationsToStudent" label="Observações para o Aluno"
+              color="yellow-darken-2"></v-textarea>
+          </v-col>
+          <v-col cols="12">
+            <v-btn type="submit" variant="elevated" color="grey-darken-4 text-amber" class="font-weight-bold"
+              size="large">Proximo ></v-btn>
+          </v-col>
+        </v-row>
+      </v-form>
       <v-row>
         <!-- Calendário -->
         <v-col cols="12" md="4">
           <v-col>
-            <h3>Olá {{ studentName.name }}</h3>
-            <v-date-picker v-model="date" color="yellow" mode="dateTime" :timezone="timezone" is24hr  ></v-date-picker>
-          </v-col>         
-        </v-col>
-
-        <!-- Formulário de Avaliação -->
-        <v-col cols="12" md="8">
-          <v-form @submit.prevent="submitForm">
-            <v-row>
-              <v-col cols="12" sm="4">
-                <v-text-field v-model="age" label="Idade" color="yellow-darken-1"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="4">
-                <v-text-field v-model="weight" label="Peso" color="yellow-darken-2" type="number"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="4">
-                <v-text-field v-model="height" label="Altura" color="yellow-darken-2" type="number"></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-textarea v-model="observationsToNutritionist" label="Observações para a Nutricionista"
-                  color="yellow-darken-2"></v-textarea>
-              </v-col>
-              <v-col cols="12">
-                <v-textarea v-model="observationsToStudent" label="Observações para o Aluno"
-                  color="yellow-darken-2"></v-textarea>
-              </v-col>
-              <v-col cols="12">
-                <v-btn type="submit" variant="elevated" color="grey-darken-4 text-amber" class="font-weight-bold"
-                  size="large">Proximo ></v-btn>
-              </v-col>
-            </v-row>
-          </v-form>
+            <v-date-picker id="date" v-model="date" color="yellow" mode="dateTime" :timezone="timezone"
+              is24hr @change="saveDateTime"></v-date-picker>
+          </v-col>
         </v-col>
       </v-row>
     </v-container>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -49,8 +52,8 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      studentName: '',
-      student_id: '1',
+      studentName: {},
+      id: '',
       date: null,
       timezone: '',
       time: null,
@@ -58,61 +61,58 @@ export default {
       weight: '',
       height: '',
       observationsToNutritionist: '',
-      observationsToStudent: '',
-      measures: '',
+      observationsToStudent: '',      
     }
   },
-  mounted(){    
-    this.student_id = this.$route.params.student_id;
-
+  mounted() {
+    this.id = this.$route.params.id;
     //recuperar nome do aluno no qual esta sendo cadastrado a avaliação
     this.findStudentName();
+
+    const savedDateTime = localStorage.getItem('dateTime');
+    if (savedDateTime) {
+      this.date = new Date(savedDateTime);
+    }
   },
 
   methods: {
-    selectDate(date) {
-      // Lógica para lidar com a seleção de data
-      console.log('Data selecionada:', date)
+
+    saveDateTime() {
+      if (this.date) { 
+        localStorage.setItem('dateTime', this.date.toISOString());
+      }
     },
 
     async findStudentName() {
       try {
-        // Obtem dados do aluno
-        const response = await axios.get(`http://127.0.0.1:8000/api/students/${this.student_id}`);
-        // Atualize o estado do componente com o nome do aluno
-        this.studentName = response.data; 
-        console.log(this.studentName)
+        const token = localStorage.getItem('@token');
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        const response = await axios.get(`http://127.0.0.1:8000/api/students/${this.id}`);
+        this.studentName = response.data;
+
       } catch (error) {
         console.error('Erro ao buscar nome do estudante:', error);
       }
     },
 
     submitForm() {
-      const dataForm = {
-        student_id: this.student_id,
+      const formData = {
+        student_id: this.id,
         age: this.age,
-        date: this.formatDate(this.date),
+        date: this.date ? this.date.toISOString() : null,
         weight: this.weight,
         height: this.height,
-        observations_to_student: this.observationsToStudent,
-        observations_to_nutritionist: this.observationsToNutritionist,
-        measures: this.measures
-      }
-      const token = localStorage.getItem('@token');
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        observationsToStudent: this.observationsToStudent,
+        observationsToNutritionist: this.observationsToNutritionist,
+      };
 
-      axios.post('http://127.0.0.1:8000/api/avaliations/step1', dataForm)
-
-        .then(response => {
-          console.log(response.data);
-          this.$router.push('/avaliation/step2');
-        })
-        .catch(error => {
-          console.log(dataForm, token)
-          console.error('erro ao enviar dados', error)
-        });
+      // Armazene os dados no LocalStorage
+      localStorage.setItem('step1Data', JSON.stringify(formData));
+      this.$router.push(`/avaliation/step2/${this.id}`);
 
     },
+
     //Logica para formatar data conforme backEnd
     formatDate(date) {
       const formattedDate = new Date(date);
@@ -130,4 +130,11 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.main {
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 5%
+}
+</style>

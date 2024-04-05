@@ -15,7 +15,7 @@
                         <td>{{ student.name }}</td>
                         <td>
                             <div class="d-flex justify-space-around">
-                                <v-btn @click="editDieta(meal)" type="submit" variant="elevated"
+                                <v-btn @click="cadAvaliation(student.id)" type="submit" variant="elevated"
                                     color="grey-darken-4 text-amber">
                                     Cadastrar Avaliação
                                 </v-btn>
@@ -63,6 +63,9 @@ export default {
     },
 
     methods: {
+        cadAvaliation(id){
+            this.$router.push(`/avaliation/step1/${id}`)
+        },
 
         cadDieta(id) {
             this.$router.push(`/dietas/${id}`)

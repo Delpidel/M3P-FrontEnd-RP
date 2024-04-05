@@ -145,11 +145,11 @@ export default {
       if (!this.allPhotosAdded) {
         this.showAlert = true
       } else {
-        this.$router.push('/avaliacao/step3')
+        this.$router.push('/avaliacao/step3/:id')
       }
     },
     goToStep1() {
-      this.$router.push('/avaliacao/step1')
+      this.$router.push(`/avaliation/step1/${this.id}`);
     }
   }
 }
