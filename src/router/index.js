@@ -12,6 +12,7 @@ import ListStudents from '../views/RecepcionistaViews/ListStudents.vue'
 import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
 
 import Exercises from '../views/InstructorViews/ExercisesPage.vue'
+import StudentsList from '../views/InstructorViews/ListStudents.vue'
 import CreateStudentWorkout from '@/views/InstructorViews/CreateStudentWorkout.vue'
 
 import AvaliationStep01 from '@/components/AvaliationStep01.vue'
@@ -74,7 +75,7 @@ const router = createRouter({
     {
       path: '/instructor/students',
       name: 'Listagem de estudantes do instrutor',
-      component: Exemplo
+      component: StudentsList
     },
     {
       path: '/newWorkout/:id',
