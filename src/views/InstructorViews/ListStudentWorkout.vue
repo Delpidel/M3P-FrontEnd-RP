@@ -139,7 +139,7 @@ export default {
     updateWorkout(workoutId) {
 
       this.workoutId = workoutId;
-      this.$router.push(`/updateWorkout/${this.$route.params.id}/${workoutId}`);
+      this.$router.push(`/updateWorkout/${workoutId}`);
     },
     deleteWorkout(workoutId) {
   DeleteWorkoutService.DeleteWorkout(workoutId)
