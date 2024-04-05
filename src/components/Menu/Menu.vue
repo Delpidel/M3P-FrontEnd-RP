@@ -12,7 +12,7 @@
       <v-list-item>
         <router-link to="/dashboard">
           <img
-            src="../assets/fit-manage-tech-white.svg"
+            src="@/assets/fit-manage-tech-white.svg"
             alt="logo fitmanage tech, braço flexionado mostrando músculos e um halter grande."
             class="my-4 pb-5 w-100 mx-auto d-block"
           />
@@ -65,7 +65,7 @@
         >
           <router-link to="/dashboard">
             <img
-              src="../assets/logo.svg"
+              src="@/assets/logo.svg"
               alt="logo fitmanage tech, braço flexionado mostrando músculos e um halter grande."
               :style="xs ? 'width: 30%; margin-left: 5% ' : 'width: 40%; margin-left: 10%'"
             />
@@ -108,7 +108,7 @@ const { xs, lgAndUp, mdAndDown } = useDisplay()
 </script>
 
 <script>
-import accountImage from '../assets/account-image.jpg'
+import accountImage from '@/assets/account-image.jpg'
 
 export default {
   name: 'MenuPag',
