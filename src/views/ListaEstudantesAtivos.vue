@@ -8,12 +8,15 @@
             </v-row>
         </v-card>
 
-        <v-row class="ma-1 mt-12">
-            <v-text-field :loading="loading" v-model="studentName" id="StudentName" density="compact" variant="solo"
-                label="Pesquisar Aluno" append-inner-icon="mdi-magnify" single-line hide-details
-                @click:append-inner="SearchStudent">
-            </v-text-field>
-        </v-row>
+        <v-card color="amber" class="mt-13" height="60px">
+            <v-row class="ma-2 mt-3">
+                <v-text-field :loading="loading" v-model="studentName" id="StudentName" density="compact" variant="solo"
+                    label="Pesquisar Aluno" append-inner-icon="mdi-magnify" single-line hide-details
+                    @click:append-inner="SearchStudent">
+                </v-text-field>
+            </v-row>
+        </v-card>
+
 
         <v-card color="grey-darken-1" class="ma-4 mt-10">
             <v-table fixed-header class="ma-2">
@@ -24,15 +27,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="student in students" :key="student.id">
+                    <tr v-for="(student, id) in filteredStudents" :key="student.id">
                         <td>{{ student.name }}</td>
                         <td>
-                            <v-btn class="ma-1" size="small" color="amber" @click="ShowAvaliation(student.id)">Ver
-                                Avaliações</v-btn>
-                            <v-btn class="ma-1" size="small" color="amber">Cadastrar Avaliação</v-btn>
-                            <v-btn class="ma-1" size="small" color="amber" @click="StudentWorkout(student.id)">Ver
-                                Treino</v-btn>
-                            <v-btn class="ma-1" size="small" color="amber">Enviar Treino</v-btn>
+                            <v-btn class="ma-1" size="small" color="amber" @click="ShowAvaliation(student.id)">Ver Avaliações</v-btn>
+                            <v-btn class="ma-1" size="small" color="amber" @click="NewStudentAvaliation(student.id)">Cadastrar Avaliação</v-btn>
+                            <v-btn class="ma-1" size="small" color="amber" @click="StudentMeal(student.id)">Ver Dieta</v-btn>
+                            <v-btn class="ma-1" size="small" color="amber"@click="NewStudentMeal(student.id)">Cadastrar Dieta</v-btn>
                         </td>
                     </tr>
                 </tbody>
@@ -49,7 +50,15 @@ export default {
         return {
             student: {},
             students: [],
+            studentName: '',
+            filteredStudents: []
             
+        }
+    },
+
+    watch: {
+        studentName() {
+            this.SearchStudent();
         }
     },
 
@@ -64,7 +73,6 @@ export default {
                 .then(response => {
                     const studentData = response.data;
                     console.log(studentData)
-                    // redirecionar para a página de avaliações com a resposta
                     this.$router.push({
                         path: `/students/avaliations/${student_id}`,                      
                     });
@@ -72,23 +80,33 @@ export default {
                 })
 
         },
-        // NewStudentAvaliation(student_id){
-        //     this.$router.push({
-        //     path: '/students/avaliations',
-        //     query: { id: student_id }
-        // }) 
-        // },
-
-        StudentWorkout() {
-            
+        
+        NewStudentAvaliation(student_id){
+            this.$router.push({
+            path: '/avaliation/step1',
+            query: { id: student_id }
+        }) 
         },
 
-        // NewStudentAvaliation(student_id){
-        //     this.$router.push({
-        //     path: '/students/avaliations',
-        //     query: { id: student_id }
-        // }) 
-        // },
+        StudentMeal(student_id) {
+            axios.get(`http://127.0.0.1:8000/api/meal/${student_id}`)
+                .then(response => {
+                    const studentData = response.data;
+                    console.log(studentData)
+                    this.$router.push({
+                        path: '/student/meal-plans',
+                        query: { id: student_id }                      
+                    });
+                    
+                })
+
+        },
+
+        NewStudentMeal(student_id){
+            this.$router.push({
+            path: `/dietas/${student_id}`,
+        }) 
+        },
 
         ShowStudent() {
             axios({
@@ -96,7 +114,9 @@ export default {
                 method: 'GET',
             })
                 .then((response) => {
-                    this.students = response.data                  
+                    this.students = response.data;
+                    this.filteredStudents = [...this.students];
+                    console.log(this.students)
                 })
                 .catch(() => {
                     console.log("Falha na requisição")
@@ -104,11 +124,11 @@ export default {
         },
 
         SearchStudent() {
-            /*this.students = response.data.students
-            this.studentsfilter = this.students.filter((item) => item.name === student.name)*/
-        }
-
+            const studentName = this.studentName.toLowerCase()
+            this.filteredStudents = this.students.filter(student => student.name.toLowerCase().includes(studentName))
+        } 
     }
-}
 
+}
 </script>
+

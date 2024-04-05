@@ -9,18 +9,21 @@
         </v-card>
 
         <v-row class="ma-1 py-4">
-            <!---Nome do estudante aqui-->
-            <h2>Olá {{student.name}}</h2>
+            <h2>Aluno: {{ student.name }}</h2>
         </v-row>
-        <v-row class="ma-1">
-            <v-col cols="12" md="3">
-                <v-text-field v-model="EvaluationDate" label="Data da Avaliação" id="EvaluationDate" type="date">
-                </v-text-field>
-            </v-col>
-            <v-col cols="12" md="9">
-                <v-btn class="ma-1" size="large" color="amber">Buscar</v-btn>
-            </v-col>
-        </v-row>
+        <v-card color="amber" class="ma-1">
+            <v-row class="ma-2">
+                <h3>Pesquise aqui a Data da Avaliação:</h3>
+            </v-row>
+            <v-row class="ma-1">
+                <v-col cols="12" md="12">
+                    <v-text-field :loading="loading" v-model="evaluationDate" id="evaluationDate" density="compact"
+                        variant="solo" type="date" label="Pesquisar Data de Avaliação" append-inner-icon="mdi-magnify"
+                        single-line hide-details @click:append-inner="searchEvaluation">
+                    </v-text-field>
+                </v-col>
+            </v-row>
+        </v-card>
 
         <v-card color="grey-darken-1" class="ma-4">
             <v-table fixed-header class="ma-2">
@@ -34,8 +37,10 @@
                     <tr v-for="evaluation in sortedEvaluations" :key="evaluation.id">
                         <td>{{ evaluation.date }}</td>
                         <td>
-                            <v-btn class="ma-1" size="small" color="amber">Exportar</v-btn>
-                            <v-btn class="ma-1" size="small" color="amber">Enviar Avaliação</v-btn>
+                            <v-btn class="ma-1" size="small" color="amber"
+                                @click="exportAvaliations(evaluation)">Exportar</v-btn>
+                            <v-btn class="ma-1" size="small" color="amber"
+                               @click="sendAvaliations(evaluation)">Enviar Avaliação</v-btn>
                         </td>
                     </tr>
                 </tbody>
@@ -52,31 +57,34 @@ export default {
         return {
             student_id: '',
             student: '',
+            id: '',
             students: [],
             evaluation: '',
+            evaluationDate: '',
             evaluations: [],
-            sortedEvaluations:''            
+            sortedEvaluations: ''
         }
     },
 
     mounted() {
-        
+
         this.student_id = this.$route.params.student_id;
+        this.id = this.$route.params.id;
         this.fetchAvaliations()
         this.fetchStudent()
-     },
-   
+    },
 
-    methods: {    
-        
-        fetchStudent(){
+
+    methods: {
+
+        fetchStudent() {
             axios.get(`http://127.0.0.1:8000/api/students/${this.student_id}`)
-            .then( response => {
-                this.student = response.data 
-            })
-            .catch(error => {
-                console.error('Erro ao buscar as avaliações', error);
-            });
+                .then(response => {
+                    this.student = response.data
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar as avaliações', error);
+                });
         },
 
         fetchAvaliations() {
@@ -94,7 +102,44 @@ export default {
         },
         sortEvaluations() {
             this.sortedEvaluations = [...this.evaluations].sort((a, b) => new Date(b.date) - new Date(a.date));
+        },
+
+        sendAvaliations(evaluation) {
+            axios.get(`http://127.0.0.1:8000/api/avaliations/send/${evaluation.id}`)
+                .then(response => {
+                    this.evaluation = response.data
+                    console.log(evaluation.id)
+                    console.log(this.evaluation)
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar as avaliações', error);
+                });
+        },
+
+        exportAvaliations(evaluation) {
+            axios.get(`http://127.0.0.1:8000/api/avaliations/export/${evaluation.id}`, { responseType: 'blob' })
+                .then(response => {
+                    // this.evaluation = response.data
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'Evaluations.pdf');
+                    document.body.appendChild(link);
+                    link.click();
+
+                    console.log(evaluation.id)
+                    console.log(this.evaluation)
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar as avaliações', error);
+                });
+        },
+
+        searchEvaluation() {
+            const evaluationDate = this.evaluationDate
+            this.sortedEvaluations = this.evaluations.filter(evaluation => evaluation.date.includes(evaluationDate))
         }
+
 
     }
 }
