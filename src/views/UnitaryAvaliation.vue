@@ -1,60 +1,118 @@
 <template>
-  <v-container>
-    <!-- Detalhes do Estudante -->
-    <v-card>
-      <v-card-title>
-        <h1>Detalhes do Estudante</h1>
-      </v-card-title>
-      <v-card-text>
-        <v-col cols="12">
-          <p><strong>Nome:</strong> {{ student?.name }}</p>
+  <div class="container mt-5">
+    <v-card color="grey-darken-3" height="85px">
+      <v-row class="ma-1">
+        <v-col>
+          <h1>Avaliações</h1>
         </v-col>
-        <v-col cols="12">
-          <p><strong>Altura:</strong> {{ student?.height }} m</p>
-        </v-col>
-        <v-col cols="12">
-          <p><strong>Peso:</strong> {{ student?.weight }} kg</p>
-        </v-col>
-        <v-col cols="12">
-          <p><strong>Idade:</strong> {{ student?.age }}</p>
-        </v-col>
-      </v-card-text>
+      </v-row>
     </v-card>
-    
-    <v-card>
-      <v-card-title>
-        <h1>Avaliações</h1>
-      </v-card-title>
-      <v-card-text>
-        <v-col cols="12">
-          <p><strong>Observações para Aluno:</strong> {{ avaliation?.observations_to_student }}</p>
-        </v-col>
-        <v-col cols="12">
-          <p><strong>Observações para Nutricionista:</strong> {{ avaliation?.observations_to_nutritionist }}</p>
-        </v-col>
-        <v-col cols="12">
-          <p><strong>Medidas:</strong></p>
-          <ul>
-            <li v-for="(measure, index) in avaliation?.measures" :key="index">
-              {{ index }}: {{ measure }}
-            </li>
-          </ul>
-        </v-col>
-        <v-row>
-          <v-col v-for="(image, index) in avaliationImages" :key="index" cols="6">
-            <img :src="image" alt="Imagem da Avaliação">
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="6">
-            <!-- Select para escolher avaliações -->
-            <v-select v-model="selectedAvaliationId" :items="avaliationOptions" label="Escolha uma avaliação" @input="selectAvaliation"></v-select>
-          </v-col>
-        </v-row>
-        
-      </v-card-text>
+    <v-row class="ma-1 mt-12">
+      <v-col cols="6">
+        <!-- Select para escolher avaliações -->
+        <v-select v-model="selectedAvaliationId" :items="avaliationOptions" label="Escolha uma avaliação"
+          item-title="text" @change="selectAvaliation"></v-select>
+      </v-col>
+    </v-row>
+    <v-card color="amber" class="ma-4" v-if="avaliation">
+      <v-table fixed-header class="ma-2">
+        <thead>
+          <tr>
+            <th class="text-left">Informações</th>
+            <th>Valores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="avaliation">
+            <td>Data</td>
+            <td>{{ avaliation.date }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Idade</td>
+            <td>{{ avaliation.age }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Peso</td>
+            <td>{{ avaliation.weight }}kg</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Altura</td>
+            <td>{{ avaliation.height }}m</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Punho</td>
+            <td>{{ avaliation.punho }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Antebraço Direito</td>
+            <td>{{ avaliation.antebraco_direito }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Antebraço Esquerdo</td>
+            <td>{{ avaliation.antebraco_esquerdo }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Braço Direito</td>
+            <td>{{ avaliation.braco_direito }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Braço Esquerdo</td>
+            <td>{{ avaliation.braco_esquerdo }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Torax</td>
+            <td>{{ avaliation.torax }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Abdomen</td>
+            <td>{{ avaliation.abdomen }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Quadril</td>
+            <td>{{ avaliation.quadril }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Coxa Direira</td>
+            <td>{{ avaliation.coxa_direita }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Coxa Esquerda</td>
+            <td>{{ avaliation.coxa_esquerda }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Biceps Femoral Direito</td>
+            <td>{{ avaliation.biceps_femoral_direito }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Biceps Femoral Esquerdo</td>
+            <td>{{ avaliation.biceps_femoral_esquerdo }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Panturrilha Direita</td>
+            <td>{{ avaliation.panturrilha_direita }}</td>
+          </tr>
+          <tr v-if="avaliation">
+            <td>Panturrilha Esquerda</td>
+            <td>{{ avaliation.panturrilha_esquerda }}</td>
+          </tr>
+        </tbody>
+      </v-table>
     </v-card>
-  </v-container>
+    <div v-if="avaliation">
+      <img :src="getImageUrl(avaliation.back)" alt="Imagem de costas">
+      <img :src="getImageUrl(avaliation.front)" alt="Imagem frontal">
+      <img :src="getImageUrl(avaliation.left)" alt="Imagem lateral esquerda">
+      <img :src="getImageUrl(avaliation.right)" alt="Imagem lateral direita">
+    </div>
+    <v-card color="grey-darken-1">
+      <v-col cols="12" v-if="avaliation">
+        <p><strong>Observações para Aluno:</strong> {{ avaliation.observations_to_student }}</p>
+        <p><strong>Observações para Nutricionista:</strong> {{ avaliation.observations_to_nutritionist }}</p>
+      </v-col>
+    </v-card>
+
+
+  </div>
 </template>
 
 <script>
@@ -63,62 +121,61 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      avaliations: [],
       selectedAvaliationId: null,
-      avaliation: null // Adicionado uma propriedade para armazenar a avaliação selecionada
+      avaliationOptions: [], // Lista de opções do select
+      avaliation: null, // Detalhes da avaliação selecionada
+      avaliationImages: [], // Lista de URLs das imagens da avaliação
+      avaliations: []
     };
   },
-  computed: {
-    avaliationOptions() {
-      const options = [];
-      for (let i = 0; i < this.avaliations.length; i++) {
-        const avaliation = this.avaliations[i];
-        options.push({
-          text: avaliation.id,
-          value: avaliation.id
-        });
-      }
-      return options;
-    },
-    avaliationImages() {
-      if (this.selectedAvaliationId && Array.isArray(this.avaliations)) { // Verifica se this.avaliations é um array
-        const selectedAvaliation = this.avaliations.find(avaliation => avaliation.id === this.selectedAvaliationId);
-        if (selectedAvaliation) {
-          // Verificar se há imagens e extrair as URLs
-          const images = ['back', 'front', 'left', 'right'].map(key => selectedAvaliation[key]);
-          return images;
-        }
-      }
-      return [];
+  watch: {
+    selectedAvaliationId(newId) {
+      console.log(this.avaliations)
+      this.avaliation = this.avaliations.find(avaliation => avaliation.id == newId)
     }
   },
   methods: {
-    fetchAvaliations(studentId) {
-      axios.get(`/api/avaliations/${studentId}`)
+    selectAvaliation() {
+      axios.get(`http://localhost:8000/api/avaliations/${this.selectedAvaliationId}`)
         .then(response => {
-          this.avaliations = response.data;
+          this.avaliation = response.data;
+
+          this.avaliationImages = [this.avaliation.back, this.avaliation.front, this.avaliation.left, this.avaliation.right];
         })
         .catch(error => {
-          console.error('Erro ao obter avaliações:', error);
+          console.error('Erro ao obter detalhes da avaliação:', error);
         });
     },
-    selectAvaliation() {
-      if (this.selectedAvaliationId && Array.isArray(this.avaliations)) { // Verifica se this.avaliations é um array
-        // Encontra a avaliação correspondente ao ID selecionado
-        const selectedAvaliation = this.avaliations.find(avaliation => avaliation.id === this.selectedAvaliationId);
-
-        // Atualiza a propriedade avaliation com a avaliação selecionada
-        this.avaliation = selectedAvaliation;
-      } else {
-        // Caso não haja nenhuma avaliação selecionada, define avaliation como null ou um objeto vazio, dependendo da sua lógica de tratamento
-        this.avaliation = null; // ou this.avaliation = {};
-      }
+    getImageUrl(imageId) {
+      return `http://localhost:8000/images/${imageId}`;
     }
   },
-
   mounted() {
-    const studentId = this.$route.params.studentId;
-    this.fetchAvaliations(studentId);
+    const studentId = this.$route.params.studentId; // Perguntar como fazer para puxar automatico
+
+    const accessToken = localStorage.getItem('@token');
+
+    if (!accessToken) {
+      console.error('Token de autenticação não encontrado no localStorage');
+      return;
+    }
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+    axios.get(`http://localhost:8000/api/avaliations/${studentId}`)
+      .then(response => {
+
+        this.avaliationOptions = response.data.map(avaliation => ({
+          text: `Avaliação ${avaliation.date}`, // Texto visível no select
+          value: avaliation.id
+        }));
+
+        this.avaliations = response.data
+
+      })
+      .catch(error => {
+        console.error('Erro ao obter lista de avaliações:', error);
+      });
   }
 };
 </script>
