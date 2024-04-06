@@ -46,6 +46,13 @@ const router = createRouter({
       component: StudentRegistration
     },
 
+    {
+      path: '/students/:id/documents',
+      name: 'student-documents',
+      component: StudentDocuments,
+      props: true
+    },
+
     //perfil instrutor
     {
       path: '/exercises',

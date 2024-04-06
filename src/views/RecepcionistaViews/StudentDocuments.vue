@@ -14,7 +14,7 @@
                 ></v-img>
               </v-col>
               <v-col cols="auto">
-                <h2 v-if="studentName">Documentos de {{ studentName }}</h2>
+                <h2 v-if="studentNameCopy">Documentos de {{ studentNameCopy }}</h2>
                 <h2 v-else>Documentos</h2>
               </v-col>
             </v-row>
@@ -45,21 +45,27 @@
                   class="font-weight-bold"
                   size="large"
                   @click="sendDocument"
-                  >Enviar</v-btn
-                >
+                >Enviar</v-btn>
               </v-col>
             </v-row>
 
             <v-row>
               <v-col cols="12">
                 <h3 class="mt-4">Documentos Cadastrados</h3>
-                <v-list v-if="documents.length > 0">
-                  <v-list-item v-for="(document, index) in documents" :key="index">
-                    <v-list-item-content>
-                      <v-list-item-title>{{ document.title }}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
+                <table v-if="documents.length > 0" class="table">
+                  <thead>
+                    <tr>
+                      <th>Título</th>
+                      <th>Descrição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(document, index) in documents" :key="index">
+                      <td>{{ document.title }}</td>
+                      <td>{{ document.description }}</td>
+                    </tr>
+                  </tbody>
+                </table>
                 <span v-else>Nenhum documento cadastrado</span>
               </v-col>
             </v-row>
@@ -71,77 +77,64 @@
 </template>
 
 <script>
-import axios from 'axios';
+import StudentDocumentService from '@/services/StudentDocumentService'
 
 export default {
+  props: ['studentName'],
   data() {
     return {
       description: '',
       selectedFile: null,
       isLoading: false,
-      success: false,
-      showError: false,
-      studentName: '',
       documents: [],
-      studentId: null
-    };
+      studentId: null,
+      studentNameCopy: ''
+    }
   },
   methods: {
     async sendDocument() {
       if (!this.selectedFile || !this.description) {
-        alert('Por favor, preencha todos os campos.');
-        return;
+        alert('Por favor, preencha todos os campos.')
+        return
       }
 
-      const formData = new FormData();
-      formData.append('title', this.description);
-      formData.append('document', this.selectedFile);
-
-      this.isLoading = true;
+      this.isLoading = true
 
       try {
-        const response = await axios.post(
-          `http://localhost:8000/api/students/${this.studentId}/documents`,
-          formData
-        );
+        const formData = new FormData()
+        formData.append('title', this.description)
+        formData.append('document', this.selectedFile)
 
-        if (response.status === 200) {
-          this.success = true;
-          this.description = '';
-          this.$refs.fileInput.reset();
-          this.fetchDocuments();
-          alert('Documento enviado com sucesso!');
-        } else {
-          this.showError = true;
-        }
+        await StudentDocumentService.sendDocument(this.studentId, formData)
+        this.description = ''
+        this.selectedFile = null
+        this.fetchDocuments()
+        alert('Documento enviado com sucesso!')
       } catch (error) {
-        console.error('Erro ao enviar documento:', error);
-        this.showError = true;
+        console.error('Erro ao enviar documento:', error)
+        alert('Erro ao enviar documento')
       } finally {
-        this.isLoading = false;
+        this.isLoading = false
       }
     },
     async fetchDocuments() {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/students/${this.studentId}/documents`
-        );
-        if (response.status === 200) {
-          this.documents = response.data;
-        } else {
-          throw new Error('Erro ao obter documentos do estudante');
-        }
+        this.documents = await StudentDocumentService.getDocuments(this.studentId)
       } catch (error) {
-        console.error('Erro ao obter documentos do estudante:', error);
-        alert('Erro ao obter documentos do estudante');
+        console.error('Erro ao obter documentos do estudante:', error)
+        alert('Erro ao obter documentos do estudante')
       }
     }
   },
-  async created() {
-    this.studentId = this.$route.params.id;
-    await this.fetchDocuments();
+  mounted() {
+    this.studentId = this.$route.params.id
+    
+    const params = new URLSearchParams(this.$route.query)
+    this.studentNameCopy = params.get('studentName')
+    
+    this.fetchDocuments()
   }
-};
+}
 </script>
 
 <style scoped>
