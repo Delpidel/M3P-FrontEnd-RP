@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <v-snackbar v-model="success"
-     color="#212121" 
+     color="success"
      location="top center" 
      timeout="5000"  
      class="blink-snackbar">
@@ -137,9 +137,7 @@ export default {
       this.$router.push(`/newWorkout/${this.$route.params.id}`);
     },
     updateWorkout(workoutId) {
-
-      this.workoutId = workoutId;
-      this.$router.push(`/updateWorkout/${workoutId}`);
+      this.$router.push(`/updateWorkout/${workoutId}`)
     },
     deleteWorkout(workoutId) {
   DeleteWorkoutService.DeleteWorkout(workoutId)
