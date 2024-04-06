@@ -191,7 +191,7 @@ nav {
   right: 0;
   border-radius: 3rem;
   box-shadow: 30px 30px 0px white;
-  z-index: 1005;
+  z-index: -1;
 }
 
 #sidebar a.v-list-item--active + .v-list-item::before,
@@ -205,7 +205,7 @@ nav {
   right: 0;
   border-radius: 3rem;
   box-shadow: 30px -30px 0px white;
-  z-index: 1005;
+  z-index: -1;
 }
 
 .menuItem {
