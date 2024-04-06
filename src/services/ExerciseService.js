@@ -1,10 +1,6 @@
 import api from './api'
 
 class ExerciseService {
-    async createExercises(body) {
-        const response = await api.post('exercises', body)
-        return response.data
-    }
 
     async createExercise(body) {
         const response = await api.post('exercises', body, {
@@ -16,7 +12,7 @@ class ExerciseService {
         return response.data
     }
 
-    async getAllExercises(page = '') {
+    async getAllExercises(page = 1) {
         const response = await api.get(`/exercises?page=${page}`, {
             headers: {
                 token: localStorage.getItem('@token'),

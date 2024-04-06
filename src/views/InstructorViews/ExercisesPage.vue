@@ -47,21 +47,26 @@
         <v-snackbar v-model="snackbarLoadError" :timeout="duration" color="red-darken-2" location="top">
           Erro ao carregar os exercícios!
         </v-snackbar>
+        <v-snackbar v-model="showEmptyListSnackbar" :timeout="duration" color="red-darken-2" location="top">
+          Não exitem exercícios cadastrados!
+        </v-snackbar>
 
       </div>
     </div>
   </div>
 </template>
+
 <script setup>
 import { useDisplay } from 'vuetify'
 const { xs, smAndDown, mdAndDown } = useDisplay()
 </script>
+
 <script>
+
 import * as yup from 'yup'
 import { captureErrorYup } from '../../utils/captureErrorYup'
 import { schemaExerciseForm } from '@/validations/exercise.validations'
-import ExerciseService from '@/services/ExerciseService'
-
+import ExerciseService from '../../services/ExerciseService'
 
 export default {
   data() {
@@ -72,6 +77,7 @@ export default {
       snackbarSuccess: false,
       snackbarError: false,
       snackbarLoadError: false,
+      showEmptyListSnackbar: false,
       duration: 3000,
       loading: false
     }
@@ -95,11 +101,18 @@ export default {
       this.load();
       ExerciseService.getAllExercises(this.exercises.current_page)
         .then((response) => {
-          this.exercises = response;
-          this.exercises.sort((a, b) => a.description.localeCompare(b.description));
+          if (response.data && Array.isArray(response.data)) {
+            if (response.data.length > 0) {
+              this.exercises = response.data;
+              this.exercises.sort((a, b) => a.description.localeCompare(b.description));
+            } else {
+              this.showEmptyListSnackbar = true;
+            }
+          } else {
+            this.snackbarLoadError = true;
+          }
         })
-        .catch((error) => {
-          console.error('Erro ao carregar os exercícios:', error);
+        .catch(() => {
           this.snackbarLoadError = true;
         });
     },
@@ -110,12 +123,12 @@ export default {
         }
         schemaExerciseForm.validateSync(body, { abortEarly: false })
         this.errors = {}
-
         ExerciseService.createExercise(body)
           .then(() => {
-            this.snackbarSuccess = true
-            this.description = ''
-            this.$refs.form.reset()
+            this.exercises.push({ description: this.description });
+            this.description = '';
+            this.$refs.form.reset();
+            this.snackbarSuccess = true;
             this.getExercises();
           })
           .catch((error) => {
@@ -126,13 +139,13 @@ export default {
               this.snackbarLoadError = true;
             }
           })
-
       } catch (error) {
         if (error instanceof yup.ValidationError) {
           this.errors = captureErrorYup(error)
         }
       }
     }
+
   }
 }
 </script>
