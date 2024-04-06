@@ -10,6 +10,8 @@ import StudentRegistration from '../views/RecepcionistaViews/StudentRegistration
 import Exemplo from '../views/PaginaExemplo.vue'
 import ListStudents from '../views/RecepcionistaViews/ListStudents.vue'
 import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
+import UpdateWorkout from '@/views/InstructorViews/UpdateWorkout.vue'
+
 
 import Exercises from '../views/InstructorViews/ExercisesPage.vue'
 import StudentsList from '../views/InstructorViews/ListStudents.vue'
@@ -68,7 +70,6 @@ const router = createRouter({
     //perfil instrutor
     {
       path: '/exercises',
-   
       name: 'Exercises',
       component: Exercises
     },
@@ -89,9 +90,9 @@ const router = createRouter({
       component: ListStudentWorkout
     },
     {
-      path: '/updateWorkout/:studentId/:workoutId',
+      path: '/updateWorkout/:id',
       name: 'UpdateWorkout',
-      component: CreateStudentWorkout
+      component: UpdateWorkout,
     },
 
     //perfil nutricionista
