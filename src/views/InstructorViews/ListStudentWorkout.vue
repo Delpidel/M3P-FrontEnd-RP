@@ -1,12 +1,5 @@
 <template>
   <div class="container">
-    <v-snackbar v-model="success"
-     color="success"
-     location="top center" 
-     timeout="5000"  
-     class="blink-snackbar">
-    Treino excluído com sucesso!
-  </v-snackbar>
     <v-card color="#ffc107">
       <v-card-title class="d-flex align-center justify-space-between">
         <div class="d-flex align-center">
@@ -79,6 +72,13 @@
         </div>
       </v-window-item>
     </v-window>
+    <v-snackbar v-model="success"
+     color="success"
+     location="top center" 
+     timeout="5000"  
+     class="blink-snackbar">
+    Treino excluído com sucesso!
+  </v-snackbar>
   </div>
 </template>
 
