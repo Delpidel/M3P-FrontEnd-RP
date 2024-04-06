@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import api from '../services/api'
 export default {
   data() {
     return {
@@ -93,12 +94,19 @@ export default {
       input.addEventListener('change', (event) => this.uploadImage(event, index))
       input.click()
     },
-    uploadImage(event, index) {
+   async uploadImage(event, index) {
       const file = event.target.files[0]
       if (file) {
+        const formData = new FormData();
+        formData.append('photo', file);
+        formData.append('name', `image_${index}`);
+        const response = await api.post('/upload', formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }});
         const imageUrl = URL.createObjectURL(file)
         this.imageLinks[index] = imageUrl
-        localStorage.setItem(`image_${index}`, imageUrl)
+        localStorage.setItem(`image_${index}`, response.data.id)
         console.log('Imagem adicionada:', imageUrl)
         this.allPhotosAdded = this.imageLinks.every((link) => link.startsWith('blob:'))
       }
