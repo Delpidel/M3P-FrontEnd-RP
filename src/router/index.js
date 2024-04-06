@@ -7,7 +7,6 @@ import NewUser from '../views/User/NewUser.vue'
 import StudentMealPlans from '@/views/Student/StudentMealPlans.vue'
 import WorkoutsStudentsList from '@/views/Student/WorkoutsStudentsList.vue'
 import StudentRegistration from '../views/RecepcionistaViews/StudentRegistration.vue'
-import Exemplo from '../views/PaginaExemplo.vue'
 import ListStudents from '../views/RecepcionistaViews/ListStudents.vue'
 import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
 
@@ -20,6 +19,8 @@ import AvaliationStep03 from '@/components/AvaliationStep03.vue'
 
 import Meal from '../views/Meal.vue'
 import ActiveStudents from '@/views/ActiveStudents.vue'
+
+import Exemplo from '../views/PaginaExemplo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -131,17 +132,6 @@ const router = createRouter({
       name: 'WorkoutsStudentsList',
       component: WorkoutsStudentsList
     },
-    {
-      path: '/workouts',
-      name: 'Treinos do aluno',
-      component: Exemplo
-    },
-    {
-      path: '/student/workouts',
-      name: 'Treinos do aluno',
-      component: Exemplo
-    },
-
   ]
 })
 
