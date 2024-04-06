@@ -24,18 +24,18 @@ import Exemplo from '../views/PaginaExemplo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes:[
+  routes: [
     {
       path: '/',
       name: 'Login',
       component: Login
     },
-   {
+    {
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard
     },
-    
+
     //perfil usuário
     {
       path: '/users',
@@ -68,7 +68,6 @@ const router = createRouter({
     //perfil instrutor
     {
       path: '/exercises',
-   
       name: 'Exercises',
       component: Exercises
     },
@@ -81,10 +80,9 @@ const router = createRouter({
       path: '/newWorkout/:id',
       name: 'CreateWorkout',
       component: CreateStudentWorkout
-
     },
     {
-      path: '/instructor/:id/list-workouts', 
+      path: '/instructor/:id/list-workouts',
       name: 'Listagem de treinos do aluno',
       component: ListStudentWorkout
     },
@@ -131,7 +129,7 @@ const router = createRouter({
       path: '/student/workouts',
       name: 'WorkoutsStudentsList',
       component: WorkoutsStudentsList
-    },
+    }
   ]
 })
 
