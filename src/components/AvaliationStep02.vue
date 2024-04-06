@@ -1,5 +1,4 @@
 <template>
-
   <div class="container">
     <v-layout>
       <v-container>
@@ -94,16 +93,17 @@ export default {
       input.addEventListener('change', (event) => this.uploadImage(event, index))
       input.click()
     },
-   async uploadImage(event, index) {
+    async uploadImage(event, index) {
       const file = event.target.files[0]
       if (file) {
-        const formData = new FormData();
-        formData.append('photo', file);
-        formData.append('name', `image_${index}`);
-        const response = await api.post('/upload', formData,{
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }});
+        const formData = new FormData()
+        formData.append('photo', file)
+        formData.append('name', `image_${index}`)
+        const response = await api.post('/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
         const imageUrl = URL.createObjectURL(file)
         this.imageLinks[index] = imageUrl
         localStorage.setItem(`image_${index}`, response.data.id)
@@ -111,9 +111,15 @@ export default {
         this.allPhotosAdded = this.imageLinks.every((link) => link.startsWith('blob:'))
       }
     },
+    async deleteFileFromBackend(index) {
+      const fileId = localStorage.getItem(`image_${index}`)
+      const response = await api.delete(`/delete/${fileId}`)
+      console.log(response.data.message)
+    },
     deletePhoto(index) {
       this.imageLinks[index] = `../src/assets/avaliation-images/${this.getOriginalImageName(index)}`
       console.log('Imagem restaurada:', this.imageLinks[index])
+      this.deleteFileFromBackend(index)
       localStorage.removeItem(`image_${index}`)
     },
     getOriginalImageName(index) {
@@ -268,4 +274,3 @@ export default {
   margin-left: 20%;
 }
 </style>
-
