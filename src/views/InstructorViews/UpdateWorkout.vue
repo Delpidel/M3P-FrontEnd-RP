@@ -15,7 +15,7 @@
             </v-card>
             <v-window>
               <v-window-item>
-                <v-form class="ma-5" @submit.prevent="handleSubmit" v-if="exercises && workout">
+                <v-form class="ma-5" @submit.prevent="handleSubmit" v-if="exercises">
                   <v-row>
                     <v-col cols="12">
                       <v-autocomplete
@@ -27,7 +27,7 @@
                         variant="outlined"
                         v-model="workout.exercise_id"
                         data-test="selected-exercise"
-                        :disabled="true"
+                        :disabled="isExerciseSelectionDisabled"
                       ></v-autocomplete>
                     </v-col>
                   </v-row>
@@ -71,6 +71,8 @@
                         label="Dia da semana"
                         variant="outlined"
                         :items="daysOfWeek"
+                        :item-title="title"
+                        item-value="value"
                         v-model="workout.day"
                         data-test="day-input"
                       ></v-select>
@@ -120,6 +122,9 @@
                 >
                   {{ errorMessage }}
                 </v-snackbar>
+                <v-overlay v-if="isExerciseSelectionDisabled">
+                  <v-progress-circular indeterminate size="64"></v-progress-circular>
+                </v-overlay>
               </v-window-item>
             </v-window>
           </v-col>
@@ -142,20 +147,27 @@ export default {
         exercise_id: null,
         repetitions: '',
         weight: '',
-        break_time: 45,
+        break_time: 0,
         day: '',
         observations: '',
       },
-      daysOfWeek: ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'],
+      daysOfWeek: [
+        { value: 'SEGUNDA', title: 'Segunda-feira' },
+        { value: 'TERCA', title: 'Terça-feira' },
+        { value: 'QUARTA', title: 'Quarta-feira' },
+        { value: 'QUINTA', title: 'Quinta-feira' },
+        { value: 'SEXTA', title: 'Sexta-feira' },
+        { value: 'SABADO', title: 'Sábado' },
+        { value: 'DOMINGO', title: 'Domingo' }
+      ],
       snackbarSuccess: false,
       snackbarError: false,
       duration: 3000,
-      errors: {},
+      errors: {}
     };
   },
-  async created() {
-    await this.loadExercises();
-    await this.loadWorkout();
+  mounted() {
+    this.loadExercises();
   },
   methods: {
     async loadExercises() {
@@ -165,16 +177,6 @@ export default {
       } catch (error) {
         console.error('Erro ao carregar exercícios:', error);
         this.showErrorMessage('Falha ao carregar os exercícios cadastrados.');
-      }
-    },
-    async loadWorkout() {
-      try {
-        const workoutId = this.$route.params.workoutId;
-        const response = await UpdateWorkoutService.updateWorkout(workoutId);
-        this.workout = response.data; 
-      } catch (error) {
-        console.error('Erro ao carregar dados do treino:', error);
-        this.showErrorMessage('Erro ao carregar dados do treino.');
       }
     },
     async handleSubmit() {
@@ -188,7 +190,7 @@ export default {
           observations: this.workout.observations,
         };
 
-        const validationResult = await yup.object().shape({
+        await yup.object().shape({
           exercise_id: yup.string().required('Selecione um exercício'),
           repetitions: yup.number().min(0, 'As repetições devem ser um número positivo').required('Digite o número de repetições'),
           weight: yup.number().min(0, 'A carga deve ser um número positivo').required('Digite a carga do exercício'),
@@ -198,7 +200,10 @@ export default {
         }).validate(body, { abortEarly: false });
 
         await UpdateWorkoutService.updateWorkout(body, this.$route.params.workoutId);
+
         this.showSuccessMessage('Treino atualizado com sucesso!');
+        this.resetForm();
+
       } catch (error) {
         if (error instanceof yup.ValidationError) {
           this.errors = error.inner.reduce((acc, err) => {
@@ -211,6 +216,14 @@ export default {
         }
       }
     },
+    resetForm() {
+      this.workout.exercise_id = null;
+      this.workout.repetitions = '';
+      this.workout.weight = '';
+      this.workout.break_time = 0;
+      this.workout.day = '';
+      this.workout.observations = '';
+    },
     showSuccessMessage(message) {
       this.snackbarSuccess = true;
       this.successMessage = message;
@@ -218,8 +231,8 @@ export default {
     showErrorMessage(message) {
       this.snackbarError = true;
       this.errorMessage = message;
-    },
-  },
+    }
+  }
 };
 </script>
 
