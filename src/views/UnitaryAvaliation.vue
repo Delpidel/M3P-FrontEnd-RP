@@ -99,10 +99,12 @@
       </v-table>
     </v-card>
     <div v-if="avaliation">
-      <img :src="getImageUrl(avaliation.back)" alt="Imagem de costas">
-      <img :src="getImageUrl(avaliation.front)" alt="Imagem frontal">
-      <img :src="getImageUrl(avaliation.left)" alt="Imagem lateral esquerda">
-      <img :src="getImageUrl(avaliation.right)" alt="Imagem lateral direita">
+      <img :src="avaliation.imagem_back.url" alt="Imagem de costas" width="250px">
+      <img :src="avaliation.imagem_front.url" alt="Imagem frontal" width="250px">
+      <img :src="avaliation.imagem_left.url" alt="Imagem de lateral esquerda" width="250px">
+      <img :src="avaliation.imagem_right.url" alt="Imagem de lateral direita" width="250px">
+      
+      
     </div>
     <v-card color="grey-darken-1">
       <v-col cols="12" v-if="avaliation">
@@ -146,9 +148,7 @@ export default {
           console.error('Erro ao obter detalhes da avaliação:', error);
         });
     },
-    getImageUrl(imageId) {
-      return `http://localhost:8000/images/${imageId}`;
-    }
+    
   },
   mounted() {
     const studentId = this.$route.params.studentId; // Perguntar como fazer para puxar automatico
