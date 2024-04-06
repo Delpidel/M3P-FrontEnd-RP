@@ -402,7 +402,7 @@ export default {
   background-image: url(../../assets/background-student-registration.jpg);
   background-size: cover;
   z-index: -1;
-  opacity: 0.5;
+  opacity: 0.15;
 }
 
 .formContent-data-cameraContent-camera {
