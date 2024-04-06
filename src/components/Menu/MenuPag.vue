@@ -215,8 +215,8 @@ nav {
   background: linear-gradient(
     90deg,
     rgba(73, 73, 73, 1) 0%,
-    rgba(33, 33, 33, 0.05) 75%,
-    rgba(33, 33, 33, 0.05) 100%
+    rgba(33, 33, 33, 0) 50%,
+    rgba(33, 33, 33, 0) 100%
   );
 }
 
