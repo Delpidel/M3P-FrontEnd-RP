@@ -99,11 +99,9 @@
                     >
                       Cadastrar
                     </v-btn>
-                    <router-link to="/instructor/{{id}}/list-workouts">
-                      <v-btn class="ml-auto" type="submit" variant="elevated" size="large">
-                        Voltar
-                      </v-btn>
-                    </router-link>
+                    <v-btn class="ml-auto" @click="goBack" variant="elevated" size="large">
+                      Voltar
+                    </v-btn>
                   </v-col>
                 </v-form>
                 <v-snackbar
@@ -171,6 +169,9 @@ export default {
       })
   },
   methods: {
+    goBack() {
+      this.$router.back()
+    },
     handleSubmit() {
       try {
         const body = {
