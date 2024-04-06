@@ -122,9 +122,6 @@
                 >
                   {{ errorMessage }}
                 </v-snackbar>
-                <v-overlay v-if="isExerciseSelectionDisabled">
-                  <v-progress-circular indeterminate size="64"></v-progress-circular>
-                </v-overlay>
               </v-window-item>
             </v-window>
           </v-col>
@@ -199,7 +196,7 @@ export default {
           observations: yup.string(),
         }).validate(body, { abortEarly: false });
 
-        await UpdateWorkoutService.updateWorkout(body, this.$route.params.workoutId);
+        await UpdateWorkoutService.updateWorkout(body, this.$route.params.id);
 
         this.showSuccessMessage('Treino atualizado com sucesso!');
         this.resetForm();
@@ -211,7 +208,6 @@ export default {
             return acc;
           }, {});
         } else {
-          console.error('Erro ao atualizar treino:', error);
           this.showErrorMessage('Erro ao atualizar treino. Por favor, tente novamente.');
         }
       }
