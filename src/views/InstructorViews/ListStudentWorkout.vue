@@ -42,7 +42,6 @@
                 <th class="head-descriptions">Peso</th>
                 <th class="head-descriptions">Repetições</th>
                 <th class="head-descriptions">Pausa (s)</th>
-                <th class="head-descriptions">Tempo</th>
                 <th class="head-descriptions">Observações</th>
                 <th class="head-descriptions">Ações</th>
               </tr>
@@ -53,7 +52,6 @@
                 <td>{{ workout.weight }} kg</td>
                 <td>{{ workout.repetitions }}</td>
                 <td>{{ workout.break_time }}</td>
-                <td>{{ workout.time }}</td>
                 <td>{{ workout.observations}}</td>
                 <td>
                   <v-btn @click="updateWorkout(workout.id)">
