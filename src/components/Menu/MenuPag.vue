@@ -18,6 +18,7 @@
           />
         </router-link>
       </v-list-item>
+
       <v-divider></v-divider>
       <v-list>
         <v-list-item
@@ -28,6 +29,7 @@
         ></v-list-item>
       </v-list>
       <v-divider class="pb-3"></v-divider>
+
       <v-list nav dense class="ma-0 pa-0 pl-0 pl-md-4 mt-5">
         <router-link
           v-for="(item, i) in menu[profile]"
@@ -40,10 +42,11 @@
             {{ item.text }}
           </v-list-item>
         </router-link>
-        <v-list-item class="menuLink"
-          ><!-- item adicionado para permitir arredondamento borda menu --></v-list-item
-        >
+        <v-list-item class="menuLink">
+          <!-- item adicionado para permitir arredondamento borda menu -->
+        </v-list-item>
       </v-list>
+
       <template v-slot:append>
         <div class="pb-10 pr-2 pr-md-4">
           <v-btn block append-icon="mdi-logout" variant="plain" @click="logout">Sair</v-btn>
@@ -51,6 +54,7 @@
       </template>
     </v-navigation-drawer>
   </v-layout>
+
   <div class="d-flex justify-center" id="menuMobile">
     <v-row :style="lgAndUp ? 'display:none' : ''">
       <v-col cols="12" class="pa-0 ma-0">
@@ -64,7 +68,9 @@
               :style="xs ? 'width: 30%; margin-left: 5% ' : 'width: 40%; margin-left: 10%'"
             />
           </router-link>
+
           <h2>FITMANAGE TECH</h2>
+
           <v-menu theme="dark" class="menu-dropdown">
             <template v-slot:activator="{ props }">
               <v-btn
@@ -76,6 +82,7 @@
               >
               </v-btn>
             </template>
+
             <v-list theme="dark">
               <v-list-item v-for="(item, i) in menu[profile]" :key="i" :to="item.link" link>
                 <v-list-item :append-icon="item.icon">{{ item.text }}</v-list-item>
@@ -92,15 +99,19 @@
     </v-row>
   </div>
 </template>
+
 <script setup>
 import { useDisplay } from 'vuetify'
 const { xs, lgAndUp, mdAndDown } = useDisplay()
 </script>
+
 <script>
 import accountImage from '@/assets/account-image.jpg'
 import UserService from '@/services/User/UserService'
 import AuthenticationService from '@/services/Auth/AuthenticationService'
+
 import axios from 'axios'
+
 export default {
   name: 'MenuPag',
   data() {
@@ -140,9 +151,11 @@ export default {
       }
     }
   },
+
   mounted() {
     this.loadUserImage()
   },
+
   methods: {
     logout() {
       AuthenticationService.logout().then(() => {
@@ -151,6 +164,7 @@ export default {
         this.$router.push('/')
       })
     },
+
     loadUserImage() {
       UserService.getImage().then((response) => {
         if (!response) return
@@ -166,10 +180,12 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 nav {
   width: 15%;
 }
+
 /* Estilo para arredondar bordas menu */
 #sidebar a.menuLink {
   border-top-left-radius: 30px;
@@ -180,12 +196,14 @@ nav {
   position: relative;
   color: white;
 }
+
 #sidebar a.router-link-exact-active,
 #sidebar a:has(.router-link-exact-active) {
   background: #fff;
   color: #424242;
   margin-right: -10px;
 }
+
 #sidebar .menuLink.router-link-exact-active::before {
   position: absolute;
   content: '';
@@ -198,6 +216,7 @@ nav {
   box-shadow: 30px 30px 0px white;
   z-index: -1;
 }
+
 #sidebar .menuLink.router-link-exact-active + .menuLink::before {
   position: absolute;
   content: '';
@@ -210,9 +229,11 @@ nav {
   box-shadow: 30px -30px 0px white;
   z-index: -1;
 }
+
 .menuItem {
   z-index: 1010;
 }
+
 .menuLink:not(:last-child):not(:first-child):hover {
   border-radius: 30px;
   background: rgb(73, 73, 73);
@@ -223,12 +244,14 @@ nav {
     rgba(33, 33, 33, 0) 100%
   );
 }
+
 a.router-link-exact-active:hover .v-list-item,
 a:has(.router-link-exact-active):hover .v-list-item {
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   background: white;
 }
+
 .menu-dropdown a.router-link-exact-active:hover .menuLink {
   background: none;
 }
