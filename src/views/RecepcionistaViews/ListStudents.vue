@@ -47,7 +47,7 @@
                 variant="elevated"
                 color="grey-darken-1"
                 dark
-                @click="handleDocumentsStudent(student.id)"
+                @click="handleDocumentsStudent(student.id, student.name)"
               >
                 <span class="text-white font-weight-bold"> Documentos </span>
               </v-btn>
@@ -113,8 +113,11 @@ export default {
       this.$router.push(`/students/${studentId}`)
     },
 
-    handleDocumentsStudent(studentId) {
-      this.$router.push(`/students/${studentId}/documents`)
+    handleDocumentsStudent(studentId, studentName) {
+      this.$router.push({
+        path: `/students/${studentId}/documents`,
+        query: { studentName }
+      })
     },
 
     handleDeleteStudent(studentId) {

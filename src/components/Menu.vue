@@ -129,7 +129,8 @@ export default {
         ],
         RECEPCIONISTA: [
           { icon: 'mdi-account-plus', text: 'Cadastrar Estudante', link: '/students/new' },
-          { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/students' }
+          { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/students' },
+          { icon: 'mdi-file-document', text: 'Cadastrar Documento de Estudante', link: '/students/:id/documents' }
         ],
         INSTRUTOR: [
           { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
