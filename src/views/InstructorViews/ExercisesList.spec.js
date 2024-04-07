@@ -19,9 +19,9 @@ describe("Tela de listagem de exercícios", () => {
     vi.spyOn(ExerciseService, 'getAllExercises').mockResolvedValue([
         {
             "id": 1,
-            "description": "Supino"
+            "description": "Supino" 
         },
-        {
+        { 
             "id": 2,
             "description": "Halter"
         },
