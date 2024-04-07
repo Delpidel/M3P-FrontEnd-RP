@@ -91,7 +91,7 @@ export default {
       workoutsList: [],
       days: '',
       daysOfWeek: [
-        { label: 'Segunda-feira', value: '', icon: 'mdi-arm-flex' },
+        { label: 'Segunda-feira', value: 'segunda', icon: 'mdi-arm-flex' },
         { label: 'Terça-feira', value: 'terca', icon: 'mdi-arm-flex' },
         { label: 'Quarta-feira', value: 'quarta', icon: 'mdi-arm-flex' },
         { label: 'Quinta-feira', value: 'quinta', icon: 'mdi-arm-flex' },
