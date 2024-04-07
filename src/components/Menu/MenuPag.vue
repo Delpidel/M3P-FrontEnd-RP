@@ -99,6 +99,7 @@ const { xs, lgAndUp, mdAndDown } = useDisplay()
 <script>
 import accountImage from '@/assets/account-image.jpg'
 import UserService from '@/services/User/UserService'
+import AuthenticationService from '@/services/Auth/AuthenticationService'
 import axios from 'axios'
 export default {
   name: 'MenuPag',
@@ -144,9 +145,11 @@ export default {
   },
   methods: {
     logout() {
-      const storage = ['@permissions', '@name', '@profile', '@token']
-      storage.forEach((item) => localStorage.removeItem(item))
-      this.$router.push('/')
+      AuthenticationService.logout().then(() => {
+        const storage = ['@permissions', '@name', '@profile', '@token']
+        storage.forEach((item) => localStorage.removeItem(item))
+        this.$router.push('/')
+      })
     },
     loadUserImage() {
       UserService.getImage().then((response) => {
