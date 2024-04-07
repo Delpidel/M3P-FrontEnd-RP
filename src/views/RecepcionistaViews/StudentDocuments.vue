@@ -45,7 +45,8 @@
                   class="font-weight-bold"
                   size="large"
                   @click="sendDocument"
-                >Enviar</v-btn>
+                  >Enviar</v-btn
+                >
               </v-col>
             </v-row>
 
@@ -53,15 +54,18 @@
               <v-col cols="12">
                 <h3 class="mt-4">Documentos Cadastrados</h3>
                 <table v-if="documents.length > 0" class="table">
-                  <thead>
-                    <tr>
-                      <th>Título</th>
-                      <th>Descrição</th>
-                    </tr>
-                  </thead>
+                  <thead></thead>
                   <tbody>
                     <tr v-for="(document, index) in documents" :key="index">
-                      <td>{{ document.title }}</td>
+                      <td>
+                        <img
+                          src="https://icones.pro/wp-content/uploads/2021/06/icone-fichier-document-jaune.png"
+                          alt="Ícone de documento"
+                          width="24"
+                          height="24"
+                        />
+                        {{ document.title }}
+                      </td>
                       <td>{{ document.description }}</td>
                     </tr>
                   </tbody>
@@ -103,7 +107,8 @@ export default {
       try {
         const formData = new FormData()
         formData.append('title', this.description)
-        formData.append('document', this.selectedFile)
+        formData.append('document', this.$refs.fileInput.files[0])
+        formData.append('document_type', this.selectedFile.type)
 
         await StudentDocumentService.sendDocument(this.studentId, formData)
         this.description = ''
@@ -128,10 +133,10 @@ export default {
   },
   mounted() {
     this.studentId = this.$route.params.id
-    
+
     const params = new URLSearchParams(this.$route.query)
     this.studentNameCopy = params.get('studentName')
-    
+
     this.fetchDocuments()
   }
 }
