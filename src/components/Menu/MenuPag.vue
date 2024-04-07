@@ -149,19 +149,16 @@ export default {
       this.$router.push('/')
     },
     loadUserImage() {
-      UserService.getImage()
-        .then((response) => {
-          axios.get(response, { responseType: 'blob', crossdomain: true }).then((response) => {
-            var reader = new window.FileReader()
-            reader.readAsDataURL(response.data)
-            reader.onload = () => {
-              this.imagePath = reader.result
-            }
-          })
+      UserService.getImage().then((response) => {
+        if (!response) return
+        axios.get(response, { responseType: 'blob', crossdomain: true }).then((response) => {
+          var reader = new window.FileReader()
+          reader.readAsDataURL(response.data)
+          reader.onload = () => {
+            this.imagePath = reader.result
+          }
         })
-        .catch(() => {
-          this.imagePath = accountImage
-        })
+      })
     }
   }
 }
