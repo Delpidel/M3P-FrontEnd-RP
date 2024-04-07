@@ -105,6 +105,8 @@ const { xs, lgAndUp, mdAndDown } = useDisplay()
 
 <script>
 import accountImage from '@/assets/account-image.jpg'
+import UserService from '@/services/User/UserService'
+import axios from 'axios'
 
 export default {
   name: 'MenuPag',
@@ -145,12 +147,31 @@ export default {
       }
     }
   },
+  mounted() {
+    this.loadUserImage()
+  },
   methods: {
     logout() {
       const storage = ['@permissions', '@name', '@profile', '@token']
       storage.forEach((item) => localStorage.removeItem(item))
 
       this.$router.push('/')
+    },
+
+    loadUserImage() {
+      UserService.getImage()
+        .then((response) => {
+          axios.get(response, { responseType: 'blob', crossdomain: true }).then((response) => {
+            var reader = new window.FileReader()
+            reader.readAsDataURL(response.data)
+            reader.onload = () => {
+              this.imagePath = reader.result
+            }
+          })
+        })
+        .catch(() => {
+          this.imagePath = accountImage
+        })
     }
   }
 }
