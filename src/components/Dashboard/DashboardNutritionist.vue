@@ -33,7 +33,7 @@
                     <v-list-item-title>{{ student.name }}</v-list-item-title>
                 </v-list-item>
                 <v-btn
-                  to="/students-active"
+                  to="/active/students"
                   append-icon="mdi-account-circle"
                   size="large"
                   variant="elevated"

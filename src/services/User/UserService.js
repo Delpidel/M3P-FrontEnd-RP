@@ -25,6 +25,11 @@ class UserService {
     const response = await api.put(`users/${userId}`, body)
     return response
   }
+
+  async getImage(){
+    const response = await api.get('user/image')
+    return response.data
+  }
 }
 
 export default new UserService()
