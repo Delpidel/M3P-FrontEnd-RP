@@ -19,7 +19,8 @@ import AvaliationStep02 from '@/components/AvaliationStep02.vue'
 import AvaliationStep03 from '@/components/AvaliationStep03.vue'
 
 import Meal from '../views/Meal.vue'
-import ActiveStudents from '@/views/ActiveStudents.vue'
+import ListAvaliations from '@/views/ListAvaliations.vue'
+import ListActiveStudents from '@/views/ListActiveStudents.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -97,19 +98,19 @@ const router = createRouter({
     {
       path: '/active/students',
       name: 'Listagem de estudantes ativos',
-      component: ListaEstudantesAtivos
+      component: ListActiveStudents
     },
 
     {
       path: '/students/avaliations/:student_id',
       name: 'Avaliacoes',
-      component: ListaAvaliacoes
+      component: ListAvaliations
     },
-    {
-      path: '/active/students',
-      name: 'Listagem de estudantes ativos',
-      component: ActiveStudents
-    },
+    // {
+    //   path: '/active/students',
+    //   name: 'Listagem de estudantes ativos',
+    //   component: ActiveStudents
+    // },
     {
       path: '/dietas/:id',
       name: 'Meal',

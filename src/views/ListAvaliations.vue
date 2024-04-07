@@ -39,18 +39,22 @@
                         <td>
                             <v-btn class="ma-1" size="small" color="amber"
                                 @click="exportAvaliations(evaluation)">Exportar</v-btn>
-                            <v-btn class="ma-1" size="small" color="amber"
-                               @click="sendAvaliations(evaluation)">Enviar Avaliação</v-btn>
+                            <v-btn class="ma-1" size="small" color="amber" @click="sendAvaliations(evaluation)">Enviar
+                                Avaliação</v-btn>
                         </td>
                     </tr>
                 </tbody>
             </v-table>
         </v-card>
+
+        <v-row class="ma-1">
+            <v-btn class="ma-1" size="small" color="amber" @click="BackActiveStudents()">Voltar</v-btn>
+        </v-row>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/services/api.js';
 
 export default {
     data() {
@@ -67,7 +71,6 @@ export default {
     },
 
     mounted() {
-
         this.student_id = this.$route.params.student_id;
         this.id = this.$route.params.id;
         this.fetchAvaliations()
@@ -76,9 +79,34 @@ export default {
 
 
     methods: {
+        async exportAvaliations(evaluation) {
+            await api.get(`/avaliations/export/${evaluation.id}`, { responseType: 'blob' })
+                .then(response => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'Evaluations.pdf');
+                    document.body.appendChild(link);
+                    link.click();
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar as avaliações', error);
+                });
+        },
 
-        fetchStudent() {
-            axios.get(`http://127.0.0.1:8000/api/students/${this.student_id}`)
+        async fetchAvaliations() {
+            await api.get(`/students/avaliations/${this.student_id}`)
+                .then(response => {
+                    this.evaluations = response.data;
+                    this.sortEvaluations();
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar as avaliações', error);
+                });
+        },
+
+        async fetchStudent() {
+            await api.get(`/students/${this.student_id}`)
                 .then(response => {
                     this.student = response.data
                 })
@@ -87,59 +115,28 @@ export default {
                 });
         },
 
-        fetchAvaliations() {
-
-            axios.get(`http://localhost:8000/api/students/avaliations/${this.student_id}`)
-                .then(response => {
-                    this.evaluations = response.data;
-                    console.log(this.evaluations)
-
-                    this.sortEvaluations();
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar as avaliações', error);
-                });
-        },
-        sortEvaluations() {
-            this.sortedEvaluations = [...this.evaluations].sort((a, b) => new Date(b.date) - new Date(a.date));
-        },
-
-        sendAvaliations(evaluation) {
-            axios.get(`http://127.0.0.1:8000/api/avaliations/send/${evaluation.id}`)
+        async sendAvaliations(evaluation) {
+            await api.get(`/avaliations/send/${evaluation.id}`)
                 .then(response => {
                     this.evaluation = response.data
-                    console.log(evaluation.id)
-                    console.log(this.evaluation)
                 })
                 .catch(error => {
                     console.error('Erro ao buscar as avaliações', error);
                 });
         },
 
-        exportAvaliations(evaluation) {
-            axios.get(`http://127.0.0.1:8000/api/avaliations/export/${evaluation.id}`, { responseType: 'blob' })
-                .then(response => {
-                    // this.evaluation = response.data
-                    const url = window.URL.createObjectURL(new Blob([response.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', 'Evaluations.pdf');
-                    document.body.appendChild(link);
-                    link.click();
-
-                    console.log(evaluation.id)
-                    console.log(this.evaluation)
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar as avaliações', error);
-                });
+        BackActiveStudents() {
+            this.$router.push(`/active/students`)
         },
 
         searchEvaluation() {
             const evaluationDate = this.evaluationDate
             this.sortedEvaluations = this.evaluations.filter(evaluation => evaluation.date.includes(evaluationDate))
-        }
+        },
 
+        sortEvaluations() {
+            this.sortedEvaluations = [...this.evaluations].sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
 
     }
 }
