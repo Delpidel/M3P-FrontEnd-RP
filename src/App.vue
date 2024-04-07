@@ -1,6 +1,6 @@
 <template>
   <Menu v-if="renderMenu" />
-  <router-view></router-view>
+  <router-view :key="$route.name"></router-view>
 </template>
 
 <script>

@@ -1,15 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
-import Dashboard from '../views/Dashboard.vue'
-import Login from '../views/Login.vue'
-import Exercises from '../views/exercise/ExercisesPage.vue'
 
+import Dashboard from '../views/Dashboard/Dashbord.vue'
+import Login from '../views/Login/Login.vue'
+import ListUser from '../views/User/ListUser.vue'
+import NewUser from '../views/User/NewUser.vue'
+import StudentMealPlans from '@/views/Student/StudentMealPlans.vue'
+import WorkoutsStudentsList from '@/views/Student/WorkoutsStudentsList.vue'
+import StudentRegistration from '../views/RecepcionistaViews/StudentRegistration.vue'
 import Exemplo from '../views/PaginaExemplo.vue'
+import ListStudents from '../views/RecepcionistaViews/ListStudents.vue'
+import ListStudentWorkout from '@/views/InstructorViews/ListStudentWorkout.vue'
+import UpdateWorkout from '@/views/InstructorViews/UpdateWorkout.vue'
 
+
+import Exercises from '../views/InstructorViews/ExercisesPage.vue'
+import StudentsList from '../views/InstructorViews/ListStudents.vue'
 import CreateStudentWorkout from '@/views/InstructorViews/CreateStudentWorkout.vue'
 
-import ExercisesList from '../views/Exercises/ExercisesList.vue'
+import AvaliationStep01 from '@/components/AvaliationStep01.vue'
+import AvaliationStep02 from '@/components/AvaliationStep02.vue'
+import AvaliationStep03 from '@/components/AvaliationStep03.vue'
 
+import Meal from '../views/Meal.vue'
+import ActiveStudents from '@/views/ActiveStudents.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,47 +32,51 @@ const router = createRouter({
       name: 'Login',
       component: Login
     },
-   /* {
+   {
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard
     },
-*/
+    
     //perfil usuário
     {
       path: '/users',
       name: 'Listagem de usuários',
-      component: Exemplo
+      component: ListUser
     },
     {
       path: '/users/new',
       name: 'Novo usuário',
-      component: Exemplo
+      component: NewUser
+    },
+    {
+      path: '/users/:id/edit',
+      name: 'Editar usuário',
+      component: NewUser
     },
 
     //perfil recepcionista
     {
       path: '/students',
-      name: 'Listagem de estudantes',
-      component: Exemplo
+      name: 'ListStudents',
+      component: ListStudents
     },
     {
       path: '/students/new',
       name: 'Novo Estudante',
-      component: Exemplo
+      component: StudentRegistration
     },
 
     //perfil instrutor
     {
       path: '/exercises',
-
       name: 'Exercises',
-      component: ExercisesList  
+      component: Exercises
     },
     {
       path: '/instructor/students',
       name: 'Listagem de estudantes do instrutor',
-      component: Exemplo
+      component: StudentsList
     },
     {
       path: '/newWorkout/:id',
@@ -67,25 +84,66 @@ const router = createRouter({
       component: CreateStudentWorkout
 
     },
+    {
+      path: '/instructor/:id/list-workouts', 
+      name: 'Listagem de treinos do aluno',
+      component: ListStudentWorkout
+    },
+    {
+      path: '/updateWorkout/:id',
+      name: 'UpdateWorkout',
+      component: UpdateWorkout,
+    },
 
     //perfil nutricionista
     {
       path: '/active/students',
       name: 'Listagem de estudantes ativos',
-      component: Exemplo
+      component: ActiveStudents
+    },
+    {
+      path: '/dietas/:id',
+      name: 'Meal',
+      component: Meal
+    },
+    {
+      path: '/avaliation/step1',
+      name: 'AvaliationStep01',
+      component: AvaliationStep01
+    },
+    {
+      path: '/avaliation/step2',
+      name: 'AvaliationStep02',
+      component: AvaliationStep02
+    },
+    {
+      path: '/avaliation/step3',
+      name: 'AvaliationStep03',
+      component: AvaliationStep03
     },
 
     //perfil aluno
     {
       path: '/student/meal-plans',
       name: 'Planos de refeições do aluno',
+      component: StudentMealPlans
+    },
+    {
+      path: '/student/workouts',
+      name: 'WorkoutsStudentsList',
+      component: WorkoutsStudentsList
+    },
+    {
+      path: '/workouts',
+      name: 'Treinos do aluno',
       component: Exemplo
     },
     {
       path: '/student/workouts',
       name: 'Treinos do aluno',
       component: Exemplo
-    }
+    },
+
   ]
 })
 
