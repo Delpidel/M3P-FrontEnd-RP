@@ -1,6 +1,7 @@
 import api from './api'
 
 class ExerciseService {
+
     async createExercises(body) {
         const response = await api.post('exercises', body)
         return response.data
@@ -22,11 +23,6 @@ class ExerciseService {
         'Content-Type': 'multipart/form-data'
       }
     })
-    return response.data
-  }
-
-  async createExercises(body) {
-    const response = await api.post('exercises', body)
     return response.data
   }
 }

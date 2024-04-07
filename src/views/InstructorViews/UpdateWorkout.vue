@@ -8,7 +8,7 @@
               <v-card-title class="d-flex align-center justify-space-between">
                 <div class="d-flex align-center">
                   <v-icon class="mr-2">mdi mdi-account-supervisor</v-icon>
-                  <h1 class="py-6">Novo Treino</h1>
+                  <h1 class="py-6">Atualizar Treino</h1>
                 </div>
                 <img src="@/assets/logo.svg" alt="Logo" style="height: 80px" />
               </v-card-title>
@@ -25,8 +25,9 @@
                         item-title="description"
                         item-value="id"
                         variant="outlined"
-                        v-model="exercisesSelected"
+                        v-model="workout.exercise_id"
                         data-test="selected-exercise"
+                        :disabled="isExerciseSelectionDisabled"
                       ></v-autocomplete>
                     </v-col>
                   </v-row>
@@ -37,7 +38,7 @@
                         type="number"
                         min="0"
                         variant="outlined"
-                        v-model="repetitionOfExercise"
+                        v-model="workout.repetitions"
                         :error-messages="errors.repetitions"
                         data-test="repetitions-input"
                       ></v-text-field>
@@ -48,14 +49,14 @@
                         type="number"
                         min="0"
                         variant="outlined"
-                        v-model="exerciseLoad"
+                        v-model="workout.weight"
                         :error-messages="errors.weight"
                         data-test="weight-input"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6">
                       <v-select
-                        v-model="breakTime"
+                        v-model="workout.break_time"
                         :items="[0, 15, 30, 45, 60, 75, 90, 105, 120]"
                         label="Selecionar pausa (em segundos)"
                         variant="outlined"
@@ -70,7 +71,9 @@
                         label="Dia da semana"
                         variant="outlined"
                         :items="daysOfWeek"
-                        v-model="dayOfWeek"
+                        :item-title="title"
+                        item-value="value"
+                        v-model="workout.day"
                         data-test="day-input"
                       ></v-select>
                     </v-col>
@@ -83,26 +86,28 @@
                         clear-icon="mdi-close-circle"
                         label="Observações"
                         variant="outlined"
-                        v-model="observations"
+                        v-model="workout.observations"
                         data-test="observations-input"
                       ></v-textarea>
                     </v-col>
                   </v-row>
-                  <v-col class="text-right">
-                    <v-btn
-                      class="font-weight-bold mr-4"
-                      type="submit"
-                      variant="elevated"
-                      color="amber text-grey-darken-4"
-                      size="large"
-                      data-test="submition-input"
-                    >
-                      Cadastrar
-                    </v-btn>
+                  <v-row>
+                    <v-col class="text-right">
+                      <v-btn
+                        class="font-weight-bold mr-4"
+                        type="submit"
+                        variant="elevated"
+                        color="amber text-grey-darken-4"
+                        size="large"
+                        data-test="submission-input"
+                      >
+                        Atualizar
+                      </v-btn>
                     <v-btn class="ml-auto" @click="goBack" variant="elevated" size="large">
                       Voltar
                     </v-btn>
-                  </v-col>
+                    </v-col>
+                  </v-row>
                 </v-form>
                 <v-snackbar
                   v-model="snackbarSuccess"
@@ -130,91 +135,109 @@
 </template>
 
 <script>
-import * as yup from 'yup'
-import { workoutSchema } from '@/validations/InstructorValidations/workout.validations'
-import { captureErrorYup } from '../../utils/captureErrorYup'
-
-import { getCurrentDay } from '../../utils/Instructor/getCurrentDay'
-import { daysOfWeek } from '../../constants/Instructor/daysOfWeek'
-
-import GetExercises from '../../services/InstructorServices/GetExercises'
-import CreateWorkoutService from '../../services/InstructorServices/CreateWorkoutService'
+import * as yup from 'yup';
+import UpdateWorkoutService from '../../services/InstructorServices/UpdateWorkoutService';
+import GetExercises from '../../services/InstructorServices/GetExercises';
 
 export default {
   data() {
     return {
       exercises: [],
-      exercisesSelected: null,
-      repetitionOfExercise: '',
-      exerciseLoad: '',
-      breakTime: 45,
-      dayOfWeek: getCurrentDay(new Date().getDay()),
-      daysOfWeek: daysOfWeek,
-      observations: '',
+      workout: {
+        exercise_id: null,
+        repetitions: '',
+        weight: '',
+        break_time: 0,
+        day: '',
+        observations: '',
+      },
+      daysOfWeek: [
+        { value: 'SEGUNDA', title: 'Segunda-feira' },
+        { value: 'TERCA', title: 'Terça-feira' },
+        { value: 'QUARTA', title: 'Quarta-feira' },
+        { value: 'QUINTA', title: 'Quinta-feira' },
+        { value: 'SEXTA', title: 'Sexta-feira' },
+        { value: 'SABADO', title: 'Sábado' },
+        { value: 'DOMINGO', title: 'Domingo' }
+      ],
       snackbarSuccess: false,
       snackbarError: false,
       duration: 3000,
       errors: {}
-    }
+    };
   },
-  components: {},
   mounted() {
-    GetExercises.getAllUserExercises()
-      .then((response) => {
-        this.exercises = response.data.data
-      })
-      .catch(() => {
-        this.snackbarError = true
-        this.errorMessage = 'Falha ao carregar os exercícios cadastrados.'
-      })
+    this.loadExercises();
   },
   methods: {
     goBack() {
       this.$router.back()
     },
-    handleSubmit() {
+    async loadExercises() {
+      try {
+        const response = await GetExercises.getAllUserExercises();
+        this.exercises = response.data.data;
+      } catch (error) {
+        console.error('Erro ao carregar exercícios:', error);
+        this.showErrorMessage('Falha ao carregar os exercícios cadastrados.');
+      }
+    },
+    async handleSubmit() {
       try {
         const body = {
-          student_id: this.$route?.params?.id,
-          exercise_id: this.exercisesSelected,
-          repetitions: this.repetitionOfExercise,
-          weight: this.exerciseLoad,
-          break_time: this.breakTime,
-          observations: this.observations,
-          day: this.dayOfWeek
-        }
+          exercise_id: this.workout.exercise_id,
+          repetitions: this.workout.repetitions,
+          weight: this.workout.weight,
+          break_time: this.workout.break_time,
+          day: this.workout.day,
+          observations: this.workout.observations,
+        };
 
-        workoutSchema.validateSync(body, { abortEarly: false })
-        this.errors = {}
-        CreateWorkoutService.createWorkout(body)
-          .then(() => {
-            this.snackbarSuccess = true
-            this.successMessage = 'Treino cadastrado com sucesso'
-            //limpa os campos
-            this.exercisesSelected = ''
-            this.repetitionOfExercise = ''
-            this.exerciseLoad = ''
-            this.breakTime = 45
-            this.observations = ''
-            this.dayOfWeek = getCurrentDay(new Date().getDay())
-          })
-          .catch((error) => {
-            if (error) {
-              this.snackbarError = true
-              this.errorMessage = `Erro ao cadastrar treino: ${error.response.data.message}`
-            }
-          })
+        await yup.object().shape({
+          exercise_id: yup.string().required('Selecione um exercício'),
+          repetitions: yup.number().min(0, 'As repetições devem ser um número positivo').required('Digite o número de repetições'),
+          weight: yup.number().min(0, 'A carga deve ser um número positivo').required('Digite a carga do exercício'),
+          break_time: yup.number().required('Selecione o tempo de pausa'),
+          day: yup.string().required('Selecione o dia da semana'),
+          observations: yup.string(),
+        }).validate(body, { abortEarly: false });
+
+        await UpdateWorkoutService.updateWorkout(body, this.$route.params.id);
+
+        this.showSuccessMessage('Treino atualizado com sucesso!');
+        this.resetForm();
+
       } catch (error) {
-        console.log(error)
         if (error instanceof yup.ValidationError) {
-          this.errors = captureErrorYup(error)
-          this.snackbarError = true
-          this.errorMessage = 'Erro ao validar os dados.'
+          this.errors = error.inner.reduce((acc, err) => {
+            acc[err.path] = err.message;
+            return acc;
+          }, {});
+        } else {
+          this.showErrorMessage('Erro ao atualizar treino. Por favor, tente novamente.');
         }
       }
+    },
+    resetForm() {
+      this.workout.exercise_id = null;
+      this.workout.repetitions = '';
+      this.workout.weight = '';
+      this.workout.break_time = 0;
+      this.workout.day = '';
+      this.workout.observations = '';
+    },
+    showSuccessMessage(message) {
+      this.snackbarSuccess = true;
+      this.successMessage = message;
+    },
+    showErrorMessage(message) {
+      this.snackbarError = true;
+      this.errorMessage = message;
     }
   }
-}
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

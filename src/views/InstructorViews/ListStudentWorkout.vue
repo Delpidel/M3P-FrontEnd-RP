@@ -1,12 +1,5 @@
 <template>
   <div class="container">
-    <v-snackbar v-model="success"
-     color="#212121" 
-     location="top center" 
-     timeout="5000"  
-     class="blink-snackbar">
-    Treino excluído com sucesso!
-  </v-snackbar>
     <v-card color="#ffc107">
       <v-card-title class="d-flex align-center justify-space-between">
         <div class="d-flex align-center">
@@ -49,7 +42,6 @@
                 <th class="head-descriptions">Peso</th>
                 <th class="head-descriptions">Repetições</th>
                 <th class="head-descriptions">Pausa (s)</th>
-                <th class="head-descriptions">Tempo</th>
                 <th class="head-descriptions">Observações</th>
                 <th class="head-descriptions">Ações</th>
               </tr>
@@ -60,7 +52,6 @@
                 <td>{{ workout.weight }} kg</td>
                 <td>{{ workout.repetitions }}</td>
                 <td>{{ workout.break_time }}</td>
-                <td>{{ workout.time }}</td>
                 <td>{{ workout.observations}}</td>
                 <td>
                   <v-btn @click="updateWorkout(workout.id)">
@@ -79,6 +70,13 @@
         </div>
       </v-window-item>
     </v-window>
+    <v-snackbar v-model="success"
+     color="success"
+     location="top center" 
+     timeout="5000"  
+     class="blink-snackbar">
+    Treino excluído com sucesso!
+  </v-snackbar>
   </div>
 </template>
 
@@ -137,9 +135,7 @@ export default {
       this.$router.push(`/newWorkout/${this.$route.params.id}`);
     },
     updateWorkout(workoutId) {
-
-      this.workoutId = workoutId;
-      this.$router.push(`/updateWorkout/${this.$route.params.id}/${workoutId}`);
+      this.$router.push(`/updateWorkout/${workoutId}`)
     },
     deleteWorkout(workoutId) {
   DeleteWorkoutService.DeleteWorkout(workoutId)
