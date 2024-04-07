@@ -58,6 +58,19 @@ a {
   padding-bottom: 5%;
 }
 
+/* Estilo informacoes usuario menu  */
+#sidebar .v-avatar.v-avatar--size-default {
+  --v-avatar-height: 60px !important;
+}
+
+.v-list-item-title {
+  font-size: 15px !important;
+}
+
+.v-list-item-subtitle {
+  font-size: 12px !important;
+}
+
 /* Quando a tela é menor que MD o menu passa a ser dropdown,
 e por isso o valor do padding left é alterado */
 @media (max-width: 1279px) {
@@ -73,5 +86,21 @@ e por isso o valor do padding left é alterado */
 
   .container {
     padding-left: 23% !important;
+  }
+
+  #sidebar .v-avatar.v-avatar--size-default {
+    --v-avatar-height: 45px !important;
+  }
+
+  .v-list-item-title {
+    font-size: 12px !important;
+  }
+
+  .v-list-item-subtitle {
+    font-size: 9px !important;
+  }
+
+  .v-list-item__content {
+    font-size: 14px !important;
   }
 }

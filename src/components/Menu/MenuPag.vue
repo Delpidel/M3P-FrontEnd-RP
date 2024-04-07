@@ -12,7 +12,7 @@
       <v-list-item>
         <router-link to="/dashboard">
           <img
-            src="../assets/fit-manage-tech-white.svg"
+            src="@/assets/fit-manage-tech-white.svg"
             alt="logo fitmanage tech, braço flexionado mostrando músculos e um halter grande."
             class="my-4 pb-5 w-100 mx-auto d-block"
           />
@@ -28,25 +28,23 @@
           class="font-weight-bold pl-8"
         ></v-list-item>
       </v-list>
+      <v-divider class="pb-3"></v-divider>
 
       <v-list nav dense class="ma-0 pa-0 pl-0 pl-md-4 mt-5">
-        <v-list-item
+        <router-link
           v-for="(item, i) in menu[profile]"
           :key="i"
           :to="item.link"
-          link
           :ripple="false"
+          class="menuLink"
         >
-          <v-list-item
-            class="font-weight-bold pl-0pl-lg-5 menuItem"
-            :prepend-icon="item.icon"
-            :active="item.link === $route.path"
-            active-class="border"
-          >
+          <v-list-item class="font-weight-bold pl-0pl-lg-5 menuItem" :prepend-icon="item.icon">
             {{ item.text }}
           </v-list-item>
+        </router-link>
+        <v-list-item class="menuLink">
+          <!-- item adicionado para permitir arredondamento borda menu -->
         </v-list-item>
-        <v-list-item><!-- item adicionado para permitir arredondamento borda menu --></v-list-item>
       </v-list>
 
       <template v-slot:append>
@@ -65,15 +63,15 @@
         >
           <router-link to="/dashboard">
             <img
-              src="../assets/logo.svg"
+              src="@/assets/logo.svg"
               alt="logo fitmanage tech, braço flexionado mostrando músculos e um halter grande."
               :style="xs ? 'width: 30%; margin-left: 5% ' : 'width: 40%; margin-left: 10%'"
             />
           </router-link>
 
-          <h2>FITMANAGE TECH</h2>      
+          <h2>FITMANAGE TECH</h2>
+
           <v-menu theme="dark" class="menu-dropdown">
-            
             <template v-slot:activator="{ props }">
               <v-btn
                 icon="mdi-dots-vertical"
@@ -108,7 +106,11 @@ const { xs, lgAndUp, mdAndDown } = useDisplay()
 </script>
 
 <script>
-import accountImage from '../assets/account-image.jpg'
+import accountImage from '@/assets/account-image.jpg'
+import UserService from '@/services/User/UserService'
+import AuthenticationService from '@/services/Auth/AuthenticationService'
+
+import axios from 'axios'
 
 export default {
   name: 'MenuPag',
@@ -128,6 +130,7 @@ export default {
           { icon: 'mdi-account-multiple', text: 'Usuários', link: '/users' }
         ],
         RECEPCIONISTA: [
+          { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
           { icon: 'mdi-account-plus', text: 'Cadastrar Estudante', link: '/students/new' },
           { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/students' }
         ],
@@ -137,6 +140,7 @@ export default {
           { icon: 'mdi-account-multiple', text: 'Estudantes', link: '/instructor/students' }
         ],
         NUTRICIONISTA: [
+          { icon: 'mdi-view-dashboard', text: 'Dashboard', link: '/dashboard' },
           { icon: 'mdi-account-check', text: 'Estudantes Ativos', link: '/active/students' }
         ],
         ALUNO: [
@@ -147,12 +151,31 @@ export default {
       }
     }
   },
+
+  mounted() {
+    this.loadUserImage()
+  },
+
   methods: {
     logout() {
-      const storage = ['@permissions', '@name', '@profile', '@token']
-      storage.forEach((item) => localStorage.removeItem(item))
+      AuthenticationService.logout().then(() => {
+        const storage = ['@permissions', '@name', '@profile', '@token']
+        storage.forEach((item) => localStorage.removeItem(item))
+        this.$router.push('/')
+      })
+    },
 
-      this.$router.push('/')
+    loadUserImage() {
+      UserService.getImage().then((response) => {
+        if (!response) return
+        axios.get(response, { responseType: 'blob', crossdomain: true }).then((response) => {
+          var reader = new window.FileReader()
+          reader.readAsDataURL(response.data)
+          reader.onload = () => {
+            this.imagePath = reader.result
+          }
+        })
+      })
     }
   }
 }
@@ -164,69 +187,72 @@ nav {
 }
 
 /* Estilo para arredondar bordas menu */
-#sidebar .v-list-item {
+#sidebar a.menuLink {
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
-
+  display: grid;
   text-decoration: none;
+  align-items: center;
+  position: relative;
+  color: white;
 }
 
-#sidebar a.v-list-item--active,
-#sidebar a:has(.v-list-item--active) {
+#sidebar a.router-link-exact-active,
+#sidebar a:has(.router-link-exact-active) {
   background: #fff;
   color: #424242;
   margin-right: -10px;
 }
 
-#sidebar a.v-list-item--active::before,
-#sidebar a:has(.v-list-item--active)::before {
+#sidebar .menuLink.router-link-exact-active::before {
   position: absolute;
   content: '';
   width: 70px;
   height: 70px;
   background-color: #212121;
   top: -70px;
-  right: 0;
+  right: 10px;
   border-radius: 3rem;
   box-shadow: 30px 30px 0px white;
-  z-index: 1005;
+  z-index: -1;
 }
 
-#sidebar a.v-list-item--active + .v-list-item::before,
-#sidebar a:has(.v-list-item--active) + .v-list-item::before {
+#sidebar .menuLink.router-link-exact-active + .menuLink::before {
   position: absolute;
   content: '';
   width: 70px;
   height: 70px;
   background-color: #212121;
-  top: -4px;
+  top: 0;
   right: 0;
   border-radius: 3rem;
   box-shadow: 30px -30px 0px white;
-  z-index: 1005;
+  z-index: -1;
 }
 
 .menuItem {
   z-index: 1010;
 }
 
-.v-list-item:not(:last-child):not(:first-child):hover {
+.menuLink:not(:last-child):not(:first-child):hover {
   border-radius: 30px;
   background: rgb(73, 73, 73);
   background: linear-gradient(
     90deg,
     rgba(73, 73, 73, 1) 0%,
-    rgba(33, 33, 33, 1) 75%,
-    rgba(33, 33, 33, 1) 100%
+    rgba(33, 33, 33, 0) 50%,
+    rgba(33, 33, 33, 0) 100%
   );
 }
 
-a.v-list-item--active:hover .v-list-item,
-a:has(.v-list-item--active):hover .v-list-item {
+a.router-link-exact-active:hover .v-list-item,
+a:has(.router-link-exact-active):hover .v-list-item {
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
   background: white;
 }
 
-.menu-dropdown a.v-list-item--active:hover .v-list-item {
+.menu-dropdown a.router-link-exact-active:hover .menuLink {
   background: none;
 }
 </style>
