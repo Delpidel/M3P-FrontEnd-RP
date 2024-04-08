@@ -21,18 +21,9 @@ global.ResizeObserver = require('resize-observer-polyfill')
 describe('Tela de Exercícios', () => {
 
     vi.spyOn(ExerciseService, 'getAllExercises').mockResolvedValue([
-        {
-            "id": 1,
-            "description": "Supino"
-        },
-        {
-            "id": 2,
-            "description": "Halter"
-        },
-        {
-            "id": 3,
-            "description": "Jump"
-        }
+        { "id": 1, "description": "Supino" },
+        { "id": 2, "description": "Halter" },
+        { "id": 3, "description": "Jump" }
     ])
 
     it('Deve renderizar a tela corretamente', () => {

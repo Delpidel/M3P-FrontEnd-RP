@@ -26,15 +26,19 @@
         <v-table class="mt-4 mt-md-10">
           <thead>
             <tr>
-              <th class="font-weight-bold text-grey-darken-4">Nome do exercício</th>
+              <th class="font-weight-bold text-grey-darken-4">Lista de exercícios</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="exercise in exercises" :key="exercise.id" data-test="exercise-description">
+            <tr v-for="exercise in exercises.data" :key="exercise.id" data-test="exercise-description">
               <td>{{ exercise.description }}</td>
             </tr>
           </tbody>
         </v-table>
+
+        <v-pagination v-model="exercises.current_page" :disabled="loading" :length="exercises.last_page"
+          @click="() => getExercises()">
+        </v-pagination>
 
         <v-snackbar v-model="snackbarSuccess" :timeout="duration" color="success" location="top">
           Cadastrado com sucesso!
@@ -86,8 +90,7 @@ export default {
     exercises(newValue) {
       this.exercises = newValue;
     }
-  },
-  mounted() {
+  }, mounted() {
     this.getExercises()
   },
   methods: {
@@ -95,26 +98,19 @@ export default {
       this.loading = true
       setTimeout(() => {
         this.loading = false
-      }, 2000);
+      }, 5000);
     },
     getExercises() {
       this.load();
       ExerciseService.getAllExercises(this.exercises.current_page)
         .then((response) => {
-          if (response.data && Array.isArray(response.data)) {
-            if (response.data.length > 0) {
-              this.exercises = response.data;
-              this.exercises.sort((a, b) => a.description.localeCompare(b.description));
-            } else {
-              this.showEmptyListSnackbar = true;
-            }
-          } else {
-            this.snackbarLoadError = true;
-          }
+          response.data.sort((a, b) => a.description.localeCompare(b.description));
+          this.exercises = response
         })
-        .catch(() => {
-          this.snackbarLoadError = true;
-        });
+        .catch((error) => {
+          console.log(error)
+          this.snackbarLoadError = true
+        })
     },
     addExercise() {
       try {
@@ -125,17 +121,15 @@ export default {
         this.errors = {}
         ExerciseService.createExercise(body)
           .then(() => {
-            this.exercises.push({ description: this.description });
+            this.getExercises();
             this.description = '';
             this.$refs.form.reset();
             this.snackbarSuccess = true;
-            this.getExercises();
           })
           .catch((error) => {
             if (error.response && error.response.status === 409) {
               this.snackbarError = true;
             } else {
-              console.error('Erro ao cadastrar exercício:', error);
               this.snackbarLoadError = true;
             }
           })
@@ -145,7 +139,6 @@ export default {
         }
       }
     }
-
   }
 }
 </script>
