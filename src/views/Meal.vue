@@ -265,8 +265,9 @@ export default {
 
         handleSubmit() {
             try {
+                console.log("entrei aqui")
                 const data = {
-                    student_id: this.$route.params.id,
+                    student_id: this.$route?.params?.id,
                     meal_plan_id: this.idPlanoAlimentacao,
                     day: this.diaDaSemana.toUpperCase(),
                     hour: this.horario,

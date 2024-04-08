@@ -112,8 +112,8 @@ describe("Testa página de avaliação", () => {
         const router = createRouter({
             history,
             routes: [
-                { path: '/avaliacao/step1' },
-                { path: '/avaliacao/step2' },
+                { path: '/avaliation/step1' },
+                { path: '/avaliation/step2' },
             ]
         })
         const component = mount(AvaliationStep02, {
@@ -124,16 +124,16 @@ describe("Testa página de avaliação", () => {
         const backButton = component.find('.btn-back')
         await backButton.trigger('click')
         await router.isReady()
-        expect(router.currentRoute.value.path).toBe('/avaliacao/step1')
+        expect(router.currentRoute.value.path).toBe('/avaliation/step1')
     })
     it("Espera-se que ao clickar no botão próximo o usuário seja redirecionado para a avaliation step 3", async () => {
         const history = createMemoryHistory()
         const router = createRouter({
             history,
             routes: [
-                { path: '/avaliacao/step1' },
-                { path: '/avaliacao/step2' },
-                { path: '/avaliacao/step3' } 
+                { path: '/avaliation/step1' },
+                { path: '/avaliation/step2' },
+                { path: '/avaliation/step3' } 
             ]
         })
         const component = mount(AvaliationStep02, {
@@ -151,16 +151,16 @@ describe("Testa página de avaliação", () => {
         const nextButton = component.find('.btn-next')
         await nextButton.trigger('click')
         await router.isReady()
-        expect(router.currentRoute.value.path).toBe('/avaliacao/step3')
+        expect(router.currentRoute.value.path).toBe('/avaliation/step3')
     })
     it("Espera-se que ao clicar no botão próximo sem todas as fotos adicionadas, o snackbar seja exibido", async () => {
         const history = createMemoryHistory()
         const router = createRouter({
             history,
             routes: [
-                { path: '/avaliacao/step1' },
-                { path: '/avaliacao/step2' },
-                { path: '/avaliacao/step3' } 
+                { path: '/avaliation/step1' },
+                { path: '/avaliation/step2' },
+                { path: '/avaliation/step3' } 
             ]
         })
         const component = mount(AvaliationStep02, {
