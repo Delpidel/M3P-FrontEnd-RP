@@ -351,6 +351,7 @@ export default {
         formData.append('neighborhood', this.neighborhood)
         formData.append('city', this.city)
         formData.append('state', this.state)
+        formData.append('complement', this.complement)
 
         StudentRegistrationService.createStudent(formData)
           .then(() => {
