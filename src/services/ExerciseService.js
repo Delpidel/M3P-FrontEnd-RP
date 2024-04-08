@@ -12,9 +12,9 @@ class ExerciseService {
         return response.data
     }
 
-    async getAllExercises(page = 1) {
+    async getAllExercises(page = '') {
         try {
-            const response = await api.get(`/exercises?page=${page}`, {
+            const response = await api.get(`/exercises?page=${page}&sortBy=description`, {
                 headers: {
                     token: localStorage.getItem('@token'),
                     'Content-Type': 'application/json'
@@ -25,6 +25,7 @@ class ExerciseService {
             throw new Error('Erro ao obter exercícios: ' + error.message);
         }
     }
+    
     
 }
 
