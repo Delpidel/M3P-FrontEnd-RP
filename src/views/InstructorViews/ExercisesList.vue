@@ -1,36 +1,43 @@
 <template>
   <div class="container" :style="mdAndDown ? 'padding-left: 5%' : 'padding-left: 20%'">
-
     <div class="d-flex align-center" :style="smAndDown ? 'justify-content:center;' : ''">
       <h1 class="py-4 py-md-12 font-weight-medium">Exercícios</h1>
       <v-icon size="x-large" class="pl-10" color="amber">mdi-weight-lifter</v-icon>
     </div>
 
     <div class="cardImage">
-      <div 
-      class="cardContent" 
-      :style="smAndDown ? 'flex-direction: column;  padding:8%' : 'flex-direction: row'">
-        
-        <v-form 
-          @submit.prevent="addExercise" 
-          ref="form" class="d-flex"
-          :style="xs ? 'flex-direction: column;' : 'flex-direction: row'">
-            
-            <v-text-field 
-              v-model="description" 
-              label="Digite o nome do exercício" 
-              :error-messages="errors.description"
-              variant="outlined" class="pl-md-2"
-              data-test="input-description">
-            </v-text-field>
+      <div
+        class="cardContent"
+        :style="smAndDown ? 'flex-direction: column;  padding:8%' : 'flex-direction: row'"
+      >
+        <v-form
+          @submit.prevent="addExercise"
+          ref="form"
+          class="d-flex"
+          :style="xs ? 'flex-direction: column;' : 'flex-direction: row'"
+        >
+          <v-text-field
+            v-model="description"
+            label="Digite o nome do exercício"
+            :error-messages="errors.description"
+            variant="outlined"
+            class="pl-md-2"
+            data-test="input-description"
+          >
+          </v-text-field>
 
-            <v-btn 
-              type="submit" variant="elevated" color="grey-darken-4 text-amber"
-              class="font-weight-bold px-md-16 ml-sm-5 ml-md-10 mt-2 mt-md-0" 
-              height="60px" :ripple="false" :style="xs ? 'height: 45px;' : 'height: 60px'"
-              data-test="submit-button">
-              Cadastrar
-            </v-btn>
+          <v-btn
+            type="submit"
+            variant="elevated"
+            color="grey-darken-4 text-amber"
+            class="font-weight-bold px-md-16 ml-sm-5 ml-md-10 mt-2 mt-md-0"
+            height="60px"
+            :ripple="false"
+            :style="xs ? 'height: 45px;' : 'height: 60px'"
+            data-test="submit-button"
+          >
+            Cadastrar
+          </v-btn>
         </v-form>
 
         <v-table class="mt-4 mt-md-10">
@@ -40,17 +47,22 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="exercise in exercises.data" :key="exercise.id" data-test="exercise-description">
+            <tr
+              v-for="exercise in exercises.data"
+              :key="exercise.id"
+              data-test="exercise-description"
+            >
               <td>{{ exercise.description }}</td>
             </tr>
           </tbody>
         </v-table>
 
-        <v-pagination 
-          v-model="exercises.current_page" 
-          :disabled="loading" 
+        <v-pagination
+          v-model="exercises.current_page"
+          :disabled="loading"
           :length="exercises.last_page"
-          @click="() => getExercises()">
+          @click="() => getExercises()"
+        >
         </v-pagination>
 
         <v-snackbar v-model="snackbarSuccess" :timeout="duration" color="success" location="top">
@@ -61,10 +73,23 @@
           Erro ao cadastrar o exercício!
         </v-snackbar>
 
-        <v-snackbar v-model="snackbarLoadError" :timeout="duration" color="red-darken-2" location="top">
+        <v-snackbar
+          v-model="snackbarLoadError"
+          :timeout="duration"
+          color="red-darken-2"
+          location="top"
+        >
           Erro ao carregar os exercícios!
         </v-snackbar>
 
+        <v-snackbar
+          v-model="snackbarDescriptionError"
+          :timeout="duration"
+          color="red-darken-2"
+          location="top"
+        >
+          Por favor, digite o nome do exercício.
+        </v-snackbar>
       </div>
     </div>
   </div>
@@ -81,7 +106,6 @@ import { captureErrorYup } from '../../utils/captureErrorYup'
 import { schemaExerciseForm } from '@/validations/exercise.validations'
 import ExerciseService from '@/services/ExerciseService'
 
-
 export default {
   data() {
     return {
@@ -91,6 +115,7 @@ export default {
       snackbarSuccess: false,
       snackbarError: false,
       snackbarLoadError: false,
+      snackbarDescriptionError: false,
       duration: 3000,
       loading: false
     }
@@ -99,14 +124,14 @@ export default {
     this.getExercises()
   },
   methods: {
-    load(){
+    load() {
       this.loading = true
       setTimeout(() => {
         this.loading = false
-      }, 5000);
+      }, 5000)
     },
     getExercises() {
-      this.load();
+      this.load()
       ExerciseService.getAllExercises(this.exercises.current_page)
         .then((response) => {
           this.exercises = response
@@ -117,6 +142,10 @@ export default {
         })
     },
     addExercise() {
+      if (!this.description.trim()) {
+        this.snackbarDescriptionError = true
+        return
+      }
       try {
         const body = {
           description: this.description
