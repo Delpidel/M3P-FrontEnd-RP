@@ -61,19 +61,19 @@ describe("Tela de listagem de exercícios", () => {
     })
 
     it("Espera-se que mostre um erro ao enviar o formulário sem a descrição do exercício", async () => {
-        vi.spyOn(ExerciseService, 'createExercises').mockImplementationOnce(() => Promise.reject(new Error('Por favor, digite o nome do exercício.')));
-
         const component = mount(ExercisesList, {
             global: {
                 plugins: [vuetify]
             }
-        })
-
-        await component.find('[data-test="submit-button"]').trigger('click');
+        });
+    
+        component.vm.description = '';
+    
+        await component.vm.addExercise();
         await flushPromises();
-
-        expect(component.find('.error-message').text()).toContain("Por favor, digite o nome do exercício.");
-    })
+    
+        expect(component.vm.snackbarDescriptionError).toBe(true);
+    });
 
     it("Espera-se exiba na tela os nomes dos exercícios", async () => {
         const mockedExercises = [
