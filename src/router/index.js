@@ -17,6 +17,8 @@ import AvaliationStep01 from '@/components/AvaliationStep01.vue'
 import AvaliationStep02 from '@/components/AvaliationStep02.vue'
 import AvaliationStep03 from '@/components/AvaliationStep03.vue'
 
+import Avaliation from '../views/UnitaryAvaliation.vue'
+
 import Meal from '../views/Meal.vue'
 import ActiveStudents from '@/views/ActiveStudents.vue'
 
@@ -120,6 +122,12 @@ const router = createRouter({
       name: 'AvaliationStep03',
       component: AvaliationStep03
     },
+
+    {
+      path: '/avaliation/:studentId',
+      name: 'avaliation',
+      component: Avaliation
+    }
 
     //perfil aluno
     {
