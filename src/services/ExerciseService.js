@@ -29,5 +29,6 @@ class ExerciseService {
             throw new Error('Erro ao obter exercícios: ' + error.message);
         }
     }
+}
 
 export default new ExerciseService()
