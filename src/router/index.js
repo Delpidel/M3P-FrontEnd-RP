@@ -125,7 +125,7 @@ const router = createRouter({
       path: '/avaliation/:studentId',
       name: 'avaliation',
       component: Avaliation
-    }
+    },
 
     //perfil aluno
     {
