@@ -15,6 +15,7 @@ class ExerciseService {
         })
         return response.data
     }
+    
 
     async getAllExercises(page = '') {
         try {
