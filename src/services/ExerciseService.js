@@ -1,5 +1,4 @@
 import api from './api'
-
 class ExerciseService {
 
     async createExercises(body) {
