@@ -114,7 +114,7 @@
                 <thead>
                     <tr>
                         <th class="linha">Horário</th>
-                        <th class="linha">Título</th>
+                        <th class="linha">Refeição</th>
                         <th class="linha">Descrição</th>
                         <th class="linha">Acões</th>
                     </tr>
@@ -191,9 +191,6 @@ export default {
         this.buscarDietaDia();
 
         this.getMealPlans();
-
-        
-
     },
 
     watch: {
