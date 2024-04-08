@@ -103,6 +103,9 @@
                       >
                         Atualizar
                       </v-btn>
+                    <v-btn class="ml-auto" @click="goBack" variant="elevated" size="large">
+                      Voltar
+                    </v-btn>
                     </v-col>
                   </v-row>
                 </v-form>
@@ -167,6 +170,9 @@ export default {
     this.loadExercises();
   },
   methods: {
+    goBack() {
+      this.$router.back()
+    },
     async loadExercises() {
       try {
         const response = await GetExercises.getAllUserExercises();

@@ -1,11 +1,11 @@
 import api from './api'
+
 class ExerciseService {
 
     async createExercises(body) {
         const response = await api.post('exercises', body)
         return response.data
     }
-
     async createExercise(body) {
         const response = await api.post('exercises', body, {
             headers: {
@@ -15,7 +15,6 @@ class ExerciseService {
         })
         return response.data
     }
-    
 
     async getAllExercises(page = '') {
         try {
