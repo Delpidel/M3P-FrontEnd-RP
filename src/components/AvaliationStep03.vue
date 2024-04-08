@@ -4,87 +4,99 @@
 
     <v-main>
       <v-container>
+        <v-img width="50px" src="blob:http://localhost:5173/eb002bae-208f-4f20-a4f2-fb7cfb9c437d">
+
+        </v-img>
         <v-card class="ma-4 ml-10" color="grey-darken-3" height="85px">
-              <v-row class="ma-1">
-                  <v-col>
-                      <h1>Medidas do Aluno <v-icon size="25">mdi-ruler-square</v-icon></h1>
-                      
-                  </v-col>
-              </v-row>
-          </v-card>
+          <v-row class="ma-1">
+            <v-col>
+              <h1>Medidas do Aluno <v-icon size="25">mdi-ruler-square</v-icon></h1>
+
+            </v-col>
+          </v-row>
+        </v-card>
       </v-container>
-      
+
       <v-container>
-        
+
         <v-card class="pl-5 d-flex align-center ma-4 ml-10">
           <v-card-text class="mt-6">
             <v-form ref="form" @submit.prevent="submitForm">
               <v-row>
                 <v-col>
-                  <v-text-field data-test="input-torax" v-model="formData.torax" :rules="toraxRules" clearable label="Torax (cm)" type="number"
+                  <v-text-field data-test="input-torax" v-model="formData.torax" :rules="toraxRules" clearable
+                    label="Torax (cm)" type="number" variant="outlined"></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-text-field data-test="input-braco_direito" v-model="formData.braco_direito"
+                    :rules="bracoDireitoRules" clearable label="Braço Direito (cm)" type="number"
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field data-test="input-braco_direito" v-model="formData.braco_direito" :rules="bracoDireitoRules" clearable
-                    label="Braço Direito (cm)" type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-braco_esquerdo" v-model="formData.braco_esquerdo"
+                    :rules="bracoEsquerdoRules" clearable label="Braço Esquerdo (cm)" type="number"
+                    variant="outlined"></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field data-test="input-braco_esquerdo" v-model="formData.braco_esquerdo" :rules="bracoEsquerdoRules" clearable
-                    label="Braço Esquerdo (cm)" type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-cintura" v-model="formData.cintura" :rules="cinturaRules" clearable
+                    label="Cintura (cm)" type="number" variant="outlined"></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field data-test="input-cintura" v-model="formData.cintura" :rules="cinturaRules" clearable label="Cintura (cm)"
-                    type="number" variant="outlined"></v-text-field>
-                </v-col>
-                <v-col>
-                  <v-text-field data-test="input-antebraco_direito" v-model="formData.antebraco_direito" :rules="antebraçoDireitoRules" clearable
-                    label="Antebraço Direito (cm)" type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-antebraco_direito" v-model="formData.antebraco_direito"
+                    :rules="antebraçoDireitoRules" clearable label="Antebraço Direito (cm)" type="number"
+                    variant="outlined"></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
-                
+
                 <v-col>
-                  <v-text-field data-test="input-antebraco_esquerdo" v-model="formData.antebraco_esquerdo" :rules="antebraçoEsquerdoRules" clearable
-                    label="Antebraço Esquerdo (cm)" type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-antebraco_esquerdo" v-model="formData.antebraco_esquerdo"
+                    :rules="antebraçoEsquerdoRules" clearable label="Antebraço Esquerdo (cm)" type="number"
+                    variant="outlined"></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field data-test="input-abdomen" v-model="formData.abdomen" :rules="abdomenRules" clearable label="Abdomen (cm)"
-                    type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-abdomen" v-model="formData.abdomen" :rules="abdomenRules" clearable
+                    label="Abdomen (cm)" type="number" variant="outlined"></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field data-test="input-quadril" v-model="formData.quadril" :rules="quadrilRules" clearable label="Quadril (cm)"
-                    type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-quadril" v-model="formData.quadril" :rules="quadrilRules" clearable
+                    label="Quadril (cm)" type="number" variant="outlined"></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field data-test="input-coxa_direita" v-model="formData.coxa_direita" :rules="coxaDireitaRules" clearable
-                    label="Coxa Direita (cm)" type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-coxa_direita" v-model="formData.coxa_direita" :rules="coxaDireitaRules"
+                    clearable label="Coxa Direita (cm)" type="number" variant="outlined"></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field data-test="input-coxa_esquerda" v-model="formData.coxa_esquerda" :rules="coxaEsquerdaRules" clearable
-                    label="Coxa Esquerda (cm)" type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-coxa_esquerda" v-model="formData.coxa_esquerda"
+                    :rules="coxaEsquerdaRules" clearable label="Coxa Esquerda (cm)" type="number"
+                    variant="outlined"></v-text-field>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col>
-                  <v-text-field data-test="input-panturrilha_direita" v-model="formData.panturrilha_direita" :rules="panturrilhaDireitaRules" clearable
-                    label="Panturrilha Direita (cm)" type="number" variant="outlined"></v-text-field>
-                </v-col>
-                <v-col>
-                  <v-text-field data-test="input-panturrilha_esquerda" v-model="formData.panturrilha_esquerda" :rules="panturrilhaEsquerdaRules" clearable
-                    label="Panturrilha Esquerda (cm)" type="number" variant="outlined"></v-text-field>
-                </v-col>
-                <v-col>
-                  <v-text-field data-test="input-punho" v-model="formData.punho" :rules="punhoRules" clearable label="Punho (cm)" type="number"
+                  <v-text-field data-test="input-panturrilha_direita" v-model="formData.panturrilha_direita"
+                    :rules="panturrilhaDireitaRules" clearable label="Panturrilha Direita (cm)" type="number"
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field data-test="input-biceps_femoral_direito" v-model="formData.biceps_femoral_direito" :rules="bicepsFemoralDireitoRules" clearable
-                    label="Bíceps Femoral Direito (cm)" type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-panturrilha_esquerda" v-model="formData.panturrilha_esquerda"
+                    :rules="panturrilhaEsquerdaRules" clearable label="Panturrilha Esquerda (cm)" type="number"
+                    variant="outlined"></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field data-test="input-biceps_femoral_esquerdo" v-model="formData.biceps_femoral_esquerdo" :rules="bicepsFemoralEsquerdoRules" clearable
-                    label="Bíceps Femoral Esquerdo (cm)" type="number" variant="outlined"></v-text-field>
+                  <v-text-field data-test="input-punho" v-model="formData.punho" :rules="punhoRules" clearable
+                    label="Punho (cm)" type="number" variant="outlined"></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-text-field data-test="input-biceps_femoral_direito" v-model="formData.biceps_femoral_direito"
+                    :rules="bicepsFemoralDireitoRules" clearable label="Bíceps Femoral Direito (cm)" type="number"
+                    variant="outlined"></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-text-field data-test="input-biceps_femoral_esquerdo" v-model="formData.biceps_femoral_esquerdo"
+                    :rules="bicepsFemoralEsquerdoRules" clearable label="Bíceps Femoral Esquerdo (cm)" type="number"
+                    variant="outlined"></v-text-field>
                 </v-col>
               </v-row>
               <v-row justify="end">
@@ -95,17 +107,10 @@
             </v-form>
           </v-card-text>
         </v-card>
-        <v-btn
-        class="ma-4 ml-10"
-        color="amber"
-        @click="goBack"
-      >
-        <v-icon class="pl-4"
-          icon="mdi-arrow-left"
-          start
-        ></v-icon>
-        Voltar
-      </v-btn>
+        <v-btn class="ma-4 ml-10" color="amber" @click="goBack">
+          <v-icon class="pl-4" icon="mdi-arrow-left" start></v-icon>
+          Voltar
+        </v-btn>
       </v-container>
     </v-main>
   </v-app>
@@ -134,7 +139,7 @@ export default {
         panturrilha_esquerda: null,
         punho: null,
         biceps_femoral_direito: null,
-        biceps_femoral_esquerdo: null, 
+        biceps_femoral_esquerdo: null,
       },
       componentKey: 0,
 
@@ -206,11 +211,11 @@ export default {
   },
   methods: {
     resetForm() {
-      this.componentKey += 1; 
+      this.componentKey += 1;
     },
     goBack() {
-    this.$router.push('/avaliation/step2');
-  },
+      this.$router.push('/avaliation/step2');
+    },
 
     loadInitialData() {
       const savedData = localStorage.getItem('studentEvaluationForm');
@@ -220,42 +225,38 @@ export default {
       }
     },
 
+
+
     async submitForm() {
-  if (!(await this.$refs.form.validate())) {
-    alert('Por favor, preencha todos os campos obrigatórios.');
-    return;
-  }
+      if (!(await this.$refs.form.validate())) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      }
 
-  const formData = new FormData();
-  
-  // Adicionando os dados do formulário
-  Object.entries(this.formData).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
+      const step1Data = JSON.parse(localStorage.getItem('step1Data'));
+      if (!step1Data) {
+        alert('Dados da etapa 1 não encontrados. Por favor, volte à etapa 1 e salve as informações novamente.');
+        return;
+      }
 
-  // Função auxiliar para converter base64 em Blob
-  function base64ToBlob(base64, mime) {
-    const byteString = atob(base64.split(',')[1]);
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], {type: mime});
-  }
+      const formData = new FormData();
 
-  const additionalData = JSON.parse(localStorage.getItem('studentEvaluationForm') || '{}');
+      const imageIds = ['image_0', 'image_1', 'image_2', 'image_3'];
+      imageIds.forEach((id, index) => {
+        const imageId = localStorage.getItem(id);
+        if (!imageId) {
+          alert(`Imagem ${index + 1} não encontrada. Por favor, verifique as imagens carregadas.`);
+          return;
+        }
+        formData.append(['front', 'right', 'back', 'left'][index], imageId);
+      });
 
-  Object.entries(additionalData).forEach(([key, value]) => {
-    if (['back', 'front', 'left', 'right'].includes(key) && value) {
-      const mime = value.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/)[1];
-      const blob = base64ToBlob(value, mime);
-      formData.append(key, blob, key + '.jpg');
-    } else if (key === 'date' && value)  {
-      const formattedDate = new Date(value).toISOString().replace(/T/, ' ').replace(/\..+/, '');
-      formData.append(key, formattedDate);
-      
-    } else {
+      Object.entries(this.formData).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      Object.entries(step1Data).forEach(([key, value]) => {
+    if (key !== 'student_id' && key !== 'date') { 
       formData.append(key, value);
     }
   });
@@ -266,23 +267,23 @@ export default {
         'Content-Type': 'multipart/form-data',
       },
     });
-    alert('Avaliação cadastrada com sucesso!');
+
+
+      alert('Avaliação cadastrada com sucesso!');
     console.log(response.data);
-    localStorage.removeItem('studentEvaluationForm');
   } catch (error) {
     console.error(error);
     alert('Ocorreu um erro ao tentar cadastrar a avaliação.');
   }
 },
-},
+  },
 };
 </script>
 
 <style scoped>
-
-  .v-container {
+.v-container {
   margin-left: 15%;
-  width: auto;  
+  width: auto;
 }
 
 @media (max-width: 960px) {
@@ -292,4 +293,3 @@ export default {
   }
 }
 </style>
-
