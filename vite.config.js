@@ -8,6 +8,9 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
+  server: {
+    port: 8000
+  },
   test: {
     globals: true,
     environment: 'jsdom',
