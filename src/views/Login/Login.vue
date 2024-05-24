@@ -1,19 +1,13 @@
 <template>
   <div class="background">
     <div class="d-flex ma-0 pa-0 container">
-      <section class="left" :style="mdAndDown ? 'display:none' : ''">
-        <div class="float">
-          <h2 class="mb-10">Amplifique seus resultados...</h2>
-          <h3>Pela integração: </h3>
-          <h4 class="text-h3" style="color: #ffc107">Academia, Instrutor, Nutricionista e Aluno!</h4>
-        </div>
-      </section>
+      
       <section
         class="d-flex flex-column justify-center align-center right"
-        :style="mdAndDown ? 'width: 100%' : 'width: 70%'"
+        :style="mdAndDown ? 'width: 100%' : 'width: 100%'"
       >
         <form @submit.prevent="handleSubmit" class="mx-auto pa-8 pb-6 v-form">
-          <v-card class="mx-auto pa-8 pb-6" elevation="8" max-width="520" rounded="lg"> <!-- Ajuste o max-width para aumentar o tamanho do formulário -->
+          <v-card class="mx-auto pa-8 pb-6" elevation="8" max-width="850" rounded="lg"> <!-- Ajuste o max-width para aumentar o tamanho do formulário -->
             <v-img
               class="mx-auto my-6"
               max-width="300" 
@@ -25,7 +19,7 @@
 
             <v-text-field
               density="compact"
-              placeholder="Email address"
+              placeholder="Email"
               prepend-inner-icon="mdi-email-outline"
               variant="outlined"
               v-model="email"
@@ -43,7 +37,7 @@
               :append-inner-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
               :type="visible ? 'text' : 'password'"
               density="compact"
-              placeholder="Enter your password"
+              placeholder="Senha"
               prepend-inner-icon="mdi-lock-outline"
               variant="outlined"
               @click:append-inner="visible = !visible"
@@ -160,10 +154,10 @@ section,
 }
 
 .v-form {
-  width: 100%;
+  width: 40%;
   gap: 8px;
 }
-section.left::before {
+section::before {
   content: '';
   position: absolute;
   top: 0;
